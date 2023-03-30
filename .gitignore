@@ -132,4 +132,6 @@ dmypy.json
 
 # Jetbrains Intellij IDEA
 .idea/
-/06_AdminInterface/news/app_news/migrations/
+.idea\
+.idea
+db.sqlite3
