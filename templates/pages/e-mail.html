@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block header %}
+  {% include 'components/header.html' with no_bottom=True %}
+{% endblock %}
+
+{% block page_content %}
+  <div class="wrapper">
+  <div class="header">
+    <h3 class="sign-in">Восстановление пароля (1/2)</h3>
+    <h5>Для восстановления пароля введите адрес электронной почты, на которую зарегистрирована учетная запись</h5>
+  </div>
+
+  <form action="#">
+
+    <div>
+
+
+      <input class="user-input" type="email" name="login" id="name" placeholder="E-mail"/>
+    </div>
+    <div>
+      <input type="submit" value="Получить проверочный код"/>
+    </div>
+    <a class="registr" href="registr.html">
+      Вход
+    </a>
+  </form>
+</div>
+{% endblock %}
