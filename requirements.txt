@@ -6,4 +6,5 @@ django-autoslug==1.9.9
 django-uuslug==2.0.0
 django-modeltranslation==0.18.9
 psycopg2==2.9.6
+phonenumbers==8.13.9
 django-phonenumber-field==7.0.2
