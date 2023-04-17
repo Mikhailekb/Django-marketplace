@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'app_shops',
+    'app_users',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -140,6 +142,10 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'uploads'
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -158,3 +164,5 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+LOGIN_REDIRECT_URL = '/'
