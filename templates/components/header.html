@@ -26,7 +26,6 @@
     <div class="ControlPanel">
         <div class="wrap">
             <div class="row ControlPanel-row">
-                {% if request.user.is_authenticated %}
                 <div class="row-block">
                     <div class="row ControlPanel-rowSplit">
                         <div class="row-block hide_700">
@@ -47,15 +46,15 @@
                         </div>
                     </div>
                 </div>
-                {% else %}
                 <nav class="row-block">
                     <div class="row ControlPanel-rowSplit">
-                        <div class="row-block"><a class="ControlPanel-title" href="#">Вход</a>
+                        {% if not request.user.is_authenticated %}
+                            <div class="row-block"><a class="ControlPanel-title" href="#">Вход</a>
                             <a class="ControlPanel-title" href="#">Регистрация</a>
-                        </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </nav>
-                {% endif %}
             </div>
         </div>
         <!--+div.menuModal#navigate
@@ -70,14 +69,12 @@
     -->
     </div>
     {% endblock %}
-
     {% block header_row_main %}
     <div class="wrap">
         <div class="row Header-rowMain">
             <div class="row-block Header-logo"><a class="logo" href="#"><img class="logo-image"
                                                                              src="/static/img/logo.png" alt="logo.png"></a>
             </div>
-
             <nav class="row-block row-block_right Header-menu">
                 <div class="menuModal" id="navigate" style="">
                     <ul class="menu menu_main" style="position: static;">
@@ -92,25 +89,23 @@
                 </div>
             </nav>
             <div class="row-block">
-
                 <div class="CartBlock">
                     <div class="dropdown">
+                        {% if request.user.is_authenticated %}
                         <button class="dropbtn"><img class="CartBlock-img" src="/static/img/icons/loon-icon.svg"
                                                      alt="loon-icon.svg"></button>
                         <div class="dropdown-content">
-                            {% if request.user.is_authenticated %}
                                 <a class="dropdown-content-a" href="#">Личный кабинет</a>
-                            {% else %}
-                                <a class="dropdown-content-a" href="#">Административный раздел</a>
+                                {% if request.user.is_staff %}
+                                    <a class="dropdown-content-a" href="#">Административный раздел</a>
+                                {% endif %}
                                 <a class="dropdown-content-a" href="#">Выход</a>
-                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                     <a class="CartBlock-block" href="#"><img class="CartBlock-img" src="/static/img/icons/cart.svg"
                                                              alt="cart.svg"><span class="CartBlock-amount">0</span></a>
                     <div class="CartBlock-block"><span class="CartBlock-price">0.00$</span>
-
-
                     </div>
                 </div>
             </div>
@@ -120,7 +115,6 @@
                 <span></span><span></span><span></span>
             </a>
             </div>
-
         </div>
     </div>
     {% endblock %}
@@ -138,7 +132,6 @@
                         </div>
                     </div>
                     <div class="CategoriesButton-content">
-
                     </div>
                 </div>
             </div>
@@ -158,7 +151,6 @@
         </div>
     </div>
     {% endblock %}
-
 
 </header>
 {% endblock %}
