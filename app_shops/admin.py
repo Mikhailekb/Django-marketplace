@@ -3,11 +3,11 @@ from django.utils.safestring import mark_safe
 from modeltranslation.admin import TranslationAdmin
 from django.utils.translation import gettext_lazy as _
 
-from app_shops.models import Catalog
+from app_shops.models import Category
 
 
-@admin.register(Catalog)
-class CatalogAdmin(TranslationAdmin):
+@admin.register(Category)
+class CategoryAdmin(TranslationAdmin):
     list_display = ['name', 'get_icon', 'is_active', 'parent', 'slug']
     list_filter = ['is_active']
 
