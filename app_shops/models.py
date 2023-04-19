@@ -11,7 +11,7 @@ def get_latin_name(instance):
 
 class Catalog(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('name'))
-    slug = AutoSlugField('URL', max_length=70, unique=True, populate_from=get_latin_name)
+    slug = AutoSlugField(max_length=70, verbose_name='URL', unique=True, populate_from=get_latin_name)
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     parent = models.ForeignKey('Catalog', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='child_category', verbose_name=_('parent category'))
