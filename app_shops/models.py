@@ -15,7 +15,7 @@ class Catalog(models.Model):
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     parent = models.ForeignKey('Catalog', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='child_category', verbose_name=_('parent category'))
-    icon = models.FileField(upload_to='static/img/icons/departments/', null=True, blank=True, verbose_name=_('icon'),
+    icon = models.FileField(upload_to='img/icons/departments/', null=True, blank=True, verbose_name=_('icon'),
                               validators=[FileExtensionValidator(['svg'])])
 
     class Meta:
