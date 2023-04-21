@@ -44,6 +44,7 @@ class Product(models.Model):
     name = models.CharField(max_length=256, verbose_name=_('name'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name=_('URL'))
     description = models.TextField(verbose_name=_('description'))
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products', verbose_name=_('products'))
 
     # По этому полю предлагаю определять, попадет ли товар в БАННЕРЫ
     img_big = models.FileField(upload_to=get_good_img_path, null=True, blank=True, verbose_name=_('banner img'),
@@ -54,8 +55,8 @@ class Product(models.Model):
     salers = models.ManyToManyField('Shop', through='ProductShop')
 
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
+    updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
 
     def __str__(self):
         return self.name
