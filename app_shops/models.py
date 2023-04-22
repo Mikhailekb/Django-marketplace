@@ -11,7 +11,7 @@ def get_latin_name(instance):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('name'))
-    slug = AutoSlugField(max_length=70, verbose_name='URL', unique=True, populate_from=get_latin_name)
+    slug = AutoSlugField(max_length=70, verbose_name='URL', unique=True, populate_from='name_en')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     parent = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='child_category', verbose_name=_('parent category'))
@@ -21,6 +21,7 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = _('categories')
         verbose_name = _('category')
+        ordering = ['id']
 
     def __str__(self):
         if not self.parent:
