@@ -13,11 +13,11 @@ def get_latin_name(instance):
 
 
 def get_good_img_path(instance):
-    return f'static/img/content/home/products/{instance.slug}/'
+    return f'static/img/content/home/products/{instance.product.slug}/'
 
 
 def get_shop_img_path(instance):
-    return f'static/img/content/home/shops/{instance.slug}/'
+    return f'static/img/content/home/shops/{instance.shop.slug}/'
 
 
 class Category(models.Model):
@@ -48,15 +48,7 @@ class Product(models.Model):
     slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name=_('URL'))
     description = models.TextField(verbose_name=_('description'))
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name=_('products'))
-
-    # По этому полю предлагаю определять, попадет ли товар в БАННЕРЫ
-    img_big = models.FileField(upload_to=get_good_img_path, null=True, blank=True, verbose_name=_('banner img'),
-                            validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])])
-    img_small = models.FileField(upload_to=get_good_img_path, null=True, blank=True, verbose_name=_('small img'),
-                               validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])])
-
     salers = models.ManyToManyField('Shop', through='ProductShop')
-
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
@@ -75,11 +67,6 @@ class Shop(models.Model):
     phone = PhoneNumberField(null=False, blank=False, unique=True, verbose_name=_('phone number'))
     mail = models.EmailField(max_length=256, verbose_name=_('email'))
     address = models.CharField(max_length=1024, verbose_name=_('address'))
-
-    logo_small = models.FileField(upload_to=get_good_img_path, null=True, blank=True, verbose_name=_('small logo'),
-                                 validators=[FileExtensionValidator(['png', 'svg'])])
-    logo_big = models.FileField(upload_to=get_good_img_path, null=True, blank=True, verbose_name=_('big logo'),
-                                  validators=[FileExtensionValidator(['png', 'svg'])])
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('edited'))
@@ -101,8 +88,29 @@ class ProductShop(models.Model):
 
 class ProductImage(models.Model):
     """Модель изображения для товара"""
-    image = ProcessedImageField(upload_to='your/path',
-                                processors=[ResizeToFit(800, 600)],
-                                format='JPEG', options={'quality': 70}, verbose_name=_('image'))
+    small = ProcessedImageField(upload_to=get_good_img_path,
+                                processors=[ResizeToFit(200, 200)],
+                                format='JPEG', options={'quality': 80}, verbose_name=_('image small'))
+    middle = ProcessedImageField(upload_to=get_good_img_path,
+                                    processors=[ResizeToFit(500, 500)],
+                                    format='JPEG', options={'quality': 80}, verbose_name=_('image middle'))
+    large = ProcessedImageField(upload_to=get_good_img_path,
+                                       processors=[ResizeToFit(800, 800)],
+                                       format='JPEG', options={'quality': 80}, verbose_name=_('image large'))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
+    uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
+
+
+class ShopImage(models.Model):
+    """Модель изображения для магазина"""
+    small = ProcessedImageField(upload_to=get_shop_img_path,
+                                processors=[ResizeToFit(200, 200)],
+                                format='JPEG', options={'quality': 80}, verbose_name=_('image small'))
+    middle = ProcessedImageField(upload_to=get_shop_img_path,
+                                    processors=[ResizeToFit(500, 500)],
+                                    format='JPEG', options={'quality': 80}, verbose_name=_('image middle'))
+    large = ProcessedImageField(upload_to=get_shop_img_path,
+                                       processors=[ResizeToFit(800, 800)],
+                                       format='JPEG', options={'quality': 80}, verbose_name=_('image large'))
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
