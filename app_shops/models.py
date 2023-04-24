@@ -20,18 +20,19 @@ def get_shop_img_path(instance):
     return f'static/img/content/home/shops/{instance.slug}/'
 
 
-class Catalog(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('name'))
-    slug = AutoSlugField('URL', max_length=70, unique=True, populate_from=get_latin_name)
+    slug = AutoSlugField(max_length=70, verbose_name='URL', unique=True, populate_from='name_en')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    parent = models.ForeignKey('Catalog', on_delete=models.CASCADE, null=True, blank=True,
+    parent = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='child_category', verbose_name=_('parent category'))
-    icon = models.FileField(upload_to='static/img/icons/departments/', null=True, blank=True, verbose_name=_('icon'),
+    icon = models.FileField(upload_to='img/icons/departments/', null=True, blank=True, verbose_name=_('icon'),
                               validators=[FileExtensionValidator(['svg'])])
 
     class Meta:
-        verbose_name_plural = _('catalog')
+        verbose_name_plural = _('categories')
         verbose_name = _('category')
+        ordering = ['id']
 
     def __str__(self):
         if not self.parent:
@@ -46,7 +47,7 @@ class Product(models.Model):
     name = models.CharField(max_length=256, verbose_name=_('name'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name=_('URL'))
     description = models.TextField(verbose_name=_('description'))
-    # category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products', verbose_name=_('products'))
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name=_('products'))
 
     # По этому полю предлагаю определять, попадет ли товар в БАННЕРЫ
     img_big = models.FileField(upload_to=get_good_img_path, null=True, blank=True, verbose_name=_('banner img'),
