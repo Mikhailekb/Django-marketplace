@@ -13,11 +13,11 @@ def get_latin_name(instance):
 
 
 def get_good_img_path(instance):
-    return f'static/img/content/home/products/{instance.product.slug}/'
+    return f'img/content/products/{instance.product.slug}/'
 
 
 def get_shop_img_path(instance):
-    return f'static/img/content/home/shops/{instance.shop.slug}/'
+    return f'img/content/shops/{instance.shop.slug}/'
 
 
 class Category(models.Model):
