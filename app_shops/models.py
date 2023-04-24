@@ -90,13 +90,13 @@ class ProductImage(models.Model):
     """Модель изображения для товара"""
     small = ProcessedImageField(upload_to=get_good_img_path,
                                 processors=[ResizeToFit(200, 200)],
-                                format='JPEG', options={'quality': 80}, verbose_name=_('image small'))
+                                format='PNG', options={'quality': 80}, verbose_name=_('image small'))
     middle = ProcessedImageField(upload_to=get_good_img_path,
                                     processors=[ResizeToFit(500, 500)],
-                                    format='JPEG', options={'quality': 80}, verbose_name=_('image middle'))
+                                    format='PNG', options={'quality': 80}, verbose_name=_('image middle'))
     large = ProcessedImageField(upload_to=get_good_img_path,
                                        processors=[ResizeToFit(800, 800)],
-                                       format='JPEG', options={'quality': 80}, verbose_name=_('image large'))
+                                       format='PNG', options={'quality': 80}, verbose_name=_('image large'))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
 
@@ -105,12 +105,12 @@ class ShopImage(models.Model):
     """Модель изображения для магазина"""
     small = ProcessedImageField(upload_to=get_shop_img_path,
                                 processors=[ResizeToFit(200, 200)],
-                                format='JPEG', options={'quality': 80}, verbose_name=_('image small'))
+                                format='PNG', options={'quality': 80}, verbose_name=_('image small'))
     middle = ProcessedImageField(upload_to=get_shop_img_path,
                                     processors=[ResizeToFit(500, 500)],
-                                    format='JPEG', options={'quality': 80}, verbose_name=_('image middle'))
+                                    format='PNG', options={'quality': 80}, verbose_name=_('image middle'))
     large = ProcessedImageField(upload_to=get_shop_img_path,
                                        processors=[ResizeToFit(800, 800)],
-                                       format='JPEG', options={'quality': 80}, verbose_name=_('image large'))
+                                       format='PNG', options={'quality': 80}, verbose_name=_('image large'))
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
