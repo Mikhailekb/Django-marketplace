@@ -1433,7 +1433,6 @@ a.Cart-title {
 .CartBlock {
     display: flex;
     align-items: center;
-    min-height: 62px;
 }
 
 @media screen and (max-width: 990px) {
@@ -3251,6 +3250,7 @@ a.Cart-title {
 
 .Header-rowMain {
     align-items: center;
+    padding-bottom: 5px;
 }
 
 @media screen and (max-width: 1300px) {
