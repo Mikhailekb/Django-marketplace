@@ -4,6 +4,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from uuslug import slugify
 from phonenumber_field.modelfields import PhoneNumberField
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFit
 
 
 def get_latin_name(instance):
@@ -78,7 +80,7 @@ class Shop(models.Model):
     logo_big = models.FileField(upload_to=get_good_img_path, null=True, blank=True, verbose_name=_('big logo'),
                                   validators=[FileExtensionValidator(['png', 'svg'])])
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    created = models.DateTimeField(auto_now_add=True, verbose_name=_('is active'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('edited'))
 
     def __str__(self):
@@ -96,4 +98,10 @@ class ProductShop(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('price'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
 
-
+class ProductImage(models.Model):
+    """Модель изображения для товара"""
+    image = ProcessedImageField(upload_to='your/path',
+                                processors=[ResizeToFit(800, 600)],
+                                format='JPEG', options={'quality': 70}, verbose_name=_('image'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
+    uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
