@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from uuslug import slugify
 from phonenumber_field.modelfields import PhoneNumberField
 from imagekit.models import ProcessedImageField, ImageSpecField
-from imagekit.processors import ResizeToFit
 
 
 def get_latin_name(instance):
