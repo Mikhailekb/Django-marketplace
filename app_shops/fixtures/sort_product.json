@@ -1,0 +1,1 @@
+[{"model": "app_shops.sortproduct", "pk": 1, "fields": {"name": "Популярности", "sort_field": "count_sold"}}, {"model": "app_shops.sortproduct", "pk": 2, "fields": {"name": "Цене", "sort_field": "price"}}, {"model": "app_shops.sortproduct", "pk": 3, "fields": {"name": "Новизне", "sort_field": "product__created"}}]
