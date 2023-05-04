@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, ListView
 from app_shops.filters import ProductFilter
 from app_shops.forms import FilterGoodsForm
 from app_shops.models import ProductShop, SortProduct
-from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME
+from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, SHOP_PRODUCT_CACHE_LIFETIME
 
 
 class HomeView(TemplateView):
@@ -57,7 +57,8 @@ class CatalogView(ListView):
         self.queryset = cache.get_or_set(f'products_{slug}', ProductShop.objects.filter(is_active=True, product__category__slug=slug) \
                                          .select_related('product') \
                                          .select_related('product__category') \
-                                         .select_related('product__main_image')
+                                         .select_related('product__main_image'),
+                                         timeout=SHOP_PRODUCT_CACHE_LIFETIME
                                          )
 
         ordering = self.get_ordering()
