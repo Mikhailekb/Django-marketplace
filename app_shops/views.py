@@ -72,7 +72,7 @@ class CatalogView(ListView):
             # free_shipping = form.cleaned_data['free_shipping']
 
             options = {'price__gte': self.price_from, 'price__lte': self.price_to,
-                       'product__name': name, 'in_stock': in_stock}
+                       'name_or_description': name, 'in_stock': in_stock}
 
             filter_obj = ProductFilter(options, queryset=self.queryset)
             filter_queryset = filter_obj.qs
