@@ -4,8 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from uuslug import slugify
 from phonenumber_field.modelfields import PhoneNumberField
-from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFit
+from imagekit.models import ProcessedImageField, ImageSpecField
 
 
 def get_latin_name(instance):
@@ -53,6 +52,11 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
 
+    class Meta:
+        verbose_name_plural = _('products')
+        verbose_name = _('product')
+        ordering = ['id']
+
     def __str__(self):
         return self.name
 
@@ -71,6 +75,11 @@ class Shop(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('edited'))
 
+    class Meta:
+        verbose_name_plural = _('shops')
+        verbose_name = _('shop')
+        ordering = ['id']
+
     def __str__(self):
         return self.name
 
@@ -88,29 +97,37 @@ class ProductShop(models.Model):
 
 class ProductImage(models.Model):
     """Модель изображения для товара"""
-    small = ProcessedImageField(upload_to=get_good_img_path,
-                                processors=[ResizeToFit(200, 200)],
-                                format='PNG', options={'quality': 80}, verbose_name=_('image small'))
-    middle = ProcessedImageField(upload_to=get_good_img_path,
-                                    processors=[ResizeToFit(500, 500)],
-                                    format='PNG', options={'quality': 80}, verbose_name=_('image middle'))
-    large = ProcessedImageField(upload_to=get_good_img_path,
-                                       processors=[ResizeToFit(800, 800)],
-                                       format='PNG', options={'quality': 80}, verbose_name=_('image large'))
+    image = ProcessedImageField(upload_to=get_good_img_path, options={'quality': 80})
+    small = ImageSpecField(source='image', id='app_shops:thumbnail_200x200', verbose_name=_('image small'))
+    middle = ImageSpecField(source='image', id='app_shops:thumbnail_500x500', verbose_name=_('image middle'))
+    large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800', verbose_name=_('image large'))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
+    is_main = models.BooleanField(default=False, verbose_name=_('is main'))
+
+    class Meta:
+        verbose_name_plural = _('product images')
+        verbose_name = _('product image')
+        ordering = ['id']
+
+    def __str__(self):
+        return f'Image of product: {self.product.name}'
 
 
 class ShopImage(models.Model):
     """Модель изображения для магазина"""
-    small = ProcessedImageField(upload_to=get_shop_img_path,
-                                processors=[ResizeToFit(200, 200)],
-                                format='PNG', options={'quality': 80}, verbose_name=_('image small'))
-    middle = ProcessedImageField(upload_to=get_shop_img_path,
-                                    processors=[ResizeToFit(500, 500)],
-                                    format='PNG', options={'quality': 80}, verbose_name=_('image middle'))
-    large = ProcessedImageField(upload_to=get_shop_img_path,
-                                       processors=[ResizeToFit(800, 800)],
-                                       format='PNG', options={'quality': 80}, verbose_name=_('image large'))
+    image = ProcessedImageField(upload_to=get_shop_img_path, options={'quality': 80})
+    small = ImageSpecField(source='image', id='app_shops:thumbnail_200x200', verbose_name=_('image small'))
+    middle = ImageSpecField(source='image', id='app_shops:thumbnail_500x500', verbose_name=_('image middle'))
+    large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800', verbose_name=_('image large'))
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
+    is_main = models.BooleanField(default=False, verbose_name=_('is main'))
+
+    class Meta:
+        verbose_name_plural = _('shop images')
+        verbose_name = _('shop image')
+        ordering = ['id']
+
+    def __str__(self):
+        return f'Image of shop: {self.shop.name}'
