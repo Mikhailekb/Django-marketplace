@@ -54,10 +54,11 @@ class CatalogView(ListView):
 
     def get_queryset(self):
         slug = self.kwargs.get('category_slug')
-        self.queryset = ProductShop.objects.filter(is_active=True, product__category__slug=slug) \
-            .select_related('product') \
-            .select_related('product__category') \
-            .select_related('product__main_image')
+        self.queryset = cache.get_or_set(f'products_{slug}', ProductShop.objects.filter(is_active=True, product__category__slug=slug) \
+                                         .select_related('product') \
+                                         .select_related('product__category') \
+                                         .select_related('product__main_image')
+                                         )
 
         ordering = self.get_ordering()
         self.queryset = self.queryset.order_by(ordering)
