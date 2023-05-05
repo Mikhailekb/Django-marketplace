@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'app_shops',
     'app_users',
     'phonenumber_field',
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -165,4 +167,21 @@ CACHES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+LOGIN_URL = '/profile/login'
+
 LOGIN_REDIRECT_URL = '/'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
