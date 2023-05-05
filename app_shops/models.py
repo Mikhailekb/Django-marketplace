@@ -97,6 +97,11 @@ class Product(models.Model):
         verbose_name = _('product')
         ordering = ['id']
 
+    class Meta:
+        verbose_name_plural = _('products')
+        verbose_name = _('product')
+        ordering = ['id']
+
     def __str__(self):
         return self.name
 
@@ -116,6 +121,11 @@ class Shop(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name=_('edited'))
     main_image = models.OneToOneField('ShopImage', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='main_for_shop')
+
+    class Meta:
+        verbose_name_plural = _('shops')
+        verbose_name = _('shop')
+        ordering = ['id']
 
     class Meta:
         verbose_name_plural = _('shops')
@@ -151,6 +161,15 @@ class ProductImage(models.Model):
     large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
+    is_main = models.BooleanField(default=False, verbose_name=_('is main'))
+
+    class Meta:
+        verbose_name_plural = _('product images')
+        verbose_name = _('product image')
+        ordering = ['id']
+
+    def __str__(self):
+        return f'Image of product: {self.product.name}'
 
     class Meta:
         verbose_name_plural = _('product images')
