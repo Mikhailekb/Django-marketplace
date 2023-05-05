@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load i18n %}
 
 
 {% block page_content %}
@@ -9,7 +10,7 @@
         <div class="Section-column">
           <div class="Section-columnSection">
             <header class="Section-header">
-              <strong class="Section-title">Фильтр
+              <strong class="Section-title">{% trans 'Filter' %}
               </strong>
             </header>
             <div class="Section-columnContent">
@@ -20,10 +21,10 @@
                 <div class="form-group">
                   <div class="range Section-columnRange">
                     <input class="range-line" id="price" name="price" type="text" data-type="double"
-                           data-min="{{ min_price }}" data-max="{{ max_price }}"
+                           data-min="{{ min_price|floatformat:-0 }}" data-max="{{ max_price|floatformat:0 }}"
                            data-from="{{ price_from }}" data-to="{{ price_to }}"/>
 
-                    <div class="range-price">Цена:&#32;
+                    <div class="range-price">{% trans 'Price:' %}
                       <div class="rangePrice">
                       </div>
                     </div>
@@ -38,7 +39,7 @@
                   <label class="toggle">
                     {{ form.in_stock }}
                     <span class="toggle-box"></span>
-                    <span class="toggle-text">Только товары в наличии</span>
+                    <span class="toggle-text">{% trans 'Only items in stock' %}</span>
                   </label>
                 </div>
 
@@ -46,13 +47,13 @@
                   <label class="toggle">
                     {{ form.free_shipping }}
                     <span class="toggle-box"></span>
-                    <span class="toggle-text">С бесплатной доставкой</span>
+                    <span class="toggle-text">{% trans 'With free shipping' %}</span>
                   </label>
                 </div>
 
                 <div class="form-group">
                   <div class="buttons">
-                    <button type="submit" class="btn btn_square btn_dark btn_narrow">Фильтр</button>
+                    <button type="submit" class="btn btn_square btn_dark btn_narrow">{% trans 'Filter' %}</button>
                   </div>
                 </div>
               </form>
@@ -61,24 +62,20 @@
           </div>
           <div class="Section-columnSection">
             <header class="Section-header">
-              <strong class="Section-title">Популярные тэги</strong>
+              <strong class="Section-title">{% trans 'Popular tags' %}</strong>
             </header>
             <div class="Section-columnContent">
               <div class="buttons">
-                <a class="btn btn_default btn_sm" href="#">Видео</a>
-                <a class="btn btn_default btn_sm" href="#">Разработка</a>
-                <a class="btn btn_default btn_sm" href="#">Игры</a>
-                <a class="btn btn_default btn_sm" href="#">Asus</a>
-                <a class="btn btn_default btn_sm" href="#">Разработка</a>
-                <a class="btn btn_default btn_sm" href="#">Видео</a>
+                {% for tag in tags %}
+                  <a class="btn btn_default btn_sm tag" href="?tag={{ tag.codename }}">{{ tag.name }}</a>
+                {% endfor %}
               </div>
             </div>
           </div>
         </div>
         <div class="Section-content">
           <div class="Sort">
-            <div class="Sort-title">Сортировать по:
-            </div>
+            <div class="Sort-title">{% trans 'Sort by:' %}</div>
             <div class="Sort-variants">
               {% for option in sort_options %}
                 <a class="Sort-sortBy {{ option.css_class }}"
@@ -91,17 +88,17 @@
             {% for item in goods %}
               <div class="Card">
                 <a class="Card-picture" href="#">
-                  <img src="{{ item.product.main_image.middle.url }}" alt="{{ item.product.slug }}"/>
+                  <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
                 </a>
                 <div class="Card-content">
                   <strong class="Card-title">
-                    <a href="#">{{ item.product.name }}</a>
+                    <a href="#">{{ item.name }}</a>
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
-                      <span class="Card-price">{{ item.price }} ₽</span>
+                      <span class="Card-price">{{ item.avg_price | floatformat:2 }} ₽</span>
                     </div>
-                    <div class="Card-category">{{ item.product.category.name }}</div>
+                    <div class="Card-category">{{ item.category.name }}</div>
                     <div class="Card-hover">
                       <a class="Card-btn" href="#">
                         <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>

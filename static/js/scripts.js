@@ -903,9 +903,11 @@
             let url = new URL(linkUrl)
             let orderBy = url.searchParams.get('order_by');
 
+            currentUrl_obj.searchParams.delete('page');
             currentUrl_obj.searchParams.set('order_by', orderBy)
             window.location.href = currentUrl_obj;
         }
+
 
         let paginationLinks = document.getElementsByClassName('Pagination-element');
         for (let i = 0; i < paginationLinks.length; i++) {
@@ -921,6 +923,25 @@
             let page = url.searchParams.get('page');
 
             currentUrl_obj.searchParams.set('page', page)
+            window.location.href = currentUrl_obj;
+        }
+
+
+        let tagLinks = document.getElementsByClassName('tag');
+        for (let i = 0; i < tagLinks.length; i++) {
+            tagLinks[i].addEventListener('click', clickToTagLink);
+        }
+
+        function clickToTagLink(event) {
+            event.preventDefault();
+            let currentUrl_obj = new URL(window.location.href);
+            let linkUrl = this.href;
+
+            let url = new URL(linkUrl)
+            let tag = url.searchParams.get('tag');
+
+            currentUrl_obj.searchParams.delete('page');
+            currentUrl_obj.searchParams.set('tag', tag)
             window.location.href = currentUrl_obj;
         }
 

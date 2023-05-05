@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
 
-from app_shops.models import Category, Product, Shop, ProductShop, ProductImage, ShopImage, SortProduct
+from app_shops.models import Category, Product, Shop, ProductShop, ProductImage, ShopImage, TagProduct
 
 
 class ProductImageInLine(admin.StackedInline):
@@ -36,23 +36,30 @@ class CategoryAdmin(TranslationAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(TranslationAdmin):
     list_display = ['name', 'category']
     inlines = [ProductImageInLine, ]
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == "main_image":
             product_id = request.path.split('/')[4]
-            kwargs["queryset"] = ProductImage.objects.filter(product_id=product_id)
+            if isinstance(product_id, int):
+                kwargs["queryset"] = ProductImage.objects.filter(product_id=product_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Shop)
-class ShopAdmin(admin.ModelAdmin):
+class ShopAdmin(TranslationAdmin):
     inlines = [ProductShopInLine, ShopImageInLine]
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == "main_image":
             shop_id = request.path.split('/')[4]
-            kwargs["queryset"] = ShopImage.objects.filter(shop_id=shop_id)
+            if isinstance(shop_id, int):
+                kwargs["queryset"] = ShopImage.objects.filter(shop_id=shop_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(TagProduct)
+class TagProductAdmin(TranslationAdmin):
+    filter_horizontal = ['goods']

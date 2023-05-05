@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 22:13+0500\n"
+"POT-Creation-Date: 2023-05-05 16:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\app_shops\admin.py:20 .\app_shops\models.py:18
+#: .\app_shops\admin.py:35 .\app_shops\models.py:34
 msgid "icon"
 msgstr "значок"
 
@@ -28,25 +28,123 @@ msgstr "значок"
 msgid "marketplace"
 msgstr "торговая площадка"
 
-#: .\app_shops\models.py:13 .\app_users\models.py:11
+#: .\app_shops\models.py:29 .\app_shops\models.py:57 .\app_shops\models.py:69
+#: .\app_shops\models.py:84 .\app_shops\models.py:108 .\app_users\models.py:11
 msgid "name"
 msgstr "имя"
 
-#: .\app_shops\models.py:15
+#: .\app_shops\models.py:31 .\app_shops\models.py:89 .\app_shops\models.py:114
+#: .\app_shops\models.py:138
 msgid "is active"
 msgstr "флаг активности"
 
-#: .\app_shops\models.py:17
+#: .\app_shops\models.py:33
 msgid "parent category"
 msgstr "родительская категория"
 
-#: .\app_shops\models.py:22
+#: .\app_shops\models.py:38
 msgid "categories"
 msgstr "категории"
 
-#: .\app_shops\models.py:23
+#: .\app_shops\models.py:39
 msgid "category"
 msgstr "категория"
+
+#: .\app_shops\models.py:58
+msgid "sort field"
+msgstr ""
+
+#: .\app_shops\models.py:68
+msgid "codename"
+msgstr "кодовое имя"
+
+#: .\app_shops\models.py:70
+msgid "goods"
+msgstr "товары"
+
+#: .\app_shops\models.py:73
+msgid "tags"
+msgstr "Тэги"
+
+#: .\app_shops\models.py:74
+msgid "tag"
+msgstr "Тэг"
+
+#: .\app_shops\models.py:86 .\app_shops\models.py:110
+msgid "description"
+msgstr "описание"
+
+#: .\app_shops\models.py:87 .\app_shops\models.py:96
+msgid "products"
+msgstr "товары"
+
+#: .\app_shops\models.py:90 .\app_shops\models.py:115
+msgid "created"
+msgstr "создано"
+
+#: .\app_shops\models.py:91
+msgid "updated"
+msgstr "обновлено"
+
+#: .\app_shops\models.py:97 .\app_shops\models.py:152 .\app_shops\models.py:172
+msgid "product"
+msgstr "товар"
+
+#: .\app_shops\models.py:111
+msgid "phone number"
+msgstr "номер телефона"
+
+#: .\app_shops\models.py:112
+msgid "email"
+msgstr "электронная почта"
+
+#: .\app_shops\models.py:113
+msgid "address"
+msgstr "адрес"
+
+#: .\app_shops\models.py:116
+msgid "edited"
+msgstr "отредактировано"
+
+#: .\app_shops\models.py:121
+msgid "shops"
+msgstr "магазины"
+
+#: .\app_shops\models.py:122
+msgid "shop"
+msgstr "магазин"
+
+#: .\app_shops\models.py:135
+msgid "left in shop"
+msgstr "осталось в магазине"
+
+#: .\app_shops\models.py:136
+msgid "sold in shop"
+msgstr "продается в магазине"
+
+#: .\app_shops\models.py:137
+msgid "price"
+msgstr "цена"
+
+#: .\app_shops\models.py:153 .\app_shops\models.py:173
+msgid "uploaded"
+msgstr "загружено"
+
+#: .\app_shops\models.py:156
+msgid "product images"
+msgstr "изображения продукта"
+
+#: .\app_shops\models.py:157
+msgid "product image"
+msgstr "изображение продукта"
+
+#: .\app_shops\models.py:176
+msgid "shop images"
+msgstr "изображения магазина"
+
+#: .\app_shops\models.py:177
+msgid "shop image"
+msgstr "изображение магазина"
 
 #: .\app_users\apps.py:9
 msgid "users"
@@ -75,6 +173,34 @@ msgstr "Профиль"
 #: .\app_users\models.py:17
 msgid "Profiles"
 msgstr "Профили"
+
+#: .\templates\components\header.html:138
+msgid "All categories"
+msgstr "Все категории"
+
+#: .\templates\pages\catalog.html:13 .\templates\pages\catalog.html:56
+msgid "Filter"
+msgstr "Фильтр"
+
+#: .\templates\pages\catalog.html:27
+msgid "Price:"
+msgstr "Цена:"
+
+#: .\templates\pages\catalog.html:42
+msgid "Only items in stock"
+msgstr "Только товары в наличии"
+
+#: .\templates\pages\catalog.html:50
+msgid "With free shipping"
+msgstr "С бесплатной доставкой"
+
+#: .\templates\pages\catalog.html:65
+msgid "Popular tags"
+msgstr "Популярные тэги"
+
+#: .\templates\pages\catalog.html:78
+msgid "Sort by:"
+msgstr "Сортировать по:"
 
 #: .\templates\pages\main.html:65
 msgid "LIMITED OFFERS"

@@ -64,15 +64,28 @@ class SortProduct(models.Model):
         ordering = ['id']
 
 
+class TagProduct(models.Model):
+    codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
+    name = models.CharField(max_length=100, verbose_name=_('name'))
+    goods = models.ManyToManyField('Product', related_name='tags', verbose_name=_('goods'), null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = _('tags')
+        verbose_name = _('tag')
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     """
     Модель товара
     """
     name = models.CharField(max_length=256, verbose_name=_('name'))
-    slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name=_('URL'))
+    slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name='URL')
     description = models.TextField(verbose_name=_('description'))
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name=_('products'))
-    salers = models.ManyToManyField('Shop', through='ProductShop')
+    sellers = models.ManyToManyField('Shop', through='ProductShop')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
@@ -93,7 +106,7 @@ class Shop(models.Model):
     Модель магазина
     """
     name = models.CharField(max_length=256, verbose_name=_('name'))
-    slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name=_('URL'))
+    slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name='URL')
     description = models.TextField(verbose_name=_('description'))
     phone = PhoneNumberField(null=False, blank=False, unique=True, verbose_name=_('phone number'))
     mail = models.EmailField(max_length=256, verbose_name=_('email'))

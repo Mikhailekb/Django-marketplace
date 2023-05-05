@@ -1,6 +1,6 @@
 {% load i18n %}
 {% block header %}
-  {% load static %}
+{% load static %}
 
   <div class="lang">
     <form id='lang_en' action="{% url 'set_language' %}" method='POST'>{% csrf_token %}
@@ -135,7 +135,7 @@
                 <div class="CategoriesButton-title">
                   <div class="CategoriesButton-icon"><img src="{% static 'img/icons/allDep.svg' %}" alt="allDep.svg">
                   </div>
-                  <span class="CategoriesButton-text">Все категории</span>
+                  <span class="CategoriesButton-text">{% trans 'All categories' %}</span>
                   <div class="CategoriesButton-arrow">
                   </div>
                 </div>
