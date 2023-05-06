@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-15 15:59+0300\n"
+"POT-Creation-Date: 2023-04-19 22:13+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: .\app_shops\admin.py:20 .\app_shops\models.py:18
 msgid "icon"
-msgstr ""
+msgstr "значок"
 
 #: .\app_shops\apps.py:8
 msgid "marketplace"
@@ -41,8 +41,8 @@ msgid "parent category"
 msgstr "родительская категория"
 
 #: .\app_shops\models.py:22
-msgid "catalog"
-msgstr "каталог"
+msgid "categories"
+msgstr "категории"
 
 #: .\app_shops\models.py:23
 msgid "category"
@@ -61,10 +61,8 @@ msgid "avatar"
 msgstr "фотография"
 
 #: .\app_users\models.py:12
-#, fuzzy
-#| msgid "name"
 msgid "surname"
-msgstr "имя"
+msgstr "фамилия"
 
 #: .\app_users\models.py:13
 msgid "patronymic"
