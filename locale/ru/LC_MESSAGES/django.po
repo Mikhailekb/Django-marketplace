@@ -120,7 +120,7 @@ msgstr "осталось в магазине"
 
 #: .\app_shops\models.py:136
 msgid "sold in shop"
-msgstr "продается в магазине"
+msgstr "продано в магазине"
 
 #: .\app_shops\models.py:137
 msgid "price"

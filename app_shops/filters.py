@@ -12,10 +12,10 @@ class ProductFilter(filters.FilterSet):
     # Фильтр на бесплатную доставку на данный момент отсутствует
 
     def filter_by_min_price(self, queryset, name, value):
-        return queryset.filter(in_shops__price__gte=value)
+        return queryset.filter(avg_price__gte=value)
 
     def filter_by_max_price(self, queryset, name, value):
-        return queryset.filter(in_shops__price__lte=value)
+        return queryset.filter(avg_price__lte=value)
 
     def filter_in_stock(self, queryset, name, value):
         return queryset.filter(in_shops__count_left__gt=0)
