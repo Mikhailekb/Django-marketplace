@@ -55,13 +55,13 @@ class CatalogView(ListView):
     def get_queryset(self):
         ordering = self.get_ordering()
         slug = self.kwargs.get('category_slug')
-        self.queryset: QuerySet = cache.get_or_set(key=f'products_{slug}', timeout=PRODUCTS_CACHE_LIFETIME,
+        self.queryset: QuerySet = cache.get_or_set(key=f'products_{slug}_{ordering}', timeout=PRODUCTS_CACHE_LIFETIME,
                     default=Product.objects.filter(is_active=True, in_shops__is_active=True, category__slug=slug)\
                                            .select_related('category', 'main_image')\
                                            .annotate(avg_price=Avg('in_shops__price'),
                                                      min_price=Min('in_shops__price'),
                                                      max_price=Max('in_shops__price'),
-                                                     count_sold=Sum('in_shops__count_sold')))
+                                                     count_sold=Sum('in_shops__count_sold')).order_by(ordering))
 
         tag = self.request.GET.get('tag')
         if tag:
@@ -80,8 +80,8 @@ class CatalogView(ListView):
             filter_obj = ProductFilter(options, queryset=self.queryset)
             filter_queryset = filter_obj.qs
 
-            return filter_queryset.order_by(ordering)
-        return self.queryset.order_by(ordering)
+            return filter_queryset
+        return self.queryset
 
     def sorting_update(self):
         for item in self.sort_options:
@@ -106,8 +106,9 @@ class CatalogView(ListView):
         queryset = object_list if object_list is not None else self.get_queryset()
         context = super().get_context_data(object_list=queryset, **kwargs)
 
-        min_price = self.queryset.aggregate(Min('min_price')).get('min_price__min')
-        max_price = self.queryset.aggregate(Max('max_price')).get('max_price__max')
+        aggregate = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
+        min_price = aggregate.get('min')
+        max_price = aggregate.get('max')
         self.sorting_update()
 
         context['sort_options'] = self.sort_options

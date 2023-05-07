@@ -19,4 +19,8 @@ def invalidate_cache(**kwargs):
      """
     instance: ProductShop = kwargs.get('instance')
     slug = instance.product.category.slug
-    cache.delete(f'products_{slug}')
+    sort_options = cache.get('sort_options')
+    options = [option.sort_field for option in sort_options]
+    for option in options:
+        cache.delete(f'products_{slug}_{option}')
+        cache.delete(f'products_{slug}_-{option}')

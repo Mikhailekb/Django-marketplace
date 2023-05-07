@@ -1,1 +1,218 @@
-[{"model": "app_shops.product", "pk": 1, "fields": {"name": "Процессор AMD Ryzen 7 7700X", "name_ru": "Процессор AMD Ryzen 7 7700X", "name_en": "Processor AMD Ryzen 7 7700X", "slug": "protsessor-amd-ryzen", "description": "Процессор AMD Ryzen 7 7700X – это мощное решение для игровых систем и рабочих станций. В основе модели используются высококачественные компоненты и передовые технологии, что в связке с большим числом физических ядер и виртуальных потоков может обеспечить непревзойденно высокую вычислительную мощность в любых сценариях использования компьютера.", "description_ru": "Процессор AMD Ryzen 7 7700X – это мощное решение для игровых систем и рабочих станций. В основе модели используются высококачественные компоненты и передовые технологии, что в связке с большим числом физических ядер и виртуальных потоков может обеспечить непревзойденно высокую вычислительную мощность в любых сценариях использования компьютера.", "description_en": "The AMD Ryzen 7 7700X processor is a powerful solution for gaming systems and workstations. The model is based on high-quality components and advanced technologies, which, in conjunction with a large number of physical cores and virtual threads, can provide unsurpassed high computing power in any computer usage scenarios.", "category": 7, "is_active": true, "created": "2023-05-01T11:42:23.065Z", "updated": "2023-05-05T08:42:46.102Z", "main_image": 5}}, {"model": "app_shops.product", "pk": 2, "fields": {"name": "Микрокомпьютер Raspberry Pi 4 Model B", "name_ru": "Микрокомпьютер Raspberry Pi 4 Model B", "name_en": "Microcomputer Raspberry Pi 4 Model B", "slug": "mikrokompiuter-raspberry-pi-4-model-b", "description": "Микрокомпьютер Raspberry Pi 4 Model B ориентирован на решение различных повседневных задач, не настаивающих на наличии внушительной вычислительной мощности.", "description_ru": "Микрокомпьютер Raspberry Pi 4 Model B ориентирован на решение различных повседневных задач, не настаивающих на наличии внушительной вычислительной мощности.", "description_en": "The Raspberry Pi 4 Model B microcomputer is focused on solving various everyday tasks that do not require impressive computing power.", "category": 7, "is_active": true, "created": "2023-05-02T08:32:20.603Z", "updated": "2023-05-05T08:44:07.253Z", "main_image": 6}}, {"model": "app_shops.product", "pk": 3, "fields": {"name": "23.8\" Моноблок MSI PRO AP241 11M-642XRU", "name_ru": "23.8\" Моноблок MSI PRO AP241 11M-642XRU", "name_en": "23.8\" Monoblock MSI PRO AP241 11M-642XRU", "slug": "23-8-monoblok-msi-pro-ap241-11m-642xru", "description": "Моноблок MSI PRO AP241 11M-642XRU [9S6-AE0312-682] с элегантным белым корпусом и экраном 23.8” подходит для работы и учебы. В его основе используется 2-ядерный процессор с ОЗУ 8 ГБ. На SSD-диск объемом 256 ГБ удобна установка привычной версии ОС.", "description_ru": "Моноблок MSI PRO AP241 11M-642XRU [9S6-AE0312-682] с элегантным белым корпусом и экраном 23.8” подходит для работы и учебы. В его основе используется 2-ядерный процессор с ОЗУ 8 ГБ. На SSD-диск объемом 256 ГБ удобна установка привычной версии ОС.", "description_en": "MSI PRO AP241 11M-642XRU [9S6-AE0312-682] with elegant white body and 23.8” screen is suitable for work and study. It is based on a 2-core processor with 8 GB of RAM. On a 256 GB SSD drive, it is convenient to install the familiar version of the OS.", "category": 7, "is_active": true, "created": "2023-05-02T08:34:22.450Z", "updated": "2023-05-05T08:44:04.313Z", "main_image": 7}}, {"model": "app_shops.product", "pk": 4, "fields": {"name": "65\" (163 см) Телевизор LED TCL 65C735", "name_ru": "65\" (163 см) Телевизор LED TCL 65C735", "name_en": "65\" (163 cm) TV LED TCL 65C735", "slug": "65-163-sm-televizor-led-tcl-65c735", "description": "Телевизор LED TCL 65C735 привлекает внимание элегантным дизайном со съемной центральной подставкой и огромным 65-дюймовым экраном с 4K-разрешением. Встроенные технологии HDR улучшают яркость и передачу цвета, позволяют легко рассматривать оттенки, детали в светлых и темных сценах. Динамики с объемным многоканальным звуком доставляют максимум удовольствия от просмотра любимых фильмов.", "description_ru": "Телевизор LED TCL 65C735 привлекает внимание элегантным дизайном со съемной центральной подставкой и огромным 65-дюймовым экраном с 4K-разрешением. Встроенные технологии HDR улучшают яркость и передачу цвета, позволяют легко рассматривать оттенки, детали в светлых и темных сценах. Динамики с объемным многоканальным звуком доставляют максимум удовольствия от просмотра любимых фильмов.", "description_en": "The TCL 65C735 LED TV has a sleek design with a detachable center stand and a huge 65-inch 4K screen. Built-in HDR technology improves brightness and color reproduction, making it easy to see shades, details in light and dark scenes. Speakers with multi-channel surround sound deliver maximum enjoyment from your favorite movies.", "category": 1, "is_active": true, "created": "2023-05-02T08:36:43.891Z", "updated": "2023-05-05T08:44:46.579Z", "main_image": 8}}, {"model": "app_shops.product", "pk": 5, "fields": {"name": "55\" (139 см) Телевизор LED Xiaomi MI TV P1 55", "name_ru": "55\" (139 см) Телевизор LED Xiaomi MI TV P1 55", "name_en": "55\" (139 cm) LED TV Xiaomi MI TV P1 55", "slug": "55-139-sm-televizor-led-xiaomi-mi-tv-p1-55", "description": "Телевизор LED Xiaomi MI TV P1 55 со стильным безрамочным дизайном оснащен 55-дюймовым экраном с 4K-разрешением и технологией MEMC. Это позволяет сполна наслаждаться фильмами в высоком качестве, легко рассматривать мелкие детали и оттенки. Динамики на 20 Вт радуют громким и объемным многоканальным звуком. 4-ядерный процессор с ОЗУ 2 ГБ не зависает при запуске объемных приложений, 16 ГБ собственной памяти хватает для установки полезных и развлекательных программ для всей семьи.", "description_ru": "Телевизор LED Xiaomi MI TV P1 55 со стильным безрамочным дизайном оснащен 55-дюймовым экраном с 4K-разрешением и технологией MEMC. Это позволяет сполна наслаждаться фильмами в высоком качестве, легко рассматривать мелкие детали и оттенки. Динамики на 20 Вт радуют громким и объемным многоканальным звуком. 4-ядерный процессор с ОЗУ 2 ГБ не зависает при запуске объемных приложений, 16 ГБ собственной памяти хватает для установки полезных и развлекательных программ для всей семьи.", "description_en": "The Xiaomi MI TV P1 55 LED TV with a stylish frameless design is equipped with a 55-inch 4K screen with MEMC technology. This allows you to fully enjoy movies in high quality, it is easy to see small details and shades. The 20W speakers deliver loud and spacious multi-channel sound. Quad-core processor with 2 GB of RAM does not freeze when running large applications, 16 GB of internal memory is enough to install useful and entertaining programs for the whole family.", "category": 1, "is_active": true, "created": "2023-05-02T08:39:33.477Z", "updated": "2023-05-05T08:45:05.028Z", "main_image": 9}}, {"model": "app_shops.product", "pk": 6, "fields": {"name": "65\" (163 см) Телевизор LED Xiaomi 65C835", "name_ru": "65\" (163 см) Телевизор LED Xiaomi 65C835", "name_en": "65\" (163 cm) TV LED TCL 65C835", "slug": "65-163-sm-televizor-led-tcl-65c835", "description": "Телевизор TCL оснащен экраном с диагональю 163 см. Модель TCL 65C835 обладает экраном с разрешением 3840×2160 (4K UltraHD), поддержкой Smart TV, операционной системой Google TV.", "description_ru": "Телевизор TCL оснащен экраном с диагональю 163 см. Модель TCL 65C835 обладает экраном с разрешением 3840×2160 (4K UltraHD), поддержкой Smart TV, операционной системой Google TV.", "description_en": "TCL TV is equipped with a screen with a diagonal of 163 cm. Model TCL 65C835 has a screen with a resolution of 3840 × 2160 (4K UltraHD), Smart TV support, Google TV operating system.", "category": 1, "is_active": true, "created": "2023-05-02T09:03:06.918Z", "updated": "2023-05-07T08:51:53.224Z", "main_image": 10}}, {"model": "app_shops.product", "pk": 7, "fields": {"name": "24\" (61 см) Телевизор LED Telefunken TF-LED24S20T2", "name_ru": "24\" (61 см) Телевизор LED Telefunken TF-LED24S20T2", "name_en": "24\" (61 cm) TV LED Telefunken TF-LED24S20T2", "slug": "24-61-sm-televizor-led-telefunken-tf-led24s20t2", "description": "Телевизор LED Telefunken TF-LED24S20T2 оборудован всем необходимым для увлекательного и комфортного просмотра телевизионных каналов или мультимедийного контента. На экране 24 дюйма с разрешением HD и светодиодной подсветкой отображается четкая картинка с яркими и насыщенными цветами. Акустическая система 6 Вт позволяет насладиться чистым насыщенным звучанием.", "description_ru": "Телевизор LED Telefunken TF-LED24S20T2 оборудован всем необходимым для увлекательного и комфортного просмотра телевизионных каналов или мультимедийного контента. На экране 24 дюйма с разрешением HD и светодиодной подсветкой отображается четкая картинка с яркими и насыщенными цветами. Акустическая система 6 Вт позволяет насладиться чистым насыщенным звучанием.", "description_en": "TV LED Telefunken TF-LED24S20T2 is equipped with everything you need for an exciting and comfortable viewing of television channels or multimedia content. The 24-inch HD LED-backlit screen delivers a crisp picture with vibrant, rich colors. The 6W speaker system lets you enjoy clear, rich sound.", "category": 1, "is_active": true, "created": "2023-05-02T09:16:54.668Z", "updated": "2023-05-05T08:46:00.619Z", "main_image": 11}}, {"model": "app_shops.product", "pk": 8, "fields": {"name": "24\" (60 см) Телевизор LED Asano 24LH1110T", "name_ru": "24\" (60 см) Телевизор LED Asano 24LH1110T", "name_en": "24\" (60 cm) LED TV Asano 24LH1110T", "slug": "24-60-sm-televizor-led-asano-24lh1110t", "description": "Телевизор LED Asano 24LH1110T оснащен 24-дюймовым экраном с подсветкой DirectLED и HD-разрешением 1366x768 dpi. Оборудование представлено в классическом черном корпусе с центральной настольной подставкой. Настенный монтаж осуществляется с помощью крепления VESA 100x100. Прибор поставляется вместе с подставкой, пультом ДУ и батарейками.", "description_ru": "Телевизор LED Asano 24LH1110T оснащен 24-дюймовым экраном с подсветкой DirectLED и HD-разрешением 1366x768 dpi. Оборудование представлено в классическом черном корпусе с центральной настольной подставкой. Настенный монтаж осуществляется с помощью крепления VESA 100x100. Прибор поставляется вместе с подставкой, пультом ДУ и батарейками.", "description_en": "The Asano 24LH1110T LED TV is equipped with a 24-inch DirectLED backlit screen with HD resolution of 1366x768 dpi. The equipment is presented in a classic black case with a central desktop stand. Wall mounting is carried out using a VESA 100x100 mount. The device comes with a stand, remote control and batteries.", "category": 1, "is_active": true, "created": "2023-05-02T09:17:51.398Z", "updated": "2023-05-05T08:46:56.982Z", "main_image": 12}}, {"model": "app_shops.product", "pk": 9, "fields": {"name": "24\" (60 см) Телевизор LED BQ 2406B", "name_ru": "24\" (60 см) Телевизор LED BQ 2406B", "name_en": "24\" (60 cm) TV LED BQ 2406B", "slug": "24-60-sm-televizor-led-bq-2406b", "description": "Телевизор BQ 2406B оснащен 24 дюймовым экраном (размер диагонали в сантиметрах – 60). Модель подойдет для оснащения комнат средних размеров. Разрешение экрана телевизора (1366x768) соответствует формату -HD", "description_ru": "Телевизор BQ 2406B оснащен 24 дюймовым экраном (размер диагонали в сантиметрах – 60). Модель подойдет для оснащения комнат средних размеров. Разрешение экрана телевизора (1366x768) соответствует формату -HD", "description_en": "TV BQ 2406B is equipped with a 24 inch screen (diagonal size in centimeters - 60). The model is suitable for equipping medium-sized rooms. TV screen resolution (1366x768) corresponds to -HD format", "category": 1, "is_active": true, "created": "2023-05-02T09:18:36.357Z", "updated": "2023-05-05T08:46:54.100Z", "main_image": 13}}, {"model": "app_shops.product", "pk": 10, "fields": {"name": "88\" (223 см) Телевизор OLED LG OLED88Z29LA", "name_ru": "88\" (223 см) Телевизор OLED LG OLED88Z29LA", "name_en": "88\" (223 cm) OLED TV LG OLED88Z29LA", "slug": "88-223-sm-televizor-oled-lg-oled88z29la", "description": "Вы не просто смотрите телевизор, перед вашими глазами разворачивается реальная жизнь. LG OLED Z2 сочетает в себе глубокие насыщенные цвета OLED-дисплея с самоподсвечивающимися пикселями и масштабность разрешения 8K. Самоподсвечивающиеся пиксели достигают глубочайшего черного цвета, обеспечивая четкую контрастность при любом освещении. Визуальные образы более четкие, поэтому вы можете различить тонкие детали, которые обычно не заметны для глаза.", "description_ru": "Вы не просто смотрите телевизор, перед вашими глазами разворачивается реальная жизнь. LG OLED Z2 сочетает в себе глубокие насыщенные цвета OLED-дисплея с самоподсвечивающимися пикселями и масштабность разрешения 8K. Самоподсвечивающиеся пиксели достигают глубочайшего черного цвета, обеспечивая четкую контрастность при любом освещении. Визуальные образы более четкие, поэтому вы можете различить тонкие детали, которые обычно не заметны для глаза.", "description_en": "You are not just watching TV, real life is unfolding before your eyes. The LG OLED Z2 combines the deep rich colors of an OLED display with self-illuminating pixels and the enormity of 8K resolution. Self-illuminating pixels achieve the deepest blacks for crisp contrast in any light. Visual images are sharper, so you can make out subtle details that are usually invisible to the eye.", "category": 1, "is_active": true, "created": "2023-05-02T09:19:19.352Z", "updated": "2023-05-05T08:47:17.688Z", "main_image": 14}}, {"model": "app_shops.product", "pk": 11, "fields": {"name": "85\" (215 см) Телевизор LED Samsung QE85QN800BUXRU", "name_ru": "85\" (215 см) Телевизор LED Samsung QE85QN800BUXRU", "name_en": "85\" (215 cm) LED TV Samsung QE85QN800BUXRU", "slug": "85-215-sm-televizor-led-samsung-qe85qn800buxru", "description": "В телевизоре Samsung QE85QN800AUXRU подсветка с точным локальным управлением яркости осуществляется с помощью запатентованной компанией технологии микроскопических светодиодов Quantum Mini LED. Благодаря этой технологии зритель сможет различить невидимые ранее мельчайшие детали изображения в самых темных и самых светлых сценах.", "description_ru": "В телевизоре Samsung QE85QN800AUXRU подсветка с точным локальным управлением яркости осуществляется с помощью запатентованной компанией технологии микроскопических светодиодов Quantum Mini LED. Благодаря этой технологии зритель сможет различить невидимые ранее мельчайшие детали изображения в самых темных и самых светлых сценах.", "description_en": "The Samsung QE85QN800AUXRU TV backlights with precise local brightness control using the company's patented Quantum Mini LED microscopic LED technology. Thanks to this technology, the viewer will be able to distinguish the smallest details of the image that were not visible before in the darkest and brightest scenes.", "category": 1, "is_active": true, "created": "2023-05-02T09:20:04.119Z", "updated": "2023-05-05T08:48:01.629Z", "main_image": 15}}, {"model": "app_shops.product", "pk": 12, "fields": {"name": "77\" (195 см) Телевизор OLED LG OLED77C2RLA", "name_ru": "77\" (195 см) Телевизор OLED LG OLED77C2RLA", "name_en": "77\" (195 cm) OLED TV LG OLED77C2RLA", "slug": "77-195-sm-televizor-oled-lg-oled77c2rla", "description": "Телевизор OLED LG OLED77C2RLA оснащен тонким серым корпусом с 77-дюймовым экраном. 4K-разрешение помогает легко разглядеть мелкие детали, тона и глубокие оттенки. С помощью разных режимов система адаптирует звук и качество видео для просмотра фильмов, спортивных передач, музыки и прочего. Игровой телевизор с 4-ядерным процессором точно передает эффекты виртуальной графики на максимальном уровне.", "description_ru": "Телевизор OLED LG OLED77C2RLA оснащен тонким серым корпусом с 77-дюймовым экраном. 4K-разрешение помогает легко разглядеть мелкие детали, тона и глубокие оттенки. С помощью разных режимов система адаптирует звук и качество видео для просмотра фильмов, спортивных передач, музыки и прочего. Игровой телевизор с 4-ядерным процессором точно передает эффекты виртуальной графики на максимальном уровне.", "description_en": "The LG OLED77C2RLA OLED TV features a 77-inch slim gray body. 4K resolution makes it easy to see fine details, tones and deep hues. With different modes, the system adapts the sound and video quality for watching movies, sports, music and more. A gaming TV with a quad-core processor accurately reproduces the effects of virtual graphics at the maximum level.", "category": 1, "is_active": true, "created": "2023-05-02T09:23:48.787Z", "updated": "2023-05-05T08:48:27.736Z", "main_image": 16}}]
+[
+  {
+    "model": "app_shops.product",
+    "pk": 1,
+    "fields": {
+      "name": "Процессор AMD Ryzen 7 7700X",
+      "name_ru": "Процессор AMD Ryzen 7 7700X",
+      "name_en": "Processor AMD Ryzen 7 7700X",
+      "slug": "protsessor-amd-ryzen",
+      "description": "Процессор AMD Ryzen 7 7700X – это мощное решение для игровых систем и рабочих станций. В основе модели используются высококачественные компоненты и передовые технологии, что в связке с большим числом физических ядер и виртуальных потоков может обеспечить непревзойденно высокую вычислительную мощность в любых сценариях использования компьютера.",
+      "description_ru": "Процессор AMD Ryzen 7 7700X – это мощное решение для игровых систем и рабочих станций. В основе модели используются высококачественные компоненты и передовые технологии, что в связке с большим числом физических ядер и виртуальных потоков может обеспечить непревзойденно высокую вычислительную мощность в любых сценариях использования компьютера.",
+      "description_en": "The AMD Ryzen 7 7700X processor is a powerful solution for gaming systems and workstations. The model is based on high-quality components and advanced technologies, which, in conjunction with a large number of physical cores and virtual threads, can provide unsurpassed high computing power in any computer usage scenarios.",
+      "category": 7,
+      "is_active": true,
+      "created": "2023-05-01T11:42:23.065Z",
+      "updated": "2023-05-05T08:42:46.102Z",
+      "main_image": 5
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 2,
+    "fields": {
+      "name": "Микрокомпьютер Raspberry Pi 4 Model B",
+      "name_ru": "Микрокомпьютер Raspberry Pi 4 Model B",
+      "name_en": "Microcomputer Raspberry Pi 4 Model B",
+      "slug": "mikrokompiuter-raspberry-pi-4-model-b",
+      "description": "Микрокомпьютер Raspberry Pi 4 Model B ориентирован на решение различных повседневных задач, не настаивающих на наличии внушительной вычислительной мощности.",
+      "description_ru": "Микрокомпьютер Raspberry Pi 4 Model B ориентирован на решение различных повседневных задач, не настаивающих на наличии внушительной вычислительной мощности.",
+      "description_en": "The Raspberry Pi 4 Model B microcomputer is focused on solving various everyday tasks that do not require impressive computing power.",
+      "category": 7,
+      "is_active": true,
+      "created": "2023-05-02T08:32:20.603Z",
+      "updated": "2023-05-05T08:44:07.253Z",
+      "main_image": 6
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 3,
+    "fields": {
+      "name": "23.8\" Моноблок MSI PRO AP241 11M-642XRU",
+      "name_ru": "23.8\" Моноблок MSI PRO AP241 11M-642XRU",
+      "name_en": "23.8\" Monoblock MSI PRO AP241 11M-642XRU",
+      "slug": "23-8-monoblok-msi-pro-ap241-11m-642xru",
+      "description": "Моноблок MSI PRO AP241 11M-642XRU [9S6-AE0312-682] с элегантным белым корпусом и экраном 23.8” подходит для работы и учебы. В его основе используется 2-ядерный процессор с ОЗУ 8 ГБ. На SSD-диск объемом 256 ГБ удобна установка привычной версии ОС.",
+      "description_ru": "Моноблок MSI PRO AP241 11M-642XRU [9S6-AE0312-682] с элегантным белым корпусом и экраном 23.8” подходит для работы и учебы. В его основе используется 2-ядерный процессор с ОЗУ 8 ГБ. На SSD-диск объемом 256 ГБ удобна установка привычной версии ОС.",
+      "description_en": "MSI PRO AP241 11M-642XRU [9S6-AE0312-682] with elegant white body and 23.8” screen is suitable for work and study. It is based on a 2-core processor with 8 GB of RAM. On a 256 GB SSD drive, it is convenient to install the familiar version of the OS.",
+      "category": 7,
+      "is_active": true,
+      "created": "2023-05-02T08:34:22.450Z",
+      "updated": "2023-05-05T08:44:04.313Z",
+      "main_image": 7
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 4,
+    "fields": {
+      "name": "65\" (163 см) Телевизор LED TCL 65C735",
+      "name_ru": "65\" (163 см) Телевизор LED TCL 65C735",
+      "name_en": "65\" (163 cm) TV LED TCL 65C735",
+      "slug": "65-163-sm-televizor-led-tcl-65c735",
+      "description": "Телевизор LED TCL 65C735 привлекает внимание элегантным дизайном со съемной центральной подставкой и огромным 65-дюймовым экраном с 4K-разрешением. Встроенные технологии HDR улучшают яркость и передачу цвета, позволяют легко рассматривать оттенки, детали в светлых и темных сценах. Динамики с объемным многоканальным звуком доставляют максимум удовольствия от просмотра любимых фильмов.",
+      "description_ru": "Телевизор LED TCL 65C735 привлекает внимание элегантным дизайном со съемной центральной подставкой и огромным 65-дюймовым экраном с 4K-разрешением. Встроенные технологии HDR улучшают яркость и передачу цвета, позволяют легко рассматривать оттенки, детали в светлых и темных сценах. Динамики с объемным многоканальным звуком доставляют максимум удовольствия от просмотра любимых фильмов.",
+      "description_en": "The TCL 65C735 LED TV has a sleek design with a detachable center stand and a huge 65-inch 4K screen. Built-in HDR technology improves brightness and color reproduction, making it easy to see shades, details in light and dark scenes. Speakers with multi-channel surround sound deliver maximum enjoyment from your favorite movies.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T08:36:43.891Z",
+      "updated": "2023-05-05T08:44:46.579Z",
+      "main_image": 8
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 5,
+    "fields": {
+      "name": "55\" (139 см) Телевизор LED Xiaomi MI TV P1 55",
+      "name_ru": "55\" (139 см) Телевизор LED Xiaomi MI TV P1 55",
+      "name_en": "55\" (139 cm) LED TV Xiaomi MI TV P1 55",
+      "slug": "55-139-sm-televizor-led-xiaomi-mi-tv-p1-55",
+      "description": "Телевизор LED Xiaomi MI TV P1 55 со стильным безрамочным дизайном оснащен 55-дюймовым экраном с 4K-разрешением и технологией MEMC. Это позволяет сполна наслаждаться фильмами в высоком качестве, легко рассматривать мелкие детали и оттенки. Динамики на 20 Вт радуют громким и объемным многоканальным звуком. 4-ядерный процессор с ОЗУ 2 ГБ не зависает при запуске объемных приложений, 16 ГБ собственной памяти хватает для установки полезных и развлекательных программ для всей семьи.",
+      "description_ru": "Телевизор LED Xiaomi MI TV P1 55 со стильным безрамочным дизайном оснащен 55-дюймовым экраном с 4K-разрешением и технологией MEMC. Это позволяет сполна наслаждаться фильмами в высоком качестве, легко рассматривать мелкие детали и оттенки. Динамики на 20 Вт радуют громким и объемным многоканальным звуком. 4-ядерный процессор с ОЗУ 2 ГБ не зависает при запуске объемных приложений, 16 ГБ собственной памяти хватает для установки полезных и развлекательных программ для всей семьи.",
+      "description_en": "The Xiaomi MI TV P1 55 LED TV with a stylish frameless design is equipped with a 55-inch 4K screen with MEMC technology. This allows you to fully enjoy movies in high quality, it is easy to see small details and shades. The 20W speakers deliver loud and spacious multi-channel sound. Quad-core processor with 2 GB of RAM does not freeze when running large applications, 16 GB of internal memory is enough to install useful and entertaining programs for the whole family.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T08:39:33.477Z",
+      "updated": "2023-05-05T08:45:05.028Z",
+      "main_image": 9
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 6,
+    "fields": {
+      "name": "65\" (163 см) Телевизор LED Xiaomi 65C835",
+      "name_ru": "65\" (163 см) Телевизор LED Xiaomi 65C835",
+      "name_en": "65\" (163 cm) TV LED TCL 65C835",
+      "slug": "65-163-sm-televizor-led-tcl-65c835",
+      "description": "Телевизор TCL оснащен экраном с диагональю 163 см. Модель TCL 65C835 обладает экраном с разрешением 3840×2160 (4K UltraHD), поддержкой Smart TV, операционной системой Google TV.",
+      "description_ru": "Телевизор TCL оснащен экраном с диагональю 163 см. Модель TCL 65C835 обладает экраном с разрешением 3840×2160 (4K UltraHD), поддержкой Smart TV, операционной системой Google TV.",
+      "description_en": "TCL TV is equipped with a screen with a diagonal of 163 cm. Model TCL 65C835 has a screen with a resolution of 3840 × 2160 (4K UltraHD), Smart TV support, Google TV operating system.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T09:03:06.918Z",
+      "updated": "2023-05-07T08:51:53.224Z",
+      "main_image": 10
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 7,
+    "fields": {
+      "name": "24\" (61 см) Телевизор LED Telefunken TF-LED24S20T2",
+      "name_ru": "24\" (61 см) Телевизор LED Telefunken TF-LED24S20T2",
+      "name_en": "24\" (61 cm) TV LED Telefunken TF-LED24S20T2",
+      "slug": "24-61-sm-televizor-led-telefunken-tf-led24s20t2",
+      "description": "Телевизор LED Telefunken TF-LED24S20T2 оборудован всем необходимым для увлекательного и комфортного просмотра телевизионных каналов или мультимедийного контента. На экране 24 дюйма с разрешением HD и светодиодной подсветкой отображается четкая картинка с яркими и насыщенными цветами. Акустическая система 6 Вт позволяет насладиться чистым насыщенным звучанием.",
+      "description_ru": "Телевизор LED Telefunken TF-LED24S20T2 оборудован всем необходимым для увлекательного и комфортного просмотра телевизионных каналов или мультимедийного контента. На экране 24 дюйма с разрешением HD и светодиодной подсветкой отображается четкая картинка с яркими и насыщенными цветами. Акустическая система 6 Вт позволяет насладиться чистым насыщенным звучанием.",
+      "description_en": "TV LED Telefunken TF-LED24S20T2 is equipped with everything you need for an exciting and comfortable viewing of television channels or multimedia content. The 24-inch HD LED-backlit screen delivers a crisp picture with vibrant, rich colors. The 6W speaker system lets you enjoy clear, rich sound.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T09:16:54.668Z",
+      "updated": "2023-05-05T08:46:00.619Z",
+      "main_image": 11
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 8,
+    "fields": {
+      "name": "24\" (60 см) Телевизор LED Asano 24LH1110T",
+      "name_ru": "24\" (60 см) Телевизор LED Asano 24LH1110T",
+      "name_en": "24\" (60 cm) LED TV Asano 24LH1110T",
+      "slug": "24-60-sm-televizor-led-asano-24lh1110t",
+      "description": "Телевизор LED Asano 24LH1110T оснащен 24-дюймовым экраном с подсветкой DirectLED и HD-разрешением 1366x768 dpi. Оборудование представлено в классическом черном корпусе с центральной настольной подставкой. Настенный монтаж осуществляется с помощью крепления VESA 100x100. Прибор поставляется вместе с подставкой, пультом ДУ и батарейками.",
+      "description_ru": "Телевизор LED Asano 24LH1110T оснащен 24-дюймовым экраном с подсветкой DirectLED и HD-разрешением 1366x768 dpi. Оборудование представлено в классическом черном корпусе с центральной настольной подставкой. Настенный монтаж осуществляется с помощью крепления VESA 100x100. Прибор поставляется вместе с подставкой, пультом ДУ и батарейками.",
+      "description_en": "The Asano 24LH1110T LED TV is equipped with a 24-inch DirectLED backlit screen with HD resolution of 1366x768 dpi. The equipment is presented in a classic black case with a central desktop stand. Wall mounting is carried out using a VESA 100x100 mount. The device comes with a stand, remote control and batteries.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T09:17:51.398Z",
+      "updated": "2023-05-05T08:46:56.982Z",
+      "main_image": 12
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 9,
+    "fields": {
+      "name": "24\" (60 см) Телевизор LED BQ 2406B",
+      "name_ru": "24\" (60 см) Телевизор LED BQ 2406B",
+      "name_en": "24\" (60 cm) TV LED BQ 2406B",
+      "slug": "24-60-sm-televizor-led-bq-2406b",
+      "description": "Телевизор BQ 2406B оснащен 24 дюймовым экраном (размер диагонали в сантиметрах – 60). Модель подойдет для оснащения комнат средних размеров. Разрешение экрана телевизора (1366x768) соответствует формату -HD",
+      "description_ru": "Телевизор BQ 2406B оснащен 24 дюймовым экраном (размер диагонали в сантиметрах – 60). Модель подойдет для оснащения комнат средних размеров. Разрешение экрана телевизора (1366x768) соответствует формату -HD",
+      "description_en": "TV BQ 2406B is equipped with a 24 inch screen (diagonal size in centimeters - 60). The model is suitable for equipping medium-sized rooms. TV screen resolution (1366x768) corresponds to -HD format",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T09:18:36.357Z",
+      "updated": "2023-05-05T08:46:54.100Z",
+      "main_image": 13
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 10,
+    "fields": {
+      "name": "88\" (223 см) Телевизор OLED LG OLED88Z29LA",
+      "name_ru": "88\" (223 см) Телевизор OLED LG OLED88Z29LA",
+      "name_en": "88\" (223 cm) OLED TV LG OLED88Z29LA",
+      "slug": "88-223-sm-televizor-oled-lg-oled88z29la",
+      "description": "Вы не просто смотрите телевизор, перед вашими глазами разворачивается реальная жизнь. LG OLED Z2 сочетает в себе глубокие насыщенные цвета OLED-дисплея с самоподсвечивающимися пикселями и масштабность разрешения 8K. Самоподсвечивающиеся пиксели достигают глубочайшего черного цвета, обеспечивая четкую контрастность при любом освещении. Визуальные образы более четкие, поэтому вы можете различить тонкие детали, которые обычно не заметны для глаза.",
+      "description_ru": "Вы не просто смотрите телевизор, перед вашими глазами разворачивается реальная жизнь. LG OLED Z2 сочетает в себе глубокие насыщенные цвета OLED-дисплея с самоподсвечивающимися пикселями и масштабность разрешения 8K. Самоподсвечивающиеся пиксели достигают глубочайшего черного цвета, обеспечивая четкую контрастность при любом освещении. Визуальные образы более четкие, поэтому вы можете различить тонкие детали, которые обычно не заметны для глаза.",
+      "description_en": "You are not just watching TV, real life is unfolding before your eyes. The LG OLED Z2 combines the deep rich colors of an OLED display with self-illuminating pixels and the enormity of 8K resolution. Self-illuminating pixels achieve the deepest blacks for crisp contrast in any light. Visual images are sharper, so you can make out subtle details that are usually invisible to the eye.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T09:19:19.352Z",
+      "updated": "2023-05-05T08:47:17.688Z",
+      "main_image": 14
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 11,
+    "fields": {
+      "name": "85\" (215 см) Телевизор LED Samsung QE85QN800BUXRU",
+      "name_ru": "85\" (215 см) Телевизор LED Samsung QE85QN800BUXRU",
+      "name_en": "85\" (215 cm) LED TV Samsung QE85QN800BUXRU",
+      "slug": "85-215-sm-televizor-led-samsung-qe85qn800buxru",
+      "description": "В телевизоре Samsung QE85QN800AUXRU подсветка с точным локальным управлением яркости осуществляется с помощью запатентованной компанией технологии микроскопических светодиодов Quantum Mini LED. Благодаря этой технологии зритель сможет различить невидимые ранее мельчайшие детали изображения в самых темных и самых светлых сценах.",
+      "description_ru": "В телевизоре Samsung QE85QN800AUXRU подсветка с точным локальным управлением яркости осуществляется с помощью запатентованной компанией технологии микроскопических светодиодов Quantum Mini LED. Благодаря этой технологии зритель сможет различить невидимые ранее мельчайшие детали изображения в самых темных и самых светлых сценах.",
+      "description_en": "The Samsung QE85QN800AUXRU TV backlights with precise local brightness control using the company's patented Quantum Mini LED microscopic LED technology. Thanks to this technology, the viewer will be able to distinguish the smallest details of the image that were not visible before in the darkest and brightest scenes.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T09:20:04.119Z",
+      "updated": "2023-05-05T08:48:01.629Z",
+      "main_image": 15
+    }
+  },
+  {
+    "model": "app_shops.product",
+    "pk": 12,
+    "fields": {
+      "name": "77\" (195 см) Телевизор OLED LG OLED77C2RLA",
+      "name_ru": "77\" (195 см) Телевизор OLED LG OLED77C2RLA",
+      "name_en": "77\" (195 cm) OLED TV LG OLED77C2RLA",
+      "slug": "77-195-sm-televizor-oled-lg-oled77c2rla",
+      "description": "Телевизор OLED LG OLED77C2RLA оснащен тонким серым корпусом с 77-дюймовым экраном. 4K-разрешение помогает легко разглядеть мелкие детали, тона и глубокие оттенки. С помощью разных режимов система адаптирует звук и качество видео для просмотра фильмов, спортивных передач, музыки и прочего. Игровой телевизор с 4-ядерным процессором точно передает эффекты виртуальной графики на максимальном уровне.",
+      "description_ru": "Телевизор OLED LG OLED77C2RLA оснащен тонким серым корпусом с 77-дюймовым экраном. 4K-разрешение помогает легко разглядеть мелкие детали, тона и глубокие оттенки. С помощью разных режимов система адаптирует звук и качество видео для просмотра фильмов, спортивных передач, музыки и прочего. Игровой телевизор с 4-ядерным процессором точно передает эффекты виртуальной графики на максимальном уровне.",
+      "description_en": "The LG OLED77C2RLA OLED TV features a 77-inch slim gray body. 4K resolution makes it easy to see fine details, tones and deep hues. With different modes, the system adapts the sound and video quality for watching movies, sports, music and more. A gaming TV with a quad-core processor accurately reproduces the effects of virtual graphics at the maximum level.",
+      "category": 1,
+      "is_active": true,
+      "created": "2023-05-02T09:23:48.787Z",
+      "updated": "2023-05-05T08:48:27.736Z",
+      "main_image": 16
+    }
+  }
+]
