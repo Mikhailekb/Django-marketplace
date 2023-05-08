@@ -67,7 +67,7 @@ class SortProduct(models.Model):
 class TagProduct(models.Model):
     codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
     name = models.CharField(max_length=100, verbose_name=_('name'))
-    goods = models.ManyToManyField('Product', related_name='tags', verbose_name=_('goods'), null=True, blank=True)
+    goods = models.ManyToManyField('Product', related_name='tags', verbose_name=_('goods'), blank=True)
 
     class Meta:
         verbose_name_plural = _('tags')
