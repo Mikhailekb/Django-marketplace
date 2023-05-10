@@ -116,6 +116,7 @@ class CatalogView(ListView):
         context['sort_options'] = self.sort_options
         context['tags'] = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
         context['order_by'] = self.ordering
+        context['category'] = self.request.GET.get('category')
         context['price_from'] = self.price_from if self.price_from else min_price
         context['price_to'] = self.price_to if self.price_to else max_price
         context['min_price'] = min_price
