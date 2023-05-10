@@ -45,7 +45,8 @@ class Category(models.Model):
         return f'{self.name} ({self.parent})'
 
     def get_absolute_url(self):
-        return reverse('catalog', kwargs={'category_slug': self.slug})
+        catalog_url = reverse('catalog')
+        return f'{catalog_url}?category={self.slug}'
 
 
 class SortProduct(models.Model):

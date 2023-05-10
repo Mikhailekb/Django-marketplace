@@ -54,10 +54,12 @@ class CatalogView(ListView):
 
     def get_queryset(self):
         ordering = self.get_ordering()
-        slug = self.kwargs.get('category_slug')
-        self.queryset: QuerySet = cache.get_or_set(key=f'products_{slug}_{ordering}', timeout=PRODUCTS_CACHE_LIFETIME,
-                    default=Product.objects.filter(is_active=True, in_shops__is_active=True, category__slug=slug)\
-                                           .select_related('category', 'main_image')\
+        filter_options = {'is_active': True, 'in_shops__is_active': True}
+        category = self.request.GET.get('category')
+        if category:
+            filter_options['category__slug'] = category
+        self.queryset: QuerySet = cache.get_or_set(key=f'products_{category}_{ordering}', timeout=PRODUCTS_CACHE_LIFETIME,
+                    default=Product.objects.filter(**filter_options).select_related('category', 'main_image')\
                                            .annotate(avg_price=Avg('in_shops__price'),
                                                      min_price=Min('in_shops__price'),
                                                      max_price=Max('in_shops__price'),
