@@ -286,27 +286,43 @@
         };
 
         modal().init();
-        var range = function () {
-            return {
-                init: function () {
-                    var $range = $('.range'),
-                        $line = $range.find('.range-line');
+var range = function () {
+    const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
+    let currencySign;
+    if (LANGUAGE_CODE === 'en') {
+        currencySign = '$';
+    } else {
+        currencySign = '₽';
+    }
 
-                    $line.ionRangeSlider({
-                        onStart: function (data) {
-                            $('.rangePrice').text(
-                                '$' + data.from + ' - $' + data.to
-                            )
-                        },
-                        onChange: function (data) {
-                            $('.rangePrice').text(
-                                '$' + data.from + ' - $' + data.to
-                            )
-                        }
-                    });
+    function createRangeText(from, to, currencySign) {
+        let rangeText;
+        if (currencySign === '₽') {
+            rangeText = from + currencySign + ' - ' + to + currencySign;
+        } else {
+            rangeText = currencySign + from + ' - ' + currencySign + to;
+        }
+        return rangeText;
+    }
+
+    return {
+        init: function () {
+            var $range = $('.range'),
+                $line = $range.find('.range-line');
+
+            $line.ionRangeSlider({
+                onStart: function (data) {
+                    var rangeText = createRangeText(data.from, data.to, currencySign);
+                    $('.rangePrice').text(rangeText);
+                },
+                onChange: function (data) {
+                    var rangeText = createRangeText(data.from, data.to, currencySign);
+                    $('.rangePrice').text(rangeText);
                 }
-            };
-        };
+            });
+        }
+    };
+};
         range().init();
         var table = function () {
             return {

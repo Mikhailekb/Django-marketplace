@@ -71,7 +71,9 @@ class CatalogView(ListView):
         form = FilterGoodsForm(self.request.GET)
         if form.is_valid():
             self.form = form
-            self.price_from, self.price_to = form.cleaned_data['price'].split(';')
+            price = form.cleaned_data['price']
+            if price and len(price.split(';')) == 2:
+                self.price_from, self.price_to = price.split(';')
             name = form.cleaned_data['name']
             in_stock = form.cleaned_data['in_stock']
             # free_shipping = form.cleaned_data['free_shipping']

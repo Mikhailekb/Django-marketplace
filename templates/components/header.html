@@ -123,8 +123,10 @@
                     </div>
                   </div>
                 {% endif %}
-                <a class="CartBlock-block" href="#"><img class="CartBlock-img" src="/static/img/icons/cart.svg"
-                                                         alt="cart.svg"><span class="CartBlock-amount">0</span></a>
+                <a class="CartBlock-block" href="#">
+                  <img class="CartBlock-img" src="/static/img/icons/cart.svg" alt="cart.svg">
+                  <span class="CartBlock-amount">0</span>
+                </a>
                 <div class="CartBlock-block"><span class="CartBlock-price">0.00$</span>
                 </div>
               </div>
@@ -189,10 +191,10 @@
             </div>
             <div class="Header-search">
               <div class="search">
-                <form class="form form_search" action="#" method="post">
-                  <input class="search-input" id="query" name="query" type="text"
+                <form class="form form_search" action="{% url 'catalog' %}" method="get">
+                  <input class="search-input" id="query" name="name" type="text"
                          placeholder="NVIDIA GeForce RTX 3060">
-                  <button class="search-button" type="submit" name="search" id="search">
+                  <button class="search-button" type="submit" id="search">
                     <img src="/static/img/icons/search.svg" alt="search.svg">Поиск
                   </button>
                 </form>
