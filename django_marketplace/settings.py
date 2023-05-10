@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_filters',
     'django_user_agents',
+    'project_command',
     'app_shops',
     'app_users',
 ]

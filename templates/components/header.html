@@ -1,25 +1,6 @@
 {% load i18n %}
 {% block header %}
-{% load static %}
-
-  <div class="lang">
-    <form id='lang_en' action="{% url 'set_language' %}" method='POST'>{% csrf_token %}
-      <input type='hidden' name='language' value='en'/>
-      <div style="float:left">
-        <a href='#' title='English' onclick="document.getElementById('lang_en').submit()">
-          <img src="{% static 'img/bg/uk.png' %}" width="28"/>
-        </a>
-      </div>
-    </form>
-    <form id='lang_ru' action="{% url 'set_language' %}" method='POST'>{% csrf_token %}
-      <input type='hidden' name='language' value='ru'/>
-      <div style="float:left">
-        <a href='#' title='Русский' onclick="document.getElementById('lang_ru').submit()">
-          <img src="{% static 'img/bg/ru.png' %}" width="28"/>
-        </a>
-      </div>
-    </form>
-  </div>
+  {% load static %}
 
   <header class="Header">
     {% block control_panel %}
@@ -30,17 +11,25 @@
               <div class="row ControlPanel-rowSplit">
                 <div class="row-block hide_700">
                   <ul class="menu menu_img menu_smallImg ControlPanel-menu">
-                    <li class="menu-item"><a class="menu-link" href="#"><img
-                            src="/static/img/icons/socialHeader/tw.svg" alt="tw.svg"></a>
+                    <li class="menu-item">
+                      <a class="menu-link" href="#">
+                        <img src="/static/img/icons/socialHeader/tw.svg" alt="tw.svg">
+                      </a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#"><img
-                            src="/static/img/icons/socialHeader/in.svg" alt="in.svg"></a>
+                    <li class="menu-item">
+                      <a class="menu-link" href="#">
+                        <img src="/static/img/icons/socialHeader/in.svg" alt="in.svg">
+                      </a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#"><img
-                            src="/static/img/icons/socialHeader/pt.svg" alt="pt.svg"></a>
+                    <li class="menu-item">
+                      <a class="menu-link" href="#">
+                        <img src="/static/img/icons/socialHeader/pt.svg" alt="pt.svg">
+                      </a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="#"><img
-                            src="/static/img/icons/socialHeader/mail.svg" alt="mail.svg"></a>
+                    <li class="menu-item">
+                      <a class="menu-link" href="#">
+                        <img src="/static/img/icons/socialHeader/mail.svg" alt="mail.svg">
+                      </a>
                     </li>
                   </ul>
                 </div>
@@ -48,8 +37,43 @@
             </div>
             <nav class="row-block">
               <div class="row ControlPanel-rowSplit">
+
+                <div class="dropdown lang">
+
+                  <button class="dropbtn" id="lang-change">
+                    <img src="{% static 'img/icons/language.svg' %}" alt="language.svg">
+                  </button>
+
+                  <div class="dropdown-content lang-dropdown" id="lang-dropdown">
+
+                    <form id='lang_en' action="{% url 'set_language' %}" method='POST'>
+                      {% csrf_token %}
+                      <input type='hidden' name='language' value='en'/>
+                      <div>
+                        <button type="submit" class="btn btn-lang">
+                          <span class="lang-text">English</span>
+                          <img src="{% static 'img/bg/uk.png' %}" alt="uk.png"/>
+                        </button>
+                      </div>
+                    </form>
+
+                    <form id='lang_ru' action="{% url 'set_language' %}" method='POST'>
+                      {% csrf_token %}
+                      <input type='hidden' name='language' value='ru'/>
+                      <div>
+                        <button type="submit" class="btn btn-lang">
+                          <span class="lang-text">Русский</span>
+                          <img src="{% static 'img/bg/ru.png' %}" alt="ru.png"/>
+                        </button>
+                      </div>
+                    </form>
+
+                  </div>
+                </div>
+
                 {% if not request.user.is_authenticated %}
-                  <div class="row-block"><a class="ControlPanel-title" href="#">Вход</a>
+                  <div class="row-block">
+                    <a class="ControlPanel-title" href="#">Вход</a>
                     <a class="ControlPanel-title" href="#">Регистрация</a>
                   </div>
                 {% endif %}
@@ -57,16 +81,6 @@
             </nav>
           </div>
         </div>
-        <!--+div.menuModal#navigate
-    //    +menu([
-    //        ['Главная','index.html'],
-    //        ['Портфолио','index.html'],
-    //        ['Мои проекты','index.html'],
-    //        ['Контакты','index.html']
-    //    ], page === 'article'? 'Портфолио': 'Главная')._main
-
-    block
-    -->
       </div>
     {% endblock %}
     {% block header_row_main %}
@@ -133,11 +147,11 @@
             <div class="Header-categories">
               <div class="CategoriesButton">
                 <div class="CategoriesButton-title">
-                  <div class="CategoriesButton-icon"><img src="{% static 'img/icons/allDep.svg' %}" alt="allDep.svg">
+                  <div class="CategoriesButton-icon">
+                    <img src="{% static 'img/icons/allDep.svg' %}" alt="allDep.svg">
                   </div>
                   <span class="CategoriesButton-text">{% trans 'All categories' %}</span>
-                  <div class="CategoriesButton-arrow">
-                  </div>
+                  <div class="CategoriesButton-arrow"></div>
                 </div>
                 <div class="CategoriesButton-content">
                   {% for caterory in categories %}
@@ -170,15 +184,16 @@
                 </div>
               </div>
             </div>
-            <div class="Header-searchLink"><img src="/static/img/icons/search.svg" alt="search.svg">
+            <div class="Header-searchLink">
+              <img src="/static/img/icons/search.svg" alt="search.svg">
             </div>
             <div class="Header-search">
               <div class="search">
                 <form class="form form_search" action="#" method="post">
                   <input class="search-input" id="query" name="query" type="text"
                          placeholder="NVIDIA GeForce RTX 3060">
-                  <button class="search-button" type="submit" name="search" id="search"><img
-                          src="/static/img/icons/search.svg" alt="search.svg">Поиск
+                  <button class="search-button" type="submit" name="search" id="search">
+                    <img src="/static/img/icons/search.svg" alt="search.svg">Поиск
                   </button>
                 </form>
               </div>
