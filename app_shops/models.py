@@ -93,7 +93,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
     main_image = models.OneToOneField('ProductImage', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='main_for_product')
-    features = models.ManyToManyField('Feature', verbose_name=_('products'), blank=True, related_name='goods')
+    features = models.ManyToManyField('Feature', verbose_name=_('features'), blank=True, related_name='goods')
 
     class Meta:
         verbose_name_plural = _('products')
