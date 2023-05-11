@@ -152,7 +152,6 @@ class ProductImage(models.Model):
     large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
-    is_main = models.BooleanField(default=False, verbose_name=_('is main'))
 
     class Meta:
         verbose_name_plural = _('product images')

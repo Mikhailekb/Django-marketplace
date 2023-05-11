@@ -10,17 +10,19 @@ class ProductFilter(filters.FilterSet):
     min_price = filters.NumberFilter(method='filter_by_min_price')
     max_price = filters.NumberFilter(method='filter_by_max_price')
     # Фильтр на бесплатную доставку на данный момент отсутствует
-
-    def filter_by_min_price(self, queryset, name, value):
+    @staticmethod
+    def filter_by_min_price(queryset, name, value):
         return queryset.filter(avg_price__gte=value)
 
-    def filter_by_max_price(self, queryset, name, value):
+    @staticmethod
+    def filter_by_max_price(queryset, name, value):
         return queryset.filter(avg_price__lte=value)
-
-    def filter_in_stock(self, queryset, name, value):
+    @staticmethod
+    def filter_in_stock(queryset, name, value):
         return queryset.filter(in_shops__count_left__gt=0)
 
-    def filter_name_or_description(self, queryset, name, value):
+    @staticmethod
+    def filter_name_or_description(queryset, name, value):
         return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value))
 
     class Meta:
