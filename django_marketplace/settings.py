@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'imagekit',
+    'phonenumber_field',
+    'django_filters',
+    'django_user_agents',
+    'project_command',
     'app_shops',
     'app_users',
-    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'django_marketplace.urls'
@@ -165,5 +169,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+USER_AGENTS_CACHE = 'default'
 
 LOGIN_REDIRECT_URL = '/'
