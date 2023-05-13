@@ -4429,7 +4429,7 @@ a.Cart-title {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 160px;
+    /*min-width: 160px;*/
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
@@ -6492,4 +6492,30 @@ input[type="radio"] {
     left: 0;
     bottom: 0rem;
     right: 0;
+}
+
+.lang {
+    margin-right: 0;
+    padding-top: 2px;
+    padding-left: 20px;
+    padding-right: 0;
+}
+
+.lang-text {
+    min-width: 80px;
+    margin-right: 5px;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1.4px;
+}
+
+.lang-dropdown {
+    right: 0;
+}
+
+.btn-lang {
+    border-radius: 0;
+    border: none;
+    min-height: 39px;
 }
