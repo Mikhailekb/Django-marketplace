@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'project_command',
     'app_shops',
     'app_users',
-    'phonenumber_field',
     'allauth',
     'allauth.account',
 ]
