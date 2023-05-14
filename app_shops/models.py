@@ -84,7 +84,8 @@ class Product(models.Model):
     """
     name = models.CharField(max_length=256, verbose_name=_('name'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from=get_latin_name, verbose_name='URL')
-    description = models.TextField(verbose_name=_('description'))
+    description_short = models.TextField(verbose_name=_('description short'))
+    description_long = models.TextField(verbose_name=_('description_long'))
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name=_('products'))
     sellers = models.ManyToManyField('Shop', through='ProductShop')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
@@ -92,6 +93,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
     main_image = models.OneToOneField('ProductImage', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='main_for_product')
+    features = models.ManyToManyField('Feature', verbose_name=_('features'), blank=True, related_name='goods')
 
     class Meta:
         verbose_name_plural = _('products')
@@ -100,6 +102,28 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FeatureName(models.Model):
+    """
+    Модель имени характеристики товаров
+    """
+    name = models.CharField(max_length=100, verbose_name=_('name'))
+
+    def __str__(self):
+        return self.name
+
+
+class Feature(models.Model):
+    """
+    Модель характеристики товара
+    """
+    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name=_('name'),
+                             related_name='feature_value')
+    value = models.CharField(max_length=100, verbose_name=_('value'))
+
+    def __str__(self):
+        return f'{self.name}: {self.value}'
 
 
 class Shop(models.Model):
