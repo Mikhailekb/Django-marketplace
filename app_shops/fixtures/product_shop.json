@@ -1,1 +1,170 @@
-[{"model": "app_shops.productshop", "pk": 2, "fields": {"product": 2, "shop": 1, "count_left": 123, "count_sold": 2, "price": "32314.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 3, "fields": {"product": 3, "shop": 1, "count_left": 234, "count_sold": 342, "price": "3432.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 4, "fields": {"product": 4, "shop": 1, "count_left": 123, "count_sold": 23, "price": "1322.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 5, "fields": {"product": 5, "shop": 1, "count_left": 123, "count_sold": 2325, "price": "1541.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 6, "fields": {"product": 6, "shop": 1, "count_left": 123, "count_sold": 231, "price": "2320.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 7, "fields": {"product": 7, "shop": 1, "count_left": 123, "count_sold": 123, "price": "1546.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 8, "fields": {"product": 8, "shop": 1, "count_left": 234, "count_sold": 234, "price": "2352.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 9, "fields": {"product": 9, "shop": 1, "count_left": 456, "count_sold": 56, "price": "4856.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 10, "fields": {"product": 10, "shop": 1, "count_left": 756, "count_sold": 6757, "price": "3464.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 11, "fields": {"product": 11, "shop": 1, "count_left": 456, "count_sold": 56, "price": "3735.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 12, "fields": {"product": 12, "shop": 1, "count_left": 56, "count_sold": 56, "price": "4644.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 13, "fields": {"product": 4, "shop": 2, "count_left": 12, "count_sold": 31, "price": "1000.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 14, "fields": {"product": 4, "shop": 3, "count_left": 19, "count_sold": 44, "price": "1100.00", "is_active": true}}, {"model": "app_shops.productshop", "pk": 15, "fields": {"product": 1, "shop": 1, "count_left": 12, "count_sold": 12, "price": "1000.00", "is_active": true}}]
+[
+  {
+    "model": "app_shops.productshop",
+    "pk": 2,
+    "fields": {
+      "product": 2,
+      "shop": 1,
+      "count_left": 123,
+      "count_sold": 2,
+      "price": "32314.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 3,
+    "fields": {
+      "product": 3,
+      "shop": 1,
+      "count_left": 234,
+      "count_sold": 342,
+      "price": "3432.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 4,
+    "fields": {
+      "product": 4,
+      "shop": 1,
+      "count_left": 123,
+      "count_sold": 23,
+      "price": "1322.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 5,
+    "fields": {
+      "product": 5,
+      "shop": 1,
+      "count_left": 123,
+      "count_sold": 2325,
+      "price": "1541.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 6,
+    "fields": {
+      "product": 6,
+      "shop": 1,
+      "count_left": 123,
+      "count_sold": 231,
+      "price": "2320.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 7,
+    "fields": {
+      "product": 7,
+      "shop": 1,
+      "count_left": 123,
+      "count_sold": 123,
+      "price": "1546.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 8,
+    "fields": {
+      "product": 8,
+      "shop": 1,
+      "count_left": 234,
+      "count_sold": 234,
+      "price": "2352.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 9,
+    "fields": {
+      "product": 9,
+      "shop": 1,
+      "count_left": 456,
+      "count_sold": 56,
+      "price": "4856.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 10,
+    "fields": {
+      "product": 10,
+      "shop": 1,
+      "count_left": 756,
+      "count_sold": 6757,
+      "price": "3464.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 11,
+    "fields": {
+      "product": 11,
+      "shop": 1,
+      "count_left": 456,
+      "count_sold": 56,
+      "price": "3735.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 12,
+    "fields": {
+      "product": 12,
+      "shop": 1,
+      "count_left": 56,
+      "count_sold": 56,
+      "price": "4644.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 13,
+    "fields": {
+      "product": 4,
+      "shop": 2,
+      "count_left": 12,
+      "count_sold": 31,
+      "price": "1000.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 14,
+    "fields": {
+      "product": 4,
+      "shop": 3,
+      "count_left": 19,
+      "count_sold": 44,
+      "price": "1100.00",
+      "is_active": true
+    }
+  },
+  {
+    "model": "app_shops.productshop",
+    "pk": 15,
+    "fields": {
+      "product": 1,
+      "shop": 1,
+      "count_left": 12,
+      "count_sold": 12,
+      "price": "1000.00",
+      "is_active": true
+    }
+  }
+]
