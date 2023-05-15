@@ -16,6 +16,9 @@ class HomeView(TemplateView):
 
 
 class CatalogView(FilterView):
+    """
+    Представление для отображения страницы каталога
+    """
     template_name = 'pages/catalog.html'
     context_object_name = 'goods'
     filterset_class = ProductFilter
