@@ -13,17 +13,16 @@
     <h5>Для восстановления пароля введите адрес электронной почты, на которую зарегистрирована учетная запись</h5>
   </div>
 
-  <form action="#">
-
+  <form method="post">
+    {% csrf_token %}
     <div>
-
-
-      <input class="user-input" type="email" name="login" id="name" placeholder="E-mail"/>
+      {{ form.email }}
+      {{ form.email.errors }}
     </div>
     <div>
       <input type="submit" value="Получить проверочный код"/>
     </div>
-    <a class="registr" href="registr.html">
+    <a class="registr" href="/profile/registr">
       Вход
     </a>
   </form>
