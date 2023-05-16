@@ -4,7 +4,8 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
 
-from app_shops.models import Category, Product, Shop, ProductShop, ProductImage, ShopImage, TagProduct
+from .models import Category, Shop, ProductShop, ProductImage, ShopImage, TagProduct, Feature, \
+    FeatureName, Product
 
 
 class ProductImageInLine(admin.StackedInline):
@@ -18,6 +19,11 @@ class ShopImageInLine(admin.StackedInline):
 
 class ProductShopInLine(admin.StackedInline):
     model = ProductShop
+    extra = 1
+
+
+class FeatureInLine(admin.StackedInline):
+    model = Feature
     extra = 1
 
 
@@ -39,6 +45,8 @@ class CategoryAdmin(TranslationAdmin):
 class ProductAdmin(TranslationAdmin):
     list_display = ['name', 'category']
     inlines = [ProductImageInLine, ]
+    filter_horizontal = ['features']
+    change_list_template = "admin/product_clear_cache.html"
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == "main_image":
@@ -63,3 +71,8 @@ class ShopAdmin(TranslationAdmin):
 @admin.register(TagProduct)
 class TagProductAdmin(TranslationAdmin):
     filter_horizontal = ['goods']
+
+
+@admin.register(FeatureName)
+class FeatureAdmin(TranslationAdmin):
+    inlines = [FeatureInLine]
