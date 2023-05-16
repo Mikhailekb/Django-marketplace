@@ -1,9 +1,9 @@
 from django.core.cache import cache
 from django.db.models import QuerySet, Avg, Min, Max, Sum
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView
 from django_filters.views import FilterView
 
-from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, PRODUCTS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME
+from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME
 from .filters import ProductFilter
 from .models import SortProduct, Product, TagProduct
 
@@ -15,17 +15,16 @@ class HomeView(TemplateView):
     template_name = 'pages/main.html'
 
 
-class CatalogView(ListView):
+class CatalogView(FilterView):
     """
     Представление для отображения страницы каталога
     """
     template_name = 'pages/catalog.html'
     context_object_name = 'goods'
+    filterset_class = ProductFilter
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.price = None
-        self.form = None
         self.sort_options: QuerySet = cache.get_or_set('sort_options', SortProduct.objects.all(),
                                                        timeout=SORT_OPTIONS_CACHE_LIFETIME)
 
@@ -37,46 +36,17 @@ class CatalogView(ListView):
             self.paginate_by = 6
         return self.paginate_by
 
-    def get_ordering(self):
-        new_ordering: str | None = self.request.GET.get('order_by')
-        if new_ordering and new_ordering.startswith('-'):
-            modulo_new_ordering = new_ordering[1:]
-        else:
-            modulo_new_ordering = new_ordering
-        options = [option.sort_field for option in self.sort_options]
-
-        if modulo_new_ordering in options:
-            self.ordering = new_ordering
-        else:
-            self.ordering = 'count_sold'
-        return self.ordering
-
     def get_queryset(self):
-        ordering = self.get_ordering()
         filter_options = {'is_active': True, 'in_shops__is_active': True}
         category = self.request.GET.get('category')
         if category:
             filter_options['category__slug'] = category
-        self.price = self.request.GET.get('price')
-        annotate = {'avg_price': Avg('in_shops__price'), 'min_price': Min('in_shops__price'),
-                    'max_price': Max('in_shops__price'), 'count_sold': Sum('in_shops__count_sold')}
-
-        if self.price:
-            queryset = Product.objects.filter(**filter_options).select_related('category', 'main_image').annotate(**annotate)
-            filter_obj = ProductFilter(self.request.GET, queryset=queryset)
-            self.form = filter_obj.form
-            self.queryset = filter_obj.qs
-        else:
-            self.queryset = cache.get(f'products_{category}_{ordering}')
-
-            if not self.queryset:
-                queryset = Product.objects.filter(**filter_options).select_related('category', 'main_image').annotate(**annotate)
-                filter_obj = ProductFilter(self.request.GET, queryset=queryset)
-                self.form = filter_obj.form
-                self.queryset = filter_obj.qs
-                aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
-                cache.set(f'products_{category}_{ordering}', self.queryset, PRODUCTS_CACHE_LIFETIME)
-                cache.set(f'aggregate_{category}', aggregate, PRODUCTS_CACHE_LIFETIME)
+        self.queryset = Product.objects.filter(**filter_options) \
+                                       .select_related('category', 'main_image') \
+                                       .annotate(avg_price=Avg('in_shops__price'),
+                                                 min_price=Min('in_shops__price'),
+                                                 max_price=Max('in_shops__price'),
+                                                 count_sold=Sum('in_shops__count_sold'))
         return self.queryset
 
     def sorting_update(self):
@@ -100,16 +70,18 @@ class CatalogView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        category = self.request.GET.get('category')
-        aggregate: dict = cache.get(f'aggregate_{category}')
-        if not aggregate:
-            aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
+        aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
         min_price = aggregate.get('min')
         max_price = aggregate.get('max')
+
+        self.ordering = self.filterset.data.get('order_by')
+        if not self.ordering:
+            self.ordering = 'count_sold'
         self.sorting_update()
 
-        if self.price and len(self.price.split(';')) == 2:
-            price_from, price_to = self.price.split(';')
+        price = self.filterset.data.get('price')
+        if price and len(price.split(';')) == 2 and all(item.isdigit() for item in price.split(';')):
+            price_from, price_to = price.split(';')
         else:
             price_from, price_to = min_price, max_price
 
@@ -121,5 +93,5 @@ class CatalogView(ListView):
         context['price_to'] = price_to
         context['min_price'] = min_price
         context['max_price'] = max_price
-        context['form'] = self.form if self.form else ProductFilter().form
+        context['form'] = self.filterset.form
         return context

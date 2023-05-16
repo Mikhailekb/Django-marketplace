@@ -26,12 +26,13 @@ class ProductFilter(filters.FilterSet):
     def filter_price(queryset, name, value):
         if len(value.split(';')) == 2:
             price_from, price_to = value.split(';')
-            return queryset.filter(avg_price__gte=price_from, avg_price__lte=price_to)
+            if price_from.isdigit() and price_to.isdigit():
+                return queryset.filter(avg_price__gte=price_from, avg_price__lte=price_to)
         return queryset
 
     @staticmethod
     def filter_name_or_description(queryset, name, value):
-        return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value))
+        return queryset.filter(Q(name__icontains=value) | Q(description_long__icontains=value))
 
     @staticmethod
     def filter_in_stock(queryset, name, value):
