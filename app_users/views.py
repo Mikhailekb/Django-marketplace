@@ -33,7 +33,7 @@ class LogInView(LoginView):
     success_url = reverse_lazy('home')
 
 
-class ResetPassStage1(LoginRequiredMixin, FormView):
+class ResetPassStage1(FormView):
     """Представление для восстановления пароля. Ввод Email"""
     template_name = 'pages/e-mail.html'
     form_class = ResetPassStage1Form
@@ -41,13 +41,14 @@ class ResetPassStage1(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        if User.objects.get(email=form.cleaned_data['email']).email == self.request.user.email:
+        email = form.cleaned_data['email']
+        if User.objects.get(email=email):
             send_mail(
                 subject="",
                 message="Для восстановления пароля перейдите по ссылке и введите новый пароль\n"
                         "http://127.0.0.1:8000/profile/reset_password/stage_2",
                 from_email="local",
-                recipient_list=[form.cleaned_data['email']],
+                recipient_list=[email],
                 fail_silently=False,
             )
         return response

@@ -16,11 +16,11 @@ def create_profile(sender, instance, created, **kwargs):
         )
 
 
-@receiver(connection_created)
-def create_groups(sender, connection, **kwargs):
-    admin_group = Group.objects.get_or_create(name=_('admins'))
-
-    creator_group = Group.objects.get_or_create(name=_('creators'))
+# @receiver(connection_created)
+# def create_groups(sender, connection, **kwargs):
+#     admin_group = Group.objects.get_or_create(name=_('admins'))
+#
+#     creator_group = Group.objects.get_or_create(name=_('creators'))
 
 
 
