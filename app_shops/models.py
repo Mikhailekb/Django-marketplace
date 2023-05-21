@@ -205,4 +205,22 @@ class ShopImage(models.Model):
 
     def __str__(self):
         return f'Image of shop: {self.shop.name}'
+    
+
+class Banner(models.Model):
+    """
+    Модель Баннера главной страницы
+    """
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='banner')
+    is_active = models.BooleanField(default=False, verbose_name=_('is active'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
+    
+
+    def __str__(self):
+        return f'The banner of {self.product.name}'
+
+    class Meta:
+        verbose_name_plural = _('banners')
+        verbose_name = _('banner')
+        ordering = ['created']
 
