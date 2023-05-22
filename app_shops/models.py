@@ -223,12 +223,13 @@ class Banner(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='banner')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
-    photo = models.ImageField(upload_to=get_banner_img_path, null=True, blank=True, verbose_name='image',
+    photo = models.ImageField(upload_to=get_banner_img_path, null=True, blank=True, verbose_name=_('image'),
                               validators=[FileExtensionValidator(['png'])])
     
     def clean(self):
         if not self.photo:
-            raise ValidationError('No image!')
+            err_text = _('No image!')
+            raise ValidationError(err_text)
         else:
             w, h = get_image_dimensions(self.photo)
             if w < 250:
