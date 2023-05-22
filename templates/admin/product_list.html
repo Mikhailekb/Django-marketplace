@@ -1,0 +1,11 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n %}
+
+{% block object-tools %}
+  {{ block.super }}
+  <form action="{% url 'clear_cache' %}" method="POST">
+    {% csrf_token %}
+    <button style="padding: 10px 15px;" class="button" type="submit" name="product_cache" value="1">{% trans 'Clear product cache' %}</button>
+  </form>
+{% endblock %}
+
