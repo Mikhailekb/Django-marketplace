@@ -70,8 +70,7 @@ class ProductShopInLine(admin.TabularInline):
     def discount_price(obj):
         if obj.price != obj.discount_price:
             return round(obj.discount_price, 2)
-        else:
-            return '-'
+        return '-'
 
 
 
@@ -91,8 +90,7 @@ class CategoryAdmin(TranslationAdmin):
     def get_icon(self, obj):
         if obj.icon:
             return mark_safe(f'<img src={obj.icon.url}>')
-        else:
-            return 'None'
+        return 'None'
 
     get_icon.short_description = _("icon")
 
