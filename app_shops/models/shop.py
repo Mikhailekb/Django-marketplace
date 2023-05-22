@@ -1,8 +1,12 @@
+import decimal
+
 from autoslug import AutoSlugField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from imagekit.models import ProcessedImageField, ImageSpecField
+
+from app_shops.models.discount import Discount
 
 
 def get_shop_img_path(instance, name):
@@ -44,6 +48,8 @@ class ProductShop(models.Model):
     count_sold = models.IntegerField(default=0, verbose_name=_('sold in shop'))
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('price'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
+    active_discount = models.ForeignKey(Discount, null=True, blank=True, on_delete=models.SET_NULL,
+                                        related_name='product_in_shop')
 
     def __str__(self):
         return self.product.name

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from django.http import HttpRequest, HttpResponseForbidden
+from django.db.models import Case, When, DecimalField, F, QuerySet, OuterRef
+from django.http import HttpRequest
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
@@ -41,6 +42,37 @@ class ProductShopInLine(admin.TabularInline):
     model = ProductShop
     extra = 1
     raw_id_fields = ['product', ]
+    fields = ('product', 'shop', 'count_left', 'count_sold', 'price', 'discount_price', 'is_active', 'active_discount')
+    readonly_fields = ('discount_price', )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "active_discount":
+            shop_id = request.path.split('/')[4]
+            if shop_id.isdigit():
+                kwargs["queryset"] = Discount.objects.filter(shop_id=shop_id)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+    def get_queryset(self, request):
+        price_expression = Case(
+            When(active_discount__discount_percentage__isnull=False,
+                 then=F('price') - F('price') * F('active_discount__discount_percentage') / 100),
+            When(active_discount__discount_amount__isnull=False,
+                 then=F('price') - F('active_discount__discount_amount')),
+            default=F('price'),
+            output_field=DecimalField(),
+        )
+        qs: QuerySet = super().get_queryset(request)
+
+        return qs.prefetch_related('product').annotate(discount_price=price_expression)
+
+    @staticmethod
+    def discount_price(obj):
+        if obj.price != obj.discount_price:
+            return round(obj.discount_price, 2)
+        else:
+            return '-'
+
 
 
 class FeatureInLine(admin.StackedInline):
@@ -99,12 +131,11 @@ class ShopAdmin(TranslationAdmin):
 
 
 @admin.register(Discount)
-class ShopAdmin(TranslationAdmin):
+class DiscountAdmin(TranslationAdmin):
     list_display = ['name', 'is_active']
     inlines = [DiscountImageInLine, ]
     readonly_fields = ['slug', 'shop', 'get_image']
-    filter_horizontal = ['goods']
-    fields = ('shop', 'name', 'description_short', 'description_long', 'goods', ('discount_amount', 'discount_percentage'),
+    fields = ('shop', 'name', 'description_short', 'description_long', ('discount_amount', 'discount_percentage'),
               'min_cost', 'date_start', 'date_end', 'is_active', ('main_image', 'get_image'))
 
 
@@ -114,7 +145,7 @@ class ShopAdmin(TranslationAdmin):
         else:
             return ''
 
-    get_image.short_description = ""
+    get_image.short_description = ''
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == "main_image":

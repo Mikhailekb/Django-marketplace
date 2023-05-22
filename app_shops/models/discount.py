@@ -22,7 +22,6 @@ class Discount(models.Model):
     description_long = models.TextField(verbose_name=_('description long'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
     shop = models.ForeignKey('Shop', on_delete=models.CASCADE, related_name='discounts')
-    goods = models.ManyToManyField('ProductShop', blank=True, related_name='discounts', verbose_name=_('goods'))
     discount_amount = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True,
                                           verbose_name=_('discount value'))
     discount_percentage = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name=_('discount percentage'),

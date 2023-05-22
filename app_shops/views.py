@@ -92,10 +92,12 @@ class CatalogView(FilterView):
         else:
             price_from, price_to = min_price, max_price
 
+        category = self.request.GET.get('category')
+
         context['sort_options'] = self.sort_options
         context['tags'] = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
         context['order_by'] = self.ordering
-        context['category'] = self.request.GET.get('category')
+        context['category'] = category if category else ''
         context['price_from'] = price_from
         context['price_to'] = price_to
         context['min_price'] = min_price
