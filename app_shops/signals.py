@@ -7,12 +7,12 @@ from .models.discount import Discount
 
 
 @receiver([post_save, post_delete], sender=Category)
-def invalidate_cache(**kwargs):
+def invalidate_cache_category(**kwargs):
     """Удаление из кэша категории товаров, в случае изменения таблицы Category из админки"""
     cache.delete('categories')
 
 
 @receiver([post_save, post_delete], sender=Discount)
-def invalidate_cache(**kwargs):
+def invalidate_cache_discount(**kwargs):
     """Удаление из кэша скидок, в случае изменения таблицы Discount из админки"""
     cache.delete('sales')
