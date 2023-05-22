@@ -142,8 +142,7 @@ class DiscountAdmin(TranslationAdmin):
     def get_image(self, obj):
         if obj.main_image:
             return mark_safe(f'<img src={obj.main_image.small.url}>')
-        else:
-            return ''
+        return ''
 
     get_image.short_description = ''
 
