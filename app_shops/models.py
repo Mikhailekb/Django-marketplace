@@ -7,6 +7,8 @@ from uuslug import slugify
 from phonenumber_field.modelfields import PhoneNumberField
 from imagekit.models import ProcessedImageField, ImageSpecField
 from .services import img_processors
+from django.core.exceptions import ValidationError
+from django.core.files.images import get_image_dimensions
 
 
 
@@ -20,6 +22,13 @@ def get_good_img_path(instance, name):
 
 def get_shop_img_path(instance, name):
     return f'img/content/shops/{instance.shop.slug}/{name}'
+
+
+def get_banner_img_path(instance, name):
+    return f'img/content/banners/{instance.product.slug}/{name}'
+
+
+
 
 
 class Category(models.Model):
@@ -214,6 +223,18 @@ class Banner(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='banner')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
+    photo = models.ImageField(upload_to=get_banner_img_path, null=True, blank=True, verbose_name='image',
+                              validators=[FileExtensionValidator(['png'])])
+    
+    def clean(self):
+        if not self.photo:
+            raise ValidationError('No image!')
+        else:
+            w, h = get_image_dimensions(self.photo)
+            if w < 250:
+                raise ValidationError(f'The image is {w} pixel wide. It\'s supposed to be >= 250px')
+            if h < 250:
+                raise ValidationError(f'The image is {h} pixel high. It\'s supposed to be >= 250px')
     
 
     def __str__(self):

@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from modeltranslation.admin import TranslationAdmin
 
 from .models import Category, Shop, ProductShop, ProductImage, ShopImage, TagProduct, Feature, \
-    FeatureName, Product
+    FeatureName, Product, Banner
 
 
 class ProductImageInLine(admin.StackedInline):
@@ -46,7 +46,7 @@ class ProductAdmin(TranslationAdmin):
     list_display = ['name', 'category']
     inlines = [ProductImageInLine, ]
     filter_horizontal = ['features']
-    change_list_template = "admin/product_clear_cache.html"
+    # change_list_template = "admin/product_clear_cache.html"
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == "main_image":
@@ -76,3 +76,19 @@ class TagProductAdmin(TranslationAdmin):
 @admin.register(FeatureName)
 class FeatureAdmin(TranslationAdmin):
     inlines = [FeatureInLine]
+
+
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ['get_foreing_name', 'is_active', 'created', 'get_img']
+    list_filter = ['is_active']
+
+    def get_img(self, obj):
+        return mark_safe(f'<img style="width: 150px; height: 150px; object-fit: contain;" src={obj.photo.url}>')
+
+    def get_foreing_name(self, obj):
+        return obj.product.name
+    
+    get_img.short_description = _('photo')
+    get_foreing_name.short_description = _('name')
+        
