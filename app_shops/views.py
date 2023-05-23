@@ -1,11 +1,18 @@
 from django.core.cache import cache
 from django.db.models import QuerySet, Avg, Min, Max, Sum
-from django.views.generic import TemplateView
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
+from django.views import View
+from django.views.generic import TemplateView, ListView
 from django_filters.views import FilterView
+from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 
-from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME
+from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
-from .models import SortProduct, Product, TagProduct
+from .models.discount import Discount
+
+from .models.product import SortProduct, Product, TagProduct
 
 
 class HomeView(TemplateView):
@@ -85,13 +92,59 @@ class CatalogView(FilterView):
         else:
             price_from, price_to = min_price, max_price
 
+        category = self.request.GET.get('category')
+
         context['sort_options'] = self.sort_options
         context['tags'] = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
         context['order_by'] = self.ordering
-        context['category'] = self.request.GET.get('category')
+        context['category'] = category if category else ''
         context['price_from'] = price_from
         context['price_to'] = price_to
         context['min_price'] = min_price
         context['max_price'] = max_price
         context['form'] = self.filterset.form
         return context
+
+
+class SaleView(ListView):
+    """
+    Представление для отображения страницы списка распродаж
+    """
+    template_name = 'pages/sale.html'
+    context_object_name = 'sales'
+
+    def get_queryset(self):
+        self.queryset = cache.get_or_set('sales', Discount.objects.filter(is_active=True) \
+                                         .order_by('date_start') \
+                                         .select_related('main_image'),
+                                         timeout=SALES_CACHE_LIFETIME)
+        return self.queryset
+
+    def get_paginate_by(self, queryset):
+        self.paginate_by = 12
+        if self.request.user_agent.is_tablet:
+            self.paginate_by = 10
+        elif self.request.user_agent.is_mobile:
+            self.paginate_by = 8
+        return self.paginate_by
+
+
+class ClearCache(View):
+    def post(self, request: HttpRequest) -> HttpResponse:
+        if not request.user.is_staff:
+            raise PermissionError
+
+        if 'product_cache' in request.POST:
+            cache.delete('sort_options')
+            cache.delete('tags')
+            messages.success(self.request, _(f"Cache cleared successfully"))
+        elif 'categories_cache' in request.POST:
+            cache.delete('categories')
+            messages.success(self.request, _(f"Cache cleared successfully"))
+        elif 'all_cache' in request.POST:
+            cache.clear()
+            messages.success(self.request, _(f"Cache cleared successfully"))
+        else:
+            messages.warning(self.request, _(f"Error. Cache not cleared"))
+
+        return redirect(request.META.get('HTTP_REFERER'))

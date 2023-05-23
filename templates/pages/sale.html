@@ -1,7 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
-{% load i18n %}
-
+{% load static i18n %}
 
 {% block page_content %}
   <div class="Middle Middle_top">
@@ -11,10 +9,10 @@
 
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item">
-              <a href="{% url 'home' %}}">Главная</a>
+              <a href="{% url 'home' %}">{% trans 'Home' %}</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current">
-              <span>Блог</span>
+              <span>{% trans "Sales list" %}</span>
             </li>
           </ul>
         </div>
@@ -22,30 +20,36 @@
     </div>
     <div class="Section">
       <div class="wrap">
-          <div class="Cards Cards_blog">
-            {% for item in goods %}
-              <div class="Card">
-                <a class="Card-picture" href="#">
-                  <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
-                </a>
-                <div class="Card-date">
-                  <strong class="Card-date-number">24</strong>
-                  <span class="Card-date-month">nov</span>
-                </div>
-                {% if card_pin %}
-                  <div class="Card-pin"></div>
-                {% endif %}
-                <div class="Card-content">
-                  <strong class="Card-title">
-                    <a href="#">{{ item.name }}</a>
-                  </strong>
-                  <div class="Card-description">
-                      {{ item.descroption }}
-                  </div>
+        <div class="Cards Cards_blog">
+          {% for item in sales %}
+            <div class="Card">
+              <a class="Card-picture" href="#">
+                <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
+              </a>
+              <div class="Card-date">
+                <strong class="Card-date-number">{{ item.day_start }}</strong>
+                <span class="Card-date-month">{{ item.month_start }}</span>
+              </div>
+              {% if item.date_end %}
+              <div class="Card-date Card-date_to">
+                <strong class="Card-date-number">{{ item.day_end }}</strong>
+                <span class="Card-date-month">{{ item.month_end }}</span>
+              </div>
+              {% endif %}
+{#              {% if card_pin %}#}
+{#                <div class="Card-pin"></div>#}
+{#              {% endif %}#}
+              <div class="Card-content">
+                <strong class="Card-title">
+                  <a href="#">{{ item.name }}</a>
+                </strong>
+                <div class="Card-description">
+                  {{ item.description_short }}
                 </div>
               </div>
-            {% endfor %}
-          </div>
+            </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

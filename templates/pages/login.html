@@ -24,10 +24,8 @@
         <div>
           <input type="submit" value="Войти"/>
         </div>
-        <a class="forgot-label" href="/profile/reset_password/stage_1">Забыли пароль?</a>
-        <a class="registr" href="/profile/register">
-          Регистрация
-        </a>
+        <a class="forgot-label" href="{% url 'reset_1' %}">Забыли пароль?</a>
+        <a class="registr" href="{% url 'registration' %}">Регистрация</a>
       </form>
     </div>
 
