@@ -35,7 +35,7 @@ class Discount(models.Model):
                                       null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = _('categories')
+        verbose_name_plural = _('discounts')
         verbose_name = _('discount')
         ordering = ['-date_start']
 
