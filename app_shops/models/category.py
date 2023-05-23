@@ -20,7 +20,7 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = _('categories')
         verbose_name = _('category')
-        ordering = ['id']
+        ordering = ['name']
 
     def __str__(self):
         if not self.parent:

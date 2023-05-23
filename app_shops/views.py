@@ -115,7 +115,6 @@ class SaleView(ListView):
 
     def get_queryset(self):
         self.queryset = cache.get_or_set('sales', Discount.objects.filter(is_active=True) \
-                                         .order_by('date_start') \
                                          .select_related('main_image'),
                                          timeout=SALES_CACHE_LIFETIME)
         return self.queryset

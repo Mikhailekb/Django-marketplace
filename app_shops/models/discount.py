@@ -28,11 +28,16 @@ class Discount(models.Model):
                                                            validators=[MaxValueValidator(99)])
     min_cost = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True,
                                    verbose_name=_('minimum cost'))
-    date_start = models.DateTimeField(verbose_name=_('date start'))
+    date_start = models.DateTimeField(verbose_name=_('date start'), db_index=True)
     date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
     is_active = models.BooleanField(default=True, verbose_name=_('is active'))
     main_image = models.OneToOneField('DiscountImage', related_name='main_for_discount', on_delete=models.SET_NULL,
                                       null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = _('discounts')
+        verbose_name = _('discount')
+        ordering = ['-date_start']
 
     def clean(self):
         if not self.discount_amount and not self.discount_percentage or \
@@ -89,7 +94,6 @@ class DiscountImage(models.Model):
     class Meta:
         verbose_name_plural = _('discount images')
         verbose_name = _('discount image')
-        ordering = ['id']
 
     def __str__(self):
         return f'Image of discount: {self.discount.name}'

@@ -19,9 +19,6 @@ class SortProduct(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        ordering = ['id']
-
 
 class TagProduct(models.Model):
     codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
@@ -78,7 +75,6 @@ class Product(models.Model):
     class Meta:
         verbose_name_plural = _('products')
         verbose_name = _('product')
-        ordering = ['id']
 
     def __str__(self):
         return self.name
@@ -98,7 +94,6 @@ class ProductImage(models.Model):
     class Meta:
         verbose_name_plural = _('product images')
         verbose_name = _('product image')
-        ordering = ['id']
 
     def __str__(self):
         return f'Image of product: {self.product.name}'

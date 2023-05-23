@@ -30,7 +30,6 @@ class Shop(models.Model):
     class Meta:
         verbose_name_plural = _('shops')
         verbose_name = _('shop')
-        ordering = ['id']
 
     def __str__(self):
         return self.name
@@ -67,7 +66,6 @@ class ShopImage(models.Model):
     class Meta:
         verbose_name_plural = _('shop images')
         verbose_name = _('shop image')
-        ordering = ['id']
 
     def __str__(self):
         return f'Image of shop: {self.shop.name}'
