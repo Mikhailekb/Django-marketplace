@@ -169,16 +169,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
 }
 
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-#         'LOCATION': 'redis://127.0.0.1:6379',
-#         'OPTIONS': {
-#             'db': '1',
-#         }
-#     },
-# }
-
 
 USER_AGENTS_CACHE = 'default'
 
@@ -203,9 +193,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_CACHE_BACKEND = 'default'
 CELERY_CACHE_BACKEND = 'django-cache'
 
 

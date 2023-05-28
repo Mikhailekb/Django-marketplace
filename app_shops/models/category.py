@@ -27,11 +27,6 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.name} ({self.parent})' if self.parent else self.name
 
-    # def __str__(self):
-    #     if not self.parent:
-    #         return self.name
-    #     return f'{self.name} ({self.parent})'
-
     def get_absolute_url(self):
         catalog_url = reverse('catalog')
         return f'{catalog_url}?category={self.slug}'
