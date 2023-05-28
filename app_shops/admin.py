@@ -8,7 +8,7 @@ from modeltranslation.admin import TranslationAdmin
 
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
-from .models.product import ProductImage, Feature, Product, TagProduct, FeatureName
+from .models.product import ProductImage, Feature, Product, TagProduct, FeatureName, Review
 from .models.shop import ShopImage, ProductShop, Shop
 
 AdminSite.site_header = 'Megano'
@@ -79,6 +79,11 @@ class FeatureInLine(admin.StackedInline):
     extra = 1
 
 
+class ReviewInLine(admin.StackedInline):
+    model = Review
+    extra = 1
+
+
 @admin.register(Category)
 class CategoryAdmin(TranslationAdmin):
     list_display = ['name', 'get_icon', 'is_active', 'parent', 'slug']
@@ -100,7 +105,7 @@ class ProductAdmin(TranslationAdmin):
     list_display = ['name', 'category', 'is_active']
     readonly_fields = ['slug']
     search_fields = ['name', 'description_long']
-    inlines = [ProductImageInLine, ]
+    inlines = [ProductImageInLine, ReviewInLine]
     filter_horizontal = ['features']
     change_list_template = "admin/product_list.html"
     save_on_top = True

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'app_users',
     'allauth',
     'allauth.account',
+    'app_shops.templatetags.custom_filters',
 ]
 
 MIDDLEWARE = [

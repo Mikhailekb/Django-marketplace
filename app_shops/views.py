@@ -1,18 +1,23 @@
 from django.core.cache import cache
-from django.db.models import QuerySet, Avg, Min, Max, Sum
+from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 
-from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
+from .services.functions import get_exchange_rate
+
+from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME, \
+    EXCHANGE_RATE_LIFETIME
 from .filters import ProductFilter
 from .models.discount import Discount
 
-from .models.product import SortProduct, Product, TagProduct
+from .models.product import SortProduct, Product, TagProduct, Feature, Review
+
+from .models.shop import ProductShop
 
 
 class HomeView(TemplateView):
@@ -147,3 +152,48 @@ class ClearCache(View):
             messages.warning(self.request, _(f"Error. Cache not cleared"))
 
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+class ProductDetailView(DetailView):
+    """
+    Представление детальной страницы товара
+    """
+    model = Product
+    slug_url_kwarg = 'product_slug'
+    template_name = 'pages/product.html'
+    context_object_name = 'product'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.select_related('category', 'main_image').\
+            prefetch_related(Prefetch('features', queryset=Feature.objects.select_related('name')), 'images', 'tags',
+                             Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')),
+                             Prefetch('reviews', queryset=Review.objects.select_related('user')))
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = context['product']
+        price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 0)
+        reviews_count = len(product.reviews.all())
+        exchange_rate = cache.get_or_set('exchange_rate', get_exchange_rate(), timeout=EXCHANGE_RATE_LIFETIME)
+
+        context['price'] = price
+        context['reviews_count'] = reviews_count
+        context['exchange_rate'] = exchange_rate
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        product = self.get_object()
+        try:
+            user = request.user.profile
+        except AttributeError:
+            return redirect('login')
+
+        text = request.POST.get('review')
+        review = Review(product=product, user=user, text=text)
+        review.save()
+
+        return redirect('product-detail', product_slug=product.slug)
