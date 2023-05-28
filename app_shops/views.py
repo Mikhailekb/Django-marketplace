@@ -108,6 +108,8 @@ class CatalogView(FilterView):
         context['min_price'] = min_price
         context['max_price'] = max_price
         context['form'] = self.filterset.form
+        context['exchange_rate'] = cache.get_or_set('exchange_rate', get_exchange_rate(),
+                                                    timeout=EXCHANGE_RATE_LIFETIME)
         return context
 
 

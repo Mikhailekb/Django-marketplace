@@ -37,7 +37,7 @@
                     {% if request.LANGUAGE_CODE == 'en' %}
                       {{ price|divide:exchange_rate }}$
                     {% else %}
-                      {{ price }} р
+                      {{ price }} ₽
                     {% endif %}
                   </div>
                 </div>
@@ -103,7 +103,7 @@
               <span>{% trans 'Features' %}</span>
             </a>
             <a class="Tabs-link" href="#reviews">
-              <span>{% trans 'Comments' %} ({{ reviews_count }})</span>
+              <span>{% trans 'Reviews' %} ({{ reviews_count }})</span>
             </a>
           </div>
           <div class="Tabs-wrap">
@@ -174,7 +174,7 @@
                               {% if request.LANGUAGE_CODE == 'en' %}
                                 <span class="Order-price">{{ shop.price|divide:exchange_rate }}$</span>
                               {% else %}
-                                <span class="Order-price">{{ shop.price|floatformat:0 }} р</span>
+                                <span class="Order-price">{{ shop.price|floatformat:0 }} ₽</span>
                               {% endif %}
                           </div>
                         </div>
@@ -201,9 +201,9 @@
             <div class="Tabs-block" id="reviews">
               <header class="Section-header">
                 {% if reviews_count > 1 %}
-                  <h3 class="Section-title">{{ reviews_count }} {% trans 'comments' %}</h3>
+                  <h3 class="Section-title">{{ reviews_count }} {% trans 'reviews' %}</h3>
                 {% else %}
-                  <h3 class="Section-title">{{ reviews_count }} {% trans 'comment' %}</h3>
+                  <h3 class="Section-title">{{ reviews_count }} {% trans 'review' %}</h3>
                 {% endif %}
               </header>
               <div class="Comments">
@@ -225,16 +225,10 @@
                       </div>
                     </div>
                   </div>
-              {% empty %}
-                <header class="Comment-header">
-                  <div>
-                    <strong class="Comment-title">No comments</strong>
-                  </div>
-                </header>
               {% endfor %}
               </div>
               <header class="Section-header Section-header_product">
-                <h3 class="Section-title">{% trans 'Add comment' %}
+                <h3 class="Section-title">{% trans 'Add review' %}
                 </h3>
               </header>
               <div class="Tabs-addComment">
@@ -244,7 +238,7 @@
                     <textarea class="form-textarea" name="review" id="review" placeholder="Отзыв"></textarea>
                   </div>
                   <div class="form-group">
-                    <button class="btn btn_muted" type="submit">{% trans 'Submit comment' %}
+                    <button class="btn btn_muted" type="submit">{% trans 'Submit review' %}
                     </button>
                   </div>
                 </form>

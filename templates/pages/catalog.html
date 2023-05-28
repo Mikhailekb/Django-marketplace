@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% load i18n %}
+{% load custom_filters %}
 
 
 {% block page_content %}
@@ -20,9 +21,16 @@
 
                 <div class="form-group">
                   <div class="range Section-columnRange">
-                    <input class="range-line" id="price" name="price" type="text" data-type="double"
+                    {% if request.LANGUAGE_CODE == 'en' %}
+                      <input class="range-line" id="price" name="price" type="text" data-type="double"
                            data-min="{{ min_price|floatformat:-0 }}" data-max="{{ max_price|floatformat:0 }}"
                            data-from="{{ price_from }}" data-to="{{ price_to }}"/>
+                    {% else %}
+                      <input class="range-line" id="price" name="price" type="text" data-type="double"
+                           data-min="{{ min_price|floatformat:-0 }}" data-max="{{ max_price|floatformat:0 }}"
+                           data-from="{{ price_from }}" data-to="{{ price_to }}"/>
+                    {% endif %}
+
 
                     <div class="range-price">{% trans 'Price:' %}
                       <div class="rangePrice">
@@ -96,7 +104,11 @@
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
-                      <span class="Card-price">{{ item.avg_price | floatformat:2 }} ₽</span>
+                      {% if request.LANGUAGE_CODE == 'en' %}
+                        <span class="Card-price">{{ item.avg_price | divide:exchange_rate }} $</span>
+                      {% else %}
+                        <span class="Card-price">{{ item.avg_price | floatformat:2 }} ₽</span>
+                      {% endif %}
                     </div>
                     <div class="Card-category">{{ item.category.name }}</div>
                     <div class="Card-hover">
