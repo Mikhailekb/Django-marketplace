@@ -23,7 +23,7 @@
         <div class="Cards Cards_blog">
           {% for item in sales %}
             <div class="Card">
-              <a class="Card-picture" href="#">
+              <a class="Card-picture" href="{{ item.get_absolute_url }}">
                 <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
               </a>
               <div class="Card-date">
@@ -41,7 +41,7 @@
 {#              {% endif %}#}
               <div class="Card-content">
                 <strong class="Card-title">
-                  <a href="#">{{ item.name }}</a>
+                  <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
                 </strong>
                 <div class="Card-description">
                   {{ item.description_short }}

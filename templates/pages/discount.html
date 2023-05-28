@@ -1,0 +1,103 @@
+{% extends 'layout.html' %}
+{% load static i18n %}
+
+{% block page_content %}
+  <div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item">
+              <a href="{% url 'home' %}">{% trans 'Home' %}</a>
+            </li>
+            <li class="breadcrumbs-item">
+              <a href="{% url 'sales' %}">{% trans 'Sales list' %}</a>
+            </li>
+            <li class="breadcrumbs-item breadcrumbs-item_current">
+              <span>{{ discount.name }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section">
+      <div class="wrap">
+        <div class="discount-descr">{{ discount.description_long }}</div>
+        <div>
+          <span>
+            {% trans 'Time left until the end of the discount:' %}
+          </span>
+
+          <div class="CountDown discount-count" data-date="{{ date_end }}">
+            <div class="CountDown-block">
+              <div class="CountDown-wrap">
+                <div class="CountDown-days">
+                  <div class="CountDown-days">
+                  </div>
+                  <span class="CountDown-label">{% trans 'days' %}</span>
+                </div>
+              </div>
+            </div>
+            <div class="CountDown-block">
+              <div class="CountDown-wrap">
+                <div class="CountDown-hours">
+                </div>
+                <span class="CountDown-label">{% trans 'hours' %}</span>
+              </div>
+            </div>
+            <div class="CountDown-block">
+              <div class="CountDown-wrap">
+                <div class="CountDown-minutes">
+                </div>
+                <span class="CountDown-label">{% trans 'mins' %}</span>
+              </div>
+            </div>
+            <div class="CountDown-block">
+              <div class="CountDown-wrap">
+                <div class="CountDown-secs">
+                </div>
+                <span class="CountDown-label">{% trans 'secs' %}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="Section">
+    <div class="wrap">
+
+      <div class="Cards">
+        {% for item in goods %}
+          <div class="Card">
+            <a class="Card-picture" href="#">
+              <img src="{{ item.product.main_image.middle.url }}" alt="{{ item.product.slug }}"/>
+            </a>
+            <div class="Card-content">
+              <strong class="Card-title">
+                <a href="#">{{ item.product.name }}</a>
+              </strong>
+              <div class="Card-description">
+                <div class="Card-cost">
+                  <span class="Card-priceOld">{{ item.price }} ₽</span>
+                  <span class="Card-price">{{ item.discount_price  | floatformat:2}} ₽</span>
+                </div>
+                <div class="Card-category">{{ item.product.category.name }}</div>
+                <div class="Card-hover">
+                  <a class="Card-btn" href="#">
+                    <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
+                  </a>
+                  <a class="Card-btn" href="#">
+                    <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
