@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-
+from django.utils import timezone
 from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
 from .models.discount import Discount
@@ -112,7 +112,8 @@ class SaleView(ListView):
     context_object_name = 'sales'
 
     def get_queryset(self):
-        self.queryset = cache.get_or_set('sales', Discount.objects.filter(is_active=True) \
+        self.queryset = cache.get_or_set('sales', Discount.objects.filter(is_active=True,
+                                                                          date_start__lte=timezone.now()) \
                                          .select_related('main_image'),
                                          timeout=SALES_CACHE_LIFETIME)
         return self.queryset
@@ -132,14 +133,21 @@ class DiscountDetailView(DetailView):
     context_object_name = 'discount'
     slug_url_kwarg = 'discount_slug'
 
+    def get(self, request, *args, **kwargs):
+        obj: Discount = self.get_object()
+        if not obj.is_active or obj.date_start > timezone.now():
+            return redirect('sales')
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj: Discount = kwargs.get('object')
-        context['goods'] = ProductShop.objects.with_discount_price()\
-            .filter(discount=obj)\
-            .select_related('product__main_image', 'product__category')
-        date_end = obj.date_end
-        context['date_end'] = date_end.strftime('%d.%m.%Y %H:%M')
+        obj: Discount = self.get_object()
+        context['goods'] = ProductShop.objects\
+                .with_discount_price()\
+                .filter(discount=obj)\
+                .select_related('product__main_image', 'product__category')
+        if date_end := obj.date_end:
+            context['date_end'] = date_end.strftime('%d.%m.%Y %H:%M')
         return context
 
 

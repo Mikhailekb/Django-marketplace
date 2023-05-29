@@ -46,10 +46,10 @@ class ProductShopInLine(TabularInlinePaginated):
     readonly_fields = ('discount_price',)
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
-        if db_field.name == "discount":
+        if db_field.name == 'discount':
             shop_id = request.path.split('/')[4]
             if shop_id.isdigit():
-                kwargs["queryset"] = Discount.objects.filter(shop_id=shop_id, is_active=True)
+                kwargs['queryset'] = Discount.objects.filter(shop_id=shop_id, is_active=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request: HttpRequest):
@@ -84,7 +84,7 @@ class CategoryAdmin(TranslationAdmin):
     def get_icon(self, obj):
         return mark_safe(f'<img src={obj.icon.url}>') if obj.icon else 'None'
 
-    get_icon.short_description = _("icon")
+    get_icon.short_description = _('icon')
 
 
 @admin.register(Product)
@@ -93,14 +93,14 @@ class ProductAdmin(TranslationAdmin):
     readonly_fields = ['slug']
     search_fields = ['name', 'description_long']
     inlines = [ProductImageInLine, FeatureToProductInLine]
-    change_list_template = "admin/product_list.html"
+    change_list_template = 'admin/product_list.html'
     save_on_top = True
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
-        if db_field.name == "main_image":
+        if db_field.name == 'main_image':
             product_id = request.path.split('/')[4]
             if product_id.isdigit():
-                kwargs["queryset"] = ProductImage.objects.filter(product_id=product_id)
+                kwargs['queryset'] = ProductImage.objects.filter(product_id=product_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -112,10 +112,10 @@ class ShopAdmin(TranslationAdmin):
     save_on_top = True
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
-        if db_field.name == "main_image":
+        if db_field.name == 'main_image':
             shop_id = request.path.split('/')[4]
             if shop_id.isdigit():
-                kwargs["queryset"] = ShopImage.objects.filter(shop_id=shop_id)
+                kwargs['queryset'] = ShopImage.objects.filter(shop_id=shop_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -135,10 +135,10 @@ class DiscountAdmin(TranslationAdmin):
     get_image.short_description = ''
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
-        if db_field.name == "main_image":
+        if db_field.name == 'main_image':
             discount_id = request.path.split('/')[4]
             if discount_id.isdigit():
-                kwargs["queryset"] = DiscountImage.objects.filter(discount_id=discount_id)
+                kwargs['queryset'] = DiscountImage.objects.filter(discount_id=discount_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request: HttpRequest, **kwargs):

@@ -25,42 +25,43 @@
       <div class="wrap">
         <div class="discount-descr">{{ discount.description_long }}</div>
         <div>
-          <span>
-            {% trans 'Time left until the end of the discount:' %}
-          </span>
-
-          <div class="CountDown discount-count" data-date="{{ date_end }}">
-            <div class="CountDown-block">
-              <div class="CountDown-wrap">
-                <div class="CountDown-days">
+          {% if date_end %}
+            <span>
+              {% trans 'Time left until the end of the discount:' %}
+            </span>
+            <div class="CountDown discount-count" data-date="{{ date_end }}">
+              <div class="CountDown-block">
+                <div class="CountDown-wrap">
                   <div class="CountDown-days">
+                    <div class="CountDown-days">
+                    </div>
+                    <span class="CountDown-label">{% trans 'days' %}</span>
                   </div>
-                  <span class="CountDown-label">{% trans 'days' %}</span>
+                </div>
+              </div>
+              <div class="CountDown-block">
+                <div class="CountDown-wrap">
+                  <div class="CountDown-hours">
+                  </div>
+                  <span class="CountDown-label">{% trans 'hours' %}</span>
+                </div>
+              </div>
+              <div class="CountDown-block">
+                <div class="CountDown-wrap">
+                  <div class="CountDown-minutes">
+                  </div>
+                  <span class="CountDown-label">{% trans 'mins' %}</span>
+                </div>
+              </div>
+              <div class="CountDown-block">
+                <div class="CountDown-wrap">
+                  <div class="CountDown-secs">
+                  </div>
+                  <span class="CountDown-label">{% trans 'secs' %}</span>
                 </div>
               </div>
             </div>
-            <div class="CountDown-block">
-              <div class="CountDown-wrap">
-                <div class="CountDown-hours">
-                </div>
-                <span class="CountDown-label">{% trans 'hours' %}</span>
-              </div>
-            </div>
-            <div class="CountDown-block">
-              <div class="CountDown-wrap">
-                <div class="CountDown-minutes">
-                </div>
-                <span class="CountDown-label">{% trans 'mins' %}</span>
-              </div>
-            </div>
-            <div class="CountDown-block">
-              <div class="CountDown-wrap">
-                <div class="CountDown-secs">
-                </div>
-                <span class="CountDown-label">{% trans 'secs' %}</span>
-              </div>
-            </div>
-          </div>
+          {% endif %}
         </div>
       </div>
     </div>

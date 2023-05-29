@@ -74,8 +74,8 @@ class FeatureToProduct(models.Model):
                                      verbose_name=_('feature name'))
     values = ChainedManyToManyField(FeatureValue,
                                     verbose_name=_('values'),
-                                    chained_field="feature_name",
-                                    chained_model_field="name",
+                                    chained_field='feature_name',
+                                    chained_model_field='name',
                                     blank=True,
                                     related_name='to_shops')
 
