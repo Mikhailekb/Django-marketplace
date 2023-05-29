@@ -23,7 +23,7 @@
     </div>
     <div class="Section">
       <div class="wrap">
-        <div class="discount-descr">{{ discount.description_long }}</div>
+        <p class="discount-descr">{{ discount.description_long }}</p>
         <div>
           {% if date_end %}
             <span>
@@ -32,31 +32,25 @@
             <div class="CountDown discount-count" data-date="{{ date_end }}">
               <div class="CountDown-block">
                 <div class="CountDown-wrap">
-                  <div class="CountDown-days">
-                    <div class="CountDown-days">
-                    </div>
-                    <span class="CountDown-label">{% trans 'days' %}</span>
-                  </div>
+                  <div class="CountDown-days"></div>
+                  <span class="CountDown-label">{% trans 'days' %}</span>
                 </div>
               </div>
               <div class="CountDown-block">
                 <div class="CountDown-wrap">
-                  <div class="CountDown-hours">
-                  </div>
+                  <div class="CountDown-hours"></div>
                   <span class="CountDown-label">{% trans 'hours' %}</span>
                 </div>
               </div>
               <div class="CountDown-block">
                 <div class="CountDown-wrap">
-                  <div class="CountDown-minutes">
-                  </div>
+                  <div class="CountDown-minutes"></div>
                   <span class="CountDown-label">{% trans 'mins' %}</span>
                 </div>
               </div>
               <div class="CountDown-block">
                 <div class="CountDown-wrap">
-                  <div class="CountDown-secs">
-                  </div>
+                  <div class="CountDown-secs"></div>
                   <span class="CountDown-label">{% trans 'secs' %}</span>
                 </div>
               </div>
@@ -70,7 +64,7 @@
     <div class="wrap">
 
       <div class="Cards">
-        {% for item in goods %}
+        {% for item in page_obj %}
           <div class="Card">
             <a class="Card-picture" href="#">
               <img src="{{ item.product.main_image.middle.url }}" alt="{{ item.product.slug }}"/>
@@ -99,6 +93,36 @@
         {% endfor %}
       </div>
 
+      {% if page_obj.has_other_pages %}
+        <div class="Pagination">
+          <div class="Pagination-ins">
+            {% if page_obj.has_previous %}
+              <a class="Pagination-element Pagination-element_prev"
+                 href="?page={{ page_obj.previous_page_number }}">
+                <img src="{% static 'img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/>
+              </a>
+            {% endif %}
+
+            {% for p in page_obj.paginator.page_range %}
+              {% if page_obj.number == p %}
+                <div class="Pagination-element Pagination-element_current">
+                  <span class="Pagination-text">{{ p }}</span>
+                </div>
+              {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                <a class="Pagination-element" href="?page={{ p }}">
+                  <span class="Pagination-text">{{ p }}</span>
+                </a>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
+                <img src="{% static 'img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

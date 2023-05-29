@@ -1,17 +1,18 @@
+from django.contrib import messages
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
-from django.contrib import messages
-from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
+
 from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
 from .models.discount import Discount
-
 from .models.product import SortProduct, Product, TagProduct
 from .models.shop import ProductShop
 
@@ -49,11 +50,11 @@ class CatalogView(FilterView):
         if category := self.request.GET.get('category'):
             filter_options['category__slug'] = category
         self.queryset = Product.objects.filter(**filter_options) \
-                                       .select_related('category', 'main_image') \
-                                       .annotate(avg_price=Avg('in_shops__price'),
-                                                 min_price=Min('in_shops__price'),
-                                                 max_price=Max('in_shops__price'),
-                                                 count_sold=Sum('in_shops__count_sold'))
+            .select_related('category', 'main_image') \
+            .annotate(avg_price=Avg('in_shops__price'),
+                      min_price=Min('in_shops__price'),
+                      max_price=Max('in_shops__price'),
+                      count_sold=Sum('in_shops__count_sold'))
         return self.queryset
 
     def sorting_update(self):
@@ -134,20 +135,33 @@ class DiscountDetailView(DetailView):
     slug_url_kwarg = 'discount_slug'
 
     def get(self, request, *args, **kwargs):
-        obj: Discount = self.get_object()
-        if not obj.is_active or obj.date_start > timezone.now():
+        self.object: Discount = self.get_object()
+        if not self.object.is_active or self.object.date_start > timezone.now():
             return redirect('sales')
-        return super().get(request, *args, **kwargs)
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj: Discount = self.get_object()
-        context['goods'] = ProductShop.objects\
-                .with_discount_price()\
-                .filter(discount=obj)\
-                .select_related('product__main_image', 'product__category')
+        obj: Discount = kwargs.get('object')
+        goods = ProductShop.objects \
+            .with_discount_price() \
+            .filter(discount=obj) \
+            .select_related('product__main_image', 'product__category') \
+            .order_by('product__name')
         if date_end := obj.date_end:
             context['date_end'] = date_end.strftime('%d.%m.%Y %H:%M')
+
+        paginate_by = 8
+        if self.request.user_agent.is_mobile:
+            paginate_by = 4
+        elif self.request.user_agent.is_tablet:
+            paginate_by = 6
+
+        paginator = Paginator(goods, paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
         return context
 
 
