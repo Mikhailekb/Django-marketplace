@@ -13,6 +13,7 @@ from .filters import ProductFilter
 from .models.discount import Discount
 
 from .models.product import SortProduct, Product, TagProduct
+from .models.banner import Banner
 
 
 class HomeView(TemplateView):
@@ -20,6 +21,14 @@ class HomeView(TemplateView):
     Представление для отображения главной страницы
     """
     template_name = 'pages/main.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        banners = Banner.objects.all().select_related('product')
+
+        context.update({'slider_content': banners})
+        return context
+
 
 
 class CatalogView(FilterView):

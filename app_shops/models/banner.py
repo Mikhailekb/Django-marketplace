@@ -21,15 +21,11 @@ class Banner(models.Model):
                               validators=[FileExtensionValidator(['png'])])
     
     def clean(self):
-        if not self.photo:
-            err_text = _('No image!')
-            raise ValidationError(err_text)
-        else:
-            w, h = get_image_dimensions(self.photo)
-            if w < 250:
-                raise ValidationError(f'The image is {w} pixel wide. It\'s supposed to be >= 250px')
-            if h < 250:
-                raise ValidationError(f'The image is {h} pixel high. It\'s supposed to be >= 250px')
+        w, h = get_image_dimensions(self.photo)
+        if w < 250:
+            raise ValidationError(f'The image is {w} pixel wide. It\'s supposed to be >= 250px')
+        if h < 250:
+            raise ValidationError(f'The image is {h} pixel high. It\'s supposed to be >= 250px')
     
 
     def __str__(self):
