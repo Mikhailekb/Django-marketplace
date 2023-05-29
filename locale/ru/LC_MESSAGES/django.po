@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-22 18:26+0300\n"
+"POT-Creation-Date: 2023-05-22 15:24+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,7 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: .\app_shops\admin.py:41 .\app_shops\models.py:43
+#: .\app_shops\admin.py:65 .\app_shops\models\category.py:17
 msgid "icon"
 msgstr "значок"
 
@@ -28,170 +29,204 @@ msgstr "значок"
 msgid "photo"
 msgstr "фото"
 
-#: .\app_shops\admin.py:93 .\app_shops\models.py:38 .\app_shops\models.py:67
-#: .\app_shops\models.py:79 .\app_shops\models.py:94 .\app_shops\models.py:120
-#: .\app_shops\models.py:130 .\app_shops\models.py:142 .\app_users\models.py:11
+#: .\app_shops\models\category.py:12 .\app_shops\models\product.py:16
+#: .\app_shops\models\product.py:28 .\app_shops\models\product.py:43
+#: .\app_shops\models\product.py:53 .\app_shops\models\product.py:65
+#: .\app_shops\models\shop.py:16 .\app_users\models.py:11
 msgid "name"
 msgstr "имя"
 
-#: .\app_shops\apps.py:8
-msgid "marketplace"
-msgstr "торговая площадка"
-
-#: .\app_shops\models.py:40 .\app_shops\models.py:100 .\app_shops\models.py:148
-#: .\app_shops\models.py:172 .\app_shops\models.py:224
+#: .\app_shops\models\category.py:14 .\app_shops\models\discount.py:34
+#: .\app_shops\models\product.py:71 .\app_shops\models\shop.py:22
+#: .\app_shops\models\shop.py:46
 msgid "is active"
 msgstr "флаг активности"
 
-#: .\app_shops\models.py:42
+#: .\app_shops\models\category.py:16
 msgid "parent category"
 msgstr "родительская категория"
 
-#: .\app_shops\models.py:47
+#: .\app_shops\models\category.py:21
 msgid "categories"
 msgstr "категории"
 
-#: .\app_shops\models.py:48
+#: .\app_shops\models\category.py:22
 msgid "category"
 msgstr "категория"
 
-#: .\app_shops\models.py:68
-msgid "sort field"
-msgstr "поле сортировки"
+#: .\app_shops\models\discount.py:20
+msgid "title"
+msgstr "название"
 
-#: .\app_shops\models.py:78
-msgid "codename"
-msgstr "кодовое имя"
+#: .\app_shops\models\discount.py:21 .\app_shops\models\product.py:67
+msgid "description short"
+msgstr "короткое описание"
 
-#: .\app_shops\models.py:80
+#: .\app_shops\models\discount.py:22 .\app_shops\models\product.py:68
+msgid "description long"
+msgstr "длинное описание"
+
+#: .\app_shops\models\discount.py:25 .\app_shops\models\product.py:29
 msgid "goods"
 msgstr "товары"
 
-#: .\app_shops\models.py:83
-msgid "tags"
-msgstr "Тэги"
+#: .\app_shops\models\discount.py:27
+msgid "discount value"
+msgstr "сумма скидки"
 
-#: .\app_shops\models.py:84
-msgid "tag"
-msgstr "Тэг"
+#: .\app_shops\models\discount.py:28
+msgid "discount percentage"
+msgstr "процент скидки"
 
-#: .\app_shops\models.py:96
-#, fuzzy
-#| msgid "description"
-msgid "description short"
-msgstr "описание"
+#: .\app_shops\models\discount.py:31
+msgid "minimum cost"
+msgstr "минимальная цена"
 
-#: .\app_shops\models.py:97
-#, fuzzy
-#| msgid "description"
-msgid "description_long"
-msgstr "описание"
+#: .\app_shops\models\discount.py:32
+msgid "date start"
+msgstr "дата начала"
 
-#: .\app_shops\models.py:98 .\app_shops\models.py:108
-msgid "products"
-msgstr "товары"
+#: .\app_shops\models\discount.py:33
+msgid "date end"
+msgstr "дата конца"
 
-#: .\app_shops\models.py:101 .\app_shops\models.py:149
-#: .\app_shops\models.py:225
-msgid "created"
-msgstr "создано"
-
-#: .\app_shops\models.py:102
-msgid "updated"
-msgstr "обновлено"
-
-#: .\app_shops\models.py:105
-msgid "features"
-msgstr "характеристики"
-
-#: .\app_shops\models.py:109 .\app_shops\models.py:186
-#: .\app_shops\models.py:207
-msgid "product"
-msgstr "товар"
-
-#: .\app_shops\models.py:132
-msgid "value"
+#: .\app_shops\models\discount.py:42
+msgid ""
+"\"discount value\" and \"discount percentage\" fields cannot be used at the "
+"same time"
 msgstr ""
+"поля \"сумма скидки\" и \"процент скидки\" не могут использоваться "
+"одновременно"
 
-#: .\app_shops\models.py:144
-msgid "description"
-msgstr "описание"
+#: .\app_shops\models\discount.py:45 .\app_shops\models\discount.py:49
+msgid "Date cannot be in the past"
+msgstr "Дата не может быть в прошлом"
 
-#: .\app_shops\models.py:145
-msgid "phone number"
-msgstr "номер телефона"
+#: .\app_shops\models\discount.py:52
+msgid "Date end cannot be before date start"
+msgstr "Дата конца скидки не может быть раньше даты начала"
 
-#: .\app_shops\models.py:146
-msgid "email"
-msgstr "электронная почта"
+#: .\app_shops\models\discount.py:87
+msgid "discount"
+msgstr "скидка"
 
-#: .\app_shops\models.py:147
-msgid "address"
-msgstr "адрес"
-
-#: .\app_shops\models.py:150
-msgid "edited"
-msgstr "отредактировано"
-
-#: .\app_shops\models.py:155
-msgid "shops"
-msgstr "магазины"
-
-#: .\app_shops\models.py:156
-msgid "shop"
-msgstr "магазин"
-
-#: .\app_shops\models.py:169
-msgid "left in shop"
-msgstr "осталось в магазине"
-
-#: .\app_shops\models.py:170
-msgid "sold in shop"
-msgstr "продано в магазине"
-
-#: .\app_shops\models.py:171
-msgid "price"
-msgstr "цена"
-
-#: .\app_shops\models.py:187 .\app_shops\models.py:208
+#: .\app_shops\models\discount.py:88 .\app_shops\models\product.py:96
+#: .\app_shops\models\shop.py:61
 msgid "uploaded"
 msgstr "загружено"
 
-#: .\app_shops\models.py:190
+#: .\app_shops\models\discount.py:91
+msgid "discount images"
+msgstr "изображения скидки"
+
+#: .\app_shops\models\discount.py:92
+msgid "discount image"
+msgstr "изображение скидки"
+
+#: .\app_shops\models\product.py:17
+msgid "sort field"
+msgstr "поле сортировки"
+
+#: .\app_shops\models\product.py:27
+msgid "codename"
+msgstr "кодовое имя"
+
+#: .\app_shops\models\product.py:32
+msgid "tags"
+msgstr "Тэги"
+
+#: .\app_shops\models\product.py:33
+msgid "tag"
+msgstr "Тэг"
+
+#: .\app_shops\models\product.py:55
+msgid "value"
+msgstr "значение"
+
+#: .\app_shops\models\product.py:69 .\app_shops\models\product.py:79
+msgid "products"
+msgstr "товары"
+
+#: .\app_shops\models\product.py:72 .\app_shops\models\shop.py:23
+msgid "created"
+msgstr "создано"
+
+#: .\app_shops\models\product.py:73
+msgid "updated"
+msgstr "обновлено"
+
+#: .\app_shops\models\product.py:76
+msgid "features"
+msgstr ""
+
+#: .\app_shops\models\product.py:80 .\app_shops\models\product.py:95
+#: .\app_shops\models\shop.py:60
+msgid "product"
+msgstr "товар"
+
+#: .\app_shops\models\product.py:99
 msgid "product images"
 msgstr "изображения продукта"
 
-#: .\app_shops\models.py:191
+#: .\app_shops\models\product.py:100
 msgid "product image"
 msgstr "изображение продукта"
 
-#: .\app_shops\models.py:211
+#: .\app_shops\models\shop.py:18
+msgid "description"
+msgstr "описание"
+
+#: .\app_shops\models\shop.py:19
+msgid "phone number"
+msgstr "номер телефона"
+
+#: .\app_shops\models\shop.py:20
+msgid "email"
+msgstr "электронная почта"
+
+#: .\app_shops\models\shop.py:21
+msgid "address"
+msgstr "адрес"
+
+#: .\app_shops\models\shop.py:24
+msgid "edited"
+msgstr "отредактировано"
+
+#: .\app_shops\models\shop.py:29
+msgid "shops"
+msgstr "магазины"
+
+#: .\app_shops\models\shop.py:30
+msgid "shop"
+msgstr "магазин"
+
+#: .\app_shops\models\shop.py:43
+msgid "left in shop"
+msgstr "осталось в магазине"
+
+#: .\app_shops\models\shop.py:44
+msgid "sold in shop"
+msgstr "продано в магазине"
+
+#: .\app_shops\models\shop.py:45
+msgid "price"
+msgstr "цена"
+
+#: .\app_shops\models\shop.py:64
 msgid "shop images"
 msgstr "изображения магазина"
 
-#: .\app_shops\models.py:212
+#: .\app_shops\models\shop.py:65
 msgid "shop image"
 msgstr "изображение магазина"
 
-#: .\app_shops\models.py:226
-#, fuzzy
-#| msgid "shop image"
-msgid "image"
-msgstr "изображение магазина"
+#: .\app_shops\views.py:136 .\app_shops\views.py:139 .\app_shops\views.py:142
+msgid "Cache cleared successfully"
+msgstr "Кэш успешно очищен"
 
-#: .\app_shops\models.py:231
-#, fuzzy
-#| msgid "shop image"
-msgid "No image!"
-msgstr "изображение магазина"
-
-#: .\app_shops\models.py:245
-msgid "banners"
-msgstr "баннеры"
-
-#: .\app_shops\models.py:246
-msgid "banner"
-msgstr "баннер"
+#: .\app_shops\views.py:144
+msgid "Error. Cache not cleared"
+msgstr "Ошибка. Кэш не очищен"
 
 #: .\app_users\apps.py:9
 msgid "users"
@@ -221,7 +256,23 @@ msgstr "Профиль"
 msgid "Profiles"
 msgstr "Профили"
 
-#: .\templates\components\header.html:155
+#: .\templates\admin\categories_list.html:8
+msgid "Clear categories cache"
+msgstr "Очистить кеш категорий"
+
+#: .\templates\admin\product_list.html:8
+msgid "Clear product cache"
+msgstr "Очистить кеш товаров"
+
+#: .\templates\components\header.html:75
+msgid "Login"
+msgstr "Вход"
+
+#: .\templates\components\header.html:76
+msgid "Registration"
+msgstr "Регистрация"
+
+#: .\templates\components\header.html:157
 msgid "All categories"
 msgstr "Все категории"
 
@@ -260,3 +311,19 @@ msgstr "Популярные товары"
 #: .\templates\pages\main.html:156
 msgid "limited edition"
 msgstr "Ограниченный тираж"
+
+#: .\templates\pages\sale.html:12
+msgid "Home"
+msgstr "Главная"
+
+#: .\templates\pages\sale.html:15
+msgid "Sales list"
+msgstr "Список скидок"
+
+#: .\app_shops\models.py:245
+msgid "banners"
+msgstr "баннеры"
+
+#: .\app_shops\models.py:246
+msgid "banner"
+msgstr "баннер"

@@ -2,7 +2,7 @@ import django_filters as filters
 from django.db.models import Q
 from django import forms
 
-from .models import Product
+from .models.product import Product
 
 
 class ProductFilter(filters.FilterSet):

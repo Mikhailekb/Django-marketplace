@@ -1,6 +1,6 @@
 from django.core.cache import cache
 
-from app_shops.models import Category
+from app_shops.models.category import Category
 from django_marketplace.constants import CATEGORIES_CACHE_LIFETIME
 
 
