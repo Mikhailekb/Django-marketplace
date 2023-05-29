@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     'app_users',
     'allauth',
     'allauth.account',
+    'django_admin_inline_paginator',
+    'django_celery_results',
+    'django_celery_beat',
+    'smart_selects'
 ]
 
 MIDDLEWARE = [
@@ -162,9 +166,9 @@ INTERNAL_IPS = [
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
 }
+
 
 USER_AGENTS_CACHE = 'default'
 
@@ -186,3 +190,13 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
