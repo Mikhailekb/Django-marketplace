@@ -6523,3 +6523,14 @@ input[type="radio"] {
     border: none;
     min-height: 39px;
 }
+
+.discount-descr {
+    font-size: 18px;
+    color: #333;
+    max-width: 700px;
+    margin-bottom: 20px;
+}
+
+.discount-count {
+    justify-content: initial;
+}
