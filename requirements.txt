@@ -1,10 +1,10 @@
 Django==3.2.18
-django_debug_toolbar==3.8.1
+django_debug_toolbar==4.1.0
 python-decouple==3.8
 Jinja2==3.1.2
 django-autoslug==1.9.9
 django-modeltranslation==0.18.9
-psycopg2==2.9.6
+psycopg2-binary==2.9.6
 phonenumbers==8.13.9
 django-phonenumber-field==7.0.2
 cryptography==40.0.2
@@ -18,3 +18,8 @@ django-imagekit==4.1.0
 Pillow==9.5.0
 django-filter==23.2
 django-user-agents==0.4.0
+django-admin-inline-paginator==0.4.0
+django-smart-selects==1.6.0
+celery==5.2.7
+django-celery-results==2.5.1
+django-celery-beat==2.5.0

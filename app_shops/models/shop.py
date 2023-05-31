@@ -1,5 +1,7 @@
 from autoslug import AutoSlugField
 from django.db import models
+from django.db.models import Case, When, F, DecimalField
+from django.db.models.functions import Greatest
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from imagekit.models import ProcessedImageField, ImageSpecField
@@ -35,6 +37,28 @@ class Shop(models.Model):
         return self.name
 
 
+class ProductShopManager(models.Manager):
+
+    def with_discount_price(self):
+        min_cost_expression = Case(
+            When(discount__is_active=False,
+                 then=None),
+            When(discount__min_cost__isnull=False,
+                 then=F('discount__min_cost'))
+        )
+        price_expression = Case(
+            When(discount__is_active=False,
+                 then=None),
+            When(discount__discount_percentage__isnull=False,
+                 then=F('price') - F('price') * F('discount__discount_percentage') / 100),
+            When(discount__discount_amount__isnull=False,
+                 then=F('price') - F('discount__discount_amount')),
+            output_field=DecimalField()
+        )
+        discount_price_expression = Greatest(price_expression, min_cost_expression)
+        return self.annotate(discount_price=discount_price_expression)
+
+
 class ProductShop(models.Model):
     """
     Промежуточная модель, которая содержит информацию о количестве товара в магазине и цене
@@ -45,11 +69,16 @@ class ProductShop(models.Model):
     count_sold = models.IntegerField(default=0, verbose_name=_('sold in shop'))
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name=_('price'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    active_discount = models.ForeignKey(Discount, null=True, blank=True, on_delete=models.SET_NULL,
-                                        related_name='product_in_shop')
+    discount = models.ForeignKey(Discount, null=True, blank=True, on_delete=models.SET_NULL,
+                                 related_name='product_in_shop')
+
+    objects = ProductShopManager()
 
     def __str__(self):
         return self.product.name
+
+    class Meta:
+        unique_together = ('product', 'shop')
 
 
 class ShopImage(models.Model):
