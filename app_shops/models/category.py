@@ -15,7 +15,9 @@ class Category(models.Model):
     parent = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='child_category', verbose_name=_('parent category'))
     icon = models.FileField(upload_to='img/icons/departments/', null=True, blank=True, verbose_name=_('icon'),
-                              validators=[FileExtensionValidator(['svg'])])
+                            validators=[FileExtensionValidator(['svg'])])
+    recommended_features = models.ManyToManyField('FeatureName', related_name='categories', blank=True,
+                                                  verbose_name=_('recommended features'))
 
     class Meta:
         verbose_name_plural = _('categories')
@@ -23,9 +25,7 @@ class Category(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        if not self.parent:
-            return self.name
-        return f'{self.name} ({self.parent})'
+        return f'{self.name} ({self.parent})' if self.parent else self.name
 
     def get_absolute_url(self):
         catalog_url = reverse('catalog')

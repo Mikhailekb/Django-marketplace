@@ -2,6 +2,7 @@ from autoslug import AutoSlugField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField, ImageSpecField
+from smart_selects.db_fields import ChainedManyToManyField
 from app_shops.services import img_processors
 
 from app_users.models import Profile
@@ -9,6 +10,7 @@ from app_users.models import Profile
 
 def get_good_img_path(instance, name):
     return f'img/content/products/{instance.product.slug}/{name}'
+
 
 class SortProduct(models.Model):
     css_cls = [
@@ -38,24 +40,49 @@ class TagProduct(models.Model):
 
 class FeatureName(models.Model):
     """
-    Модель имени характеристики товаров
+    Модель имени характеристики для товаров
     """
     name = models.CharField(max_length=100, verbose_name=_('name'))
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = _('features')
+        verbose_name = _('feature')
 
-class Feature(models.Model):
+
+class FeatureValue(models.Model):
     """
-    Модель характеристики товара
+    Модель значений для имени характеристики
     """
     name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name=_('name'),
                              related_name='feature_value')
     value = models.CharField(max_length=100, verbose_name=_('value'))
 
     def __str__(self):
-        return f'{self.name}: {self.value}'
+        return self.value
+
+    class Meta:
+        ordering = ['value']
+
+
+class FeatureToProduct(models.Model):
+    """
+    Модель связывающая характеристики с товаром
+    """
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='features', verbose_name=_('product'))
+    feature_name = models.ForeignKey('FeatureName', on_delete=models.CASCADE, related_name='to_shops',
+                                     verbose_name=_('feature name'))
+    values = ChainedManyToManyField(FeatureValue,
+                                    verbose_name=_('values'),
+                                    chained_field='feature_name',
+                                    chained_model_field='name',
+                                    blank=True,
+                                    related_name='to_shops')
+
+    class Meta:
+        unique_together = ('product', 'feature_name')
 
 
 class Product(models.Model):
@@ -66,14 +93,14 @@ class Product(models.Model):
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
     description_short = models.TextField(verbose_name=_('description short'))
     description_long = models.TextField(verbose_name=_('description long'))
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products', verbose_name=_('products'))
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products',
+                                 verbose_name=_('products'))
     sellers = models.ManyToManyField('Shop', through='ProductShop')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
     main_image = models.OneToOneField('ProductImage', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='main_for_product')
-    features = models.ManyToManyField('Feature', verbose_name=_('features'), blank=True, related_name='goods')
 
     class Meta:
         verbose_name_plural = _('products')

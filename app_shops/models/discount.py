@@ -4,6 +4,7 @@ from autoslug import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField, ImageSpecField
@@ -58,6 +59,9 @@ class Discount(models.Model):
     def __str__(self) -> str:
         return f'{self.name}'
 
+    def get_absolute_url(self):
+        return reverse('discount', kwargs={'discount_slug': self.slug})
+
     @property
     def day_start(self) -> str:
         return datetime.date.strftime(self.date_start, '%d')
@@ -68,16 +72,11 @@ class Discount(models.Model):
 
     @property
     def day_end(self) -> str | None:
-        if not self.date_end:
-            return None
-        return datetime.date.strftime(self.date_end, '%d')
+        return datetime.date.strftime(self.date_end, '%d') if self.date_end else None
 
     @property
     def month_end(self) -> str | None:
-        if not self.date_end:
-            return None
-        return datetime.date.strftime(self.date_end, '%b')
-
+        return datetime.date.strftime(self.date_end, '%b') if self.date_end else None
 
 
 class DiscountImage(models.Model):
