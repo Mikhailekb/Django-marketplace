@@ -108,8 +108,7 @@ class CatalogView(FilterView):
         context['min_price'] = min_price
         context['max_price'] = max_price
         context['form'] = self.filterset.form
-        context['exchange_rate'] = cache.get_or_set('exchange_rate', get_exchange_rate(),
-                                                    timeout=EXCHANGE_RATE_LIFETIME)
+
         return context
 
 
@@ -178,7 +177,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         product = context['product']
         price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 0)
-        reviews_count = len(product.reviews.all())
+        reviews_count = product.reviews.count()
         exchange_rate = cache.get_or_set('exchange_rate', get_exchange_rate(), timeout=EXCHANGE_RATE_LIFETIME)
 
         context['price'] = price
@@ -189,13 +188,13 @@ class ProductDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         product = self.get_object()
-        try:
+        if request.user.is_authenticated:
             user = request.user.profile
-        except AttributeError:
+            text = request.POST.get('review')
+            if text:
+                review = Review(product=product, user=user, text=text)
+                review.save()
+        else:
             return redirect('login')
-
-        text = request.POST.get('review')
-        review = Review(product=product, user=user, text=text)
-        review.save()
 
         return redirect('product-detail', product_slug=product.slug)

@@ -200,14 +200,18 @@
             </div>
             <div class="Tabs-block" id="reviews">
               <header class="Section-header">
-                {% if reviews_count > 1 %}
+                {% if reviews_count == 1 %}
+                  <h3 class="Section-title">{{ reviews_count }} {% trans 'review' %}</h3>
+                {% elif reviews_count > 1 %}
+                  <h3 class="Section-title">{{ reviews_count }} {% trans 'reviews' %}</h3>
+                {% elif reviews_count > 4 %}
                   <h3 class="Section-title">{{ reviews_count }} {% trans 'reviews' %}</h3>
                 {% else %}
                   <h3 class="Section-title">{{ reviews_count }} {% trans 'review' %}</h3>
                 {% endif %}
               </header>
               <div class="Comments">
-                {% for review in product.reviews.all %}
+                {% for review in product.reviews.all|dictsortreversed:"created" %}
                   <div class="Comment">
                     <div class="Comment-column Comment-column_pict">
                       <div class="Comment-avatar">

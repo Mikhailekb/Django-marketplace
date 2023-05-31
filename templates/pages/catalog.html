@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% load i18n %}
-{% load custom_filters %}
 
 
 {% block page_content %}
@@ -97,11 +96,7 @@
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
-                      {% if request.LANGUAGE_CODE == 'en' %}
-                        <span class="Card-price">{{ item.avg_price | divide:exchange_rate }} $</span>
-                      {% else %}
                         <span class="Card-price">{{ item.avg_price | floatformat:2 }} ₽</span>
-                      {% endif %}
                     </div>
                     <div class="Card-category">{{ item.category.name }}</div>
                     <div class="Card-hover">
