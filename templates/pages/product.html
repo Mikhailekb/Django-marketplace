@@ -189,10 +189,19 @@
             <div class="Tabs-block" id="addit">
               <div class="Product-props">
                 {% for feature in product.features.all %}
+                {% for value in feature.values.all %}
+                {% if forloop.first %}
                 <div class="Product-prop">
-                  <strong>{{ feature.name }}</strong>
-                  <span>{{ feature.value }}</span>
+                  <strong>{{ feature.feature_name }}</strong>
+                  <span>{{ value }}</span>
                 </div>
+                {% else %}
+                <div class="Product-prop">
+                  <strong></strong>
+                  <span>{{ value }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
                 {% empty %}
                 <p>No features</p>
                 {% endfor %}
@@ -201,13 +210,23 @@
             <div class="Tabs-block" id="reviews">
               <header class="Section-header">
                 {% if reviews_count == 1 %}
-                  <h3 class="Section-title">{{ reviews_count }} {% trans 'review' %}</h3>
+                  {% if request.LANGUAGE_CODE == 'ru' %}
+                    <h3 class="Section-title">{{ reviews_count }} отзыв</h3>
+                  {% else %}
+                    <h3 class="Section-title">{{ reviews_count }} review</h3>
+                  {% endif %}
                 {% elif reviews_count > 1 %}
-                  <h3 class="Section-title">{{ reviews_count }} {% trans 'reviews' %}</h3>
-                {% elif reviews_count > 4 %}
-                  <h3 class="Section-title">{{ reviews_count }} {% trans 'reviews' %}</h3>
-                {% else %}
-                  <h3 class="Section-title">{{ reviews_count }} {% trans 'review' %}</h3>
+                  {% if request.LANGUAGE_CODE == 'ru' %}
+                    <h3 class="Section-title">{{ reviews_count }} отзыва</h3>
+                  {% else %}
+                    <h3 class="Section-title">{{ reviews_count }} reviews</h3>
+                  {% endif %}
+                {% elif reviews_count > 4 or reviews_count == 0%}
+                  {% if request.LANGUAGE_CODE == 'ru' %}
+                    <h3 class="Section-title">{{ reviews_count }} отзывов</h3>
+                  {% else %}
+                    <h3 class="Section-title">{{ reviews_count }} reviews</h3>
+                  {% endif %}
                 {% endif %}
               </header>
               <div class="Comments">

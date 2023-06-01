@@ -16,7 +16,7 @@ from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE
     EXCHANGE_RATE_LIFETIME
 from .filters import ProductFilter
 from .models.discount import Discount
-from .models.product import SortProduct, Product, TagProduct, Feature, Review
+from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, FeatureValue, Review
 from .models.shop import ProductShop
 
 
@@ -202,7 +202,9 @@ class ProductDetailView(DetailView):
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.select_related('category', 'main_image').\
-            prefetch_related(Prefetch('features', queryset=Feature.objects.select_related('name')), 'images', 'tags',
+            prefetch_related('images', 'tags',
+                             Prefetch('features', queryset=FeatureToProduct.objects.select_related('feature_name')
+                                      .prefetch_related('values')),
                              Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')),
                              Prefetch('reviews', queryset=Review.objects.select_related('user')))
 
@@ -213,7 +215,7 @@ class ProductDetailView(DetailView):
         product = context['product']
         price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 0)
         reviews_count = product.reviews.count()
-        exchange_rate = cache.get_or_set('exchange_rate', get_exchange_rate(), timeout=EXCHANGE_RATE_LIFETIME)
+        exchange_rate = cache.get_or_set('exchange_rate', get_exchange_rate, timeout=EXCHANGE_RATE_LIFETIME)
 
         context['price'] = price
         context['reviews_count'] = reviews_count
