@@ -26,6 +26,16 @@ class HomeView(TemplateView):
     """
     template_name = 'pages/main.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        goods = Product.objects.select_related('category', 'main_image')\
+            .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
+        top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
+
+        context['top_goods'] = top_products
+
+        return context
+
 
 class CatalogView(FilterView):
     """

@@ -122,21 +122,28 @@
           </h2>
         </header>
         <div class="Cards">
-
-          {% for product in cards %}
+          {% for item in top_goods %}
+            {% url 'product-detail' item.slug as item_url %}
             <div class="Card">
-              <a class="Card-picture" href="#">
-                <img src="{% static product.img %}" alt="{{ product.name }}"/>
+              <a class="Card-picture" href="{{ item_url }}">
+                <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
               </a>
               <div class="Card-content">
-                <strong class="Card-title"><a href="#">{{ product.name }}</a></strong>
+                <strong class="Card-title">
+                  <a href="{{ item_url }}">{{ item.name }}</a>
+                </strong>
                 <div class="Card-description">
                   <div class="Card-cost">
-                    <span class="Card-price">{{ product.price }}</span>
+                    <span class="Card-price">{{ item.avg_price | floatformat:2 }} ₽</span>
                   </div>
-                  <div class="Card-category">{{ product.category }}</div>
-                  <div class="Card-hover"><a class="Card-btn" href="#">
-                    <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/></a>
+                  <div class="Card-category">{{ item.category.name }}</div>
+                  <div class="Card-hover">
+                    <a class="Card-btn" href="#">
+                      <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
+                    </a>
+                    <a class="Card-btn" href="#">
+                      <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
+                    </a>
                   </div>
                 </div>
               </div>
