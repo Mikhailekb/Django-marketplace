@@ -7,6 +7,4 @@ from django.utils import timezone
 def discount_invalidate():
     current_time = timezone.now()
     discounts = Discount.objects.filter(date_end__lte=current_time, is_active=True)
-    for discount in discounts:
-        discount.is_active = False
-        discount.save()
+    discounts.update(is_active=False)
