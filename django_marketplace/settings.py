@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'django_admin_inline_paginator',
     'django_celery_results',
     'django_celery_beat',
-    'smart_selects'
+    'smart_selects',
+    'app_shops.templatetags.custom_filters',
 ]
 
 MIDDLEWARE = [
@@ -164,9 +165,11 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+CACHE_ROOT = os.path.join(BASE_DIR, 'cache/')
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache', 'LOCATION': CACHE_ROOT},
 }
 
 
