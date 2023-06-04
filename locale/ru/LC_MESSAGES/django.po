@@ -8,39 +8,62 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-01 21:59+0300\n"
+"POT-Creation-Date: 2023-06-04 23:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%"
-"100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\app_shops\admin.py:92 .\app_shops\models\category.py:17
+#: .\app_shops\admin.py:94 .\app_shops\models\category.py:17
 msgid "icon"
 msgstr "значок"
 
-#: .\app_shops\admin.py:92
+#: .\app_shops\admin.py:187
 msgid "photo"
 msgstr "фото"
 
-#: .\app_shops\models\category.py:12 .\app_shops\models\product.py:21
-#: .\app_shops\models\product.py:30 .\app_shops\models\product.py:45
-#: .\app_shops\models\product.py:59 .\app_shops\models\product.py:92
-#: .\app_shops\models\shop.py:20 .\app_users\models.py:11
-#: .\venv\Lib\site-packages\django\utils\translation\__init__.py:329
+#: .\app_shops\admin.py:188 .\app_shops\models\category.py:12
+#: .\app_shops\models\product.py:21 .\app_shops\models\product.py:30
+#: .\app_shops\models\product.py:45 .\app_shops\models\product.py:59
+#: .\app_shops\models\product.py:92 .\app_shops\models\shop.py:20
 msgid "name"
 msgstr "имя"
 
-#: .\app_shops\models\category.py:14 .\app_shops\models\discount.py:34
-#: .\app_shops\models\product.py:99 .\app_shops\models\product.py:140
-#: .\app_shops\models\shop.py:26 .\app_shops\models\shop.py:71
+#: .\app_shops\apps.py:8
+msgid "marketplace"
+msgstr ""
+
+#: .\app_shops\models\banner.py:18 .\app_shops\models\category.py:14
+#: .\app_shops\models\discount.py:34 .\app_shops\models\product.py:99
+#: .\app_shops\models\product.py:140 .\app_shops\models\shop.py:26
+#: .\app_shops\models\shop.py:71
 msgid "is active"
 msgstr "флаг активности"
+
+#: .\app_shops\models\banner.py:19 .\app_shops\models\product.py:100
+#: .\app_shops\models\product.py:139 .\app_shops\models\shop.py:27
+msgid "created"
+msgstr "создано"
+
+#: .\app_shops\models\banner.py:20
+#, fuzzy
+#| msgid "shop image"
+msgid "image"
+msgstr "изображение магазина"
+
+#: .\app_shops\models\banner.py:35
+msgid "banners"
+msgstr "Баннеры"
+
+#: .\app_shops\models\banner.py:36
+msgid "banner"
+msgstr "Баннер"
 
 #: .\app_shops\models\category.py:16
 msgid "parent category"
@@ -185,11 +208,6 @@ msgstr "значение"
 msgid "products"
 msgstr "товары"
 
-#: .\app_shops\models\product.py:100 .\app_shops\models\product.py:139
-#: .\app_shops\models\shop.py:27
-msgid "created"
-msgstr "создано"
-
 #: .\app_shops\models\product.py:101
 msgid "updated"
 msgstr "обновлено"
@@ -260,41 +278,13 @@ msgstr "изображения магазина"
 msgid "shop image"
 msgstr "изображение магазина"
 
-#: .\app_shops\views.py:180 .\app_shops\views.py:183 .\app_shops\views.py:186
+#: .\app_shops\views.py:194 .\app_shops\views.py:197 .\app_shops\views.py:200
 msgid "Cache cleared successfully"
 msgstr "Кэш успешно очищен"
 
-#: .\app_shops\views.py:188
+#: .\app_shops\views.py:202
 msgid "Error. Cache not cleared"
 msgstr "Ошибка. Кэш не очищен"
-
-#: .\app_users\apps.py:9
-msgid "users"
-msgstr "пользователи"
-
-#: .\app_users\models.py:9
-msgid "phone"
-msgstr "телефон"
-
-#: .\app_users\models.py:10
-msgid "avatar"
-msgstr "фотография"
-
-#: .\app_users\models.py:12
-msgid "surname"
-msgstr "фамилия"
-
-#: .\app_users\models.py:13
-msgid "patronymic"
-msgstr "отчество"
-
-#: .\app_users\models.py:16
-msgid "Profile"
-msgstr "Профиль"
-
-#: .\app_users\models.py:17
-msgid "Profiles"
-msgstr "Профили"
 
 #: .\templates\admin\categories_list.html:8
 msgid "Clear categories cache"
@@ -372,15 +362,21 @@ msgstr ""
 msgid "secs"
 msgstr "пользователи"
 
-#: .\templates\pages\main.html:65
+#: .\templates\pages\main.html:21
+#, fuzzy
+#| msgid "date start"
+msgid "get started"
+msgstr "перейти"
+
+#: .\templates\pages\main.html:73
 msgid "LIMITED OFFERS"
 msgstr "ОГРАНИЧЕННЫЕ ПРЕДЛОЖЕНИЯ"
 
-#: .\templates\pages\main.html:121
+#: .\templates\pages\main.html:129
 msgid "Popular goods"
 msgstr "Популярные товары"
 
-#: .\templates\pages\main.html:156
+#: .\templates\pages\main.html:171
 msgid "limited edition"
 msgstr "Ограниченный тираж"
 
@@ -432,10 +428,31 @@ msgstr "Оплата"
 msgid "Price"
 msgstr "Цена"
 
-#: .\templates\pages\product.html:252
+#: .\templates\pages\product.html:254
 msgid "Add review"
 msgstr "Добавить отзыв"
 
-#: .\templates\pages\product.html:262
+#: .\templates\pages\product.html:264
 msgid "Submit review"
 msgstr "Отправить отзыв"
+
+#~ msgid "users"
+#~ msgstr "пользователи"
+
+#~ msgid "phone"
+#~ msgstr "телефон"
+
+#~ msgid "avatar"
+#~ msgstr "фотография"
+
+#~ msgid "surname"
+#~ msgstr "фамилия"
+
+#~ msgid "patronymic"
+#~ msgstr "отчество"
+
+#~ msgid "Profile"
+#~ msgstr "Профиль"
+
+#~ msgid "Profiles"
+#~ msgstr "Профили"
