@@ -33,10 +33,10 @@ class HomeView(TemplateView):
             .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
         top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
 
-        banners = Banner.objects.all().select_related('product')
+        banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
 
         context['top_goods'] = top_products
-        context['slider_content'] = banners
+        context['banners'] = banners
 
         return context
 
