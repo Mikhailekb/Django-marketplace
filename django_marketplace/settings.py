@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'project_command',
     'app_shops',
     'app_users',
+    'app_cart',
     'allauth',
     'allauth.account',
     'django_admin_inline_paginator',
@@ -203,3 +204,5 @@ CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+CART_SESSION_ID = 'cart'
