@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.paginator import Paginator
-from django.db.models import QuerySet, Avg, Min, Max, Sum
+from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -10,11 +10,14 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
 
-from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
+from .services.functions import get_exchange_rate
+
+from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME, \
+    EXCHANGE_RATE_LIFETIME
 from .filters import ProductFilter
 from .models.discount import Discount
-from .models.product import SortProduct, Product, TagProduct
 from .models.banner import Banner
+from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, FeatureValue, Review
 from .models.shop import ProductShop
 
 
@@ -25,12 +28,17 @@ class HomeView(TemplateView):
     template_name = 'pages/main.html'
 
     def get_context_data(self, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        goods = Product.objects.select_related('category', 'main_image')\
+            .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
+        top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
+
         banners = Banner.objects.all().select_related('product')
 
-        context.update({'slider_content': banners})
-        return context
+        context['top_goods'] = top_products
+        context['slider_content'] = banners
 
+        return context
 
 
 class CatalogView(FilterView):
@@ -111,6 +119,7 @@ class CatalogView(FilterView):
         context['min_price'] = min_price
         context['max_price'] = max_price
         context['form'] = self.filterset.form
+
         return context
 
 
@@ -193,3 +202,50 @@ class ClearCache(View):
             messages.warning(self.request, _('Error. Cache not cleared'))
 
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+class ProductDetailView(DetailView):
+    """
+    Представление детальной страницы товара
+    """
+    model = Product
+    slug_url_kwarg = 'product_slug'
+    template_name = 'pages/product.html'
+    context_object_name = 'product'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.select_related('category', 'main_image').\
+            prefetch_related('images', 'tags',
+                             Prefetch('features', queryset=FeatureToProduct.objects.select_related('feature_name')
+                                      .prefetch_related('values')),
+                             Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')),
+                             Prefetch('reviews', queryset=Review.objects.select_related('user')))
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = context['product']
+        price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 0)
+        reviews_count = product.reviews.count()
+        exchange_rate = cache.get_or_set('exchange_rate', get_exchange_rate, timeout=EXCHANGE_RATE_LIFETIME)
+
+        context['price'] = price
+        context['reviews_count'] = reviews_count
+        context['exchange_rate'] = exchange_rate
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        product = self.get_object()
+        if request.user.is_authenticated:
+            user = request.user.profile
+            text = request.POST.get('review')
+            if text:
+                review = Review(product=product, user=user, text=text)
+                review.save()
+        else:
+            return redirect('login')
+
+        return redirect('product-detail', product_slug=product.slug)

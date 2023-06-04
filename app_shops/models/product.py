@@ -5,6 +5,8 @@ from imagekit.models import ProcessedImageField, ImageSpecField
 from smart_selects.db_fields import ChainedManyToManyField
 from app_shops.services import img_processors
 
+from app_users.models import Profile
+
 
 def get_good_img_path(instance, name):
     return f'img/content/products/{instance.product.slug}/{name}'
@@ -125,3 +127,22 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f'Image of product: {self.product.name}'
+
+
+class Review(models.Model):
+    """
+    Модель отзывов
+    """
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', verbose_name=_('product'))
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews', verbose_name=_('user'))
+    text = models.TextField(verbose_name=_('review text'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
+    is_active = models.BooleanField(default=True, verbose_name=_('is active'))
+
+    def short_text(self):
+        return self.text[:30]
+
+    def __str__(self):
+        return f'{self.user} - {self.product}: {self.short_text()}'
+
+    short_text.short_description = 'text_short'
