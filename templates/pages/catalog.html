@@ -1,7 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
-{% load i18n %}
-
+{% load static i18n djmoney custom_filters %}
 
 {% block page_content %}
   <div class="Middle Middle_top">
@@ -20,10 +18,15 @@
 
                 <div class="form-group">
                   <div class="range Section-columnRange">
-                    <input class="range-line" id="price" name="price" type="text" data-type="double"
-                           data-min="{{ min_price|floatformat:-0 }}" data-max="{{ max_price|floatformat:0 }}"
-                           data-from="{{ price_from }}" data-to="{{ price_to }}"/>
-
+                    {% if request.LANGUAGE_CODE == 'ru' %}
+                      <input class="range-line" id="price" name="price" type="text" data-type="double"
+                             data-min="{{ min_price|floatformat:-0 }}" data-max="{{ max_price|floatformat:0 }}"
+                             data-from="{{ price_from }}" data-to="{{ price_to }}"/>
+                    {% else %}
+                      <input class="range-line" id="price" name="price" type="text" data-type="double"
+                             data-min="{{ min_price|dollar_conversion_range }}" data-max="{{ max_price|dollar_conversion_range }}"
+                             data-from="{{ price_from }}" data-to="{{ price_to }}"/>
+                    {% endif %}
                     <div class="range-price">{% trans 'Price:' %}
                       <div class="rangePrice">
                       </div>
@@ -77,7 +80,7 @@
             <div class="Sort-title">{% trans 'Sort by:' %}</div>
             <div class="Sort-variants">
               {% for option in sort_options %}
-                <a class="Sort-sortBy {{ option.css_class }}"
+                <a class="Sort-sortBy" id={{ option.sort_field }}
                    href="?order_by={{ option.sort_field }}">{{ option.name }}</a>
               {% endfor %}
             </div>
@@ -96,13 +99,21 @@
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
-                      <span class="Card-price">{{ item.avg_price | floatformat:2 }} ₽</span>
+                      {% if request.LANGUAGE_CODE == 'ru' %}
+                        <span class="Card-price">{% money_localize item.avg_price 'RUB' %}</span>
+                      {% else %}
+                        <span class="Card-price">{{ item.avg_price|dollar_conversion }}</span>
+                      {% endif %}
+
                     </div>
                     <div class="Card-category">{{ item.category.name }}</div>
                     <div class="Card-hover">
-                      <a class="Card-btn" href="#">
-                        <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
-                      </a>
+{#                      <form class="Card-btn comparison" action="{% url 'comparison' %}" method="post">#}
+{#                        {% csrf_token %}#}
+{#                        <button class="btn-reset btn-comparison" type="submit" name="add_product" value="{{ item.id }}">#}
+{#                          <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>#}
+{#                        </button>#}
+{#                      </form>#}
                       <a class="Card-btn" href="#">
                         <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
                       </a>
@@ -147,5 +158,5 @@
       </div>
     </div>
   </div>
+  {{ order_by|json_script:"order_by" }}
 {% endblock %}
-

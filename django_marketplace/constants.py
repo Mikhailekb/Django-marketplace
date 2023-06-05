@@ -5,5 +5,4 @@ CATEGORIES_CACHE_LIFETIME = timedelta(days=1).total_seconds()
 SORT_OPTIONS_CACHE_LIFETIME = timedelta(days=2).total_seconds()
 TAGS_CACHE_LIFETIME = timedelta(days=1).total_seconds()
 SALES_CACHE_LIFETIME = timedelta(days=1).total_seconds()
-EXCHANGE_RATE_LIFETIME = timedelta(days=1).total_seconds()
-
+DISCOUNT_CACHE_LIFETIME = timedelta(days=1).total_seconds()
