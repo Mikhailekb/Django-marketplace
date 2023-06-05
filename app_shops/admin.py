@@ -13,6 +13,7 @@ from .models.category import Category
 from .models.discount import Discount, DiscountImage
 from .models.product import ProductImage, FeatureValue, Product, TagProduct, FeatureName, FeatureToProduct, Review
 from .models.shop import ShopImage, ProductShop, Shop
+from .models.banner import Banner
 
 AdminSite.site_header = 'Megano'
 AdminSite.site_title = 'Megano'
@@ -200,4 +201,21 @@ class TagProductAdmin(TranslationAdmin):
 
 @admin.register(FeatureName)
 class FeatureNameAdmin(TranslationAdmin):
-    inlines = (FeatureValueInLine, )
+    inlines = [FeatureValueInLine]
+
+
+
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ['get_foreing_name', 'is_active', 'created', 'get_img']
+    list_filter = ['is_active']
+
+    def get_img(self, obj):
+        return mark_safe(f'<img style="width: 150px; height: 150px; object-fit: contain;" src={obj.photo.url}>')
+
+    def get_foreing_name(self, obj):
+        return obj.product.name
+    
+    get_img.short_description = _('photo')
+    get_foreing_name.short_description = _('name')
+

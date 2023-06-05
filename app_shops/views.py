@@ -15,7 +15,8 @@ from djmoney.money import Money
 from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
 from .models.discount import Discount
-from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
+from .models.banner import Banner
+from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, FeatureValue, Review
 from .models.shop import ProductShop
 
 
@@ -31,7 +32,10 @@ class HomeView(TemplateView):
             .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
         top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
 
+        banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
+
         context['top_goods'] = top_products
+        context['banners'] = banners
 
         return context
 

@@ -5685,6 +5685,10 @@ input[type="radio"] {
     margin-top: 43px;
 }
 
+.Slider-btn {
+  text-transform: uppercase;
+}
+
 @media screen and (max-width: 990px) {
     .Slider-footer .row {
         display: flex;
@@ -5701,10 +5705,10 @@ input[type="radio"] {
 
 .Slider-title {
     font-weight: 600;
-    line-height: 84px;
+    line-height: 70px;
     text-transform: uppercase;
     display: block;
-    font-size: 74px;
+    font-size: 60px;
     letter-spacing: -2.3px;
     margin-bottom: 25px;
 }
