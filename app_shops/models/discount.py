@@ -7,10 +7,12 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from djmoney.models.fields import MoneyField
 from imagekit.models import ProcessedImageField, ImageSpecField
 
 
-def get_discount_img_path(instance, name):
+def get_discount_img_path(instance, name) -> str:
+    """Возвращает путь для хранения изображений данной скидки"""
     return f'img/content/discounts/{instance.discount.slug}/{name}'
 
 
@@ -23,12 +25,12 @@ class Discount(models.Model):
     description_long = models.TextField(verbose_name=_('description long'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
     shop = models.ForeignKey('Shop', on_delete=models.CASCADE, related_name='discounts')
-    discount_amount = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True,
-                                          verbose_name=_('discount value'))
+    discount_amount = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True,
+                                 default_currency='RUB', verbose_name=_('discount value'))
     discount_percentage = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name=_('discount percentage'),
                                                            validators=[MaxValueValidator(99)])
-    min_cost = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True,
-                                   verbose_name=_('minimum cost'))
+    min_cost = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True,
+                          default_currency='RUB', verbose_name=_('minimum cost'))
     date_start = models.DateTimeField(verbose_name=_('date start'), db_index=True)
     date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
     is_active = models.BooleanField(default=True, verbose_name=_('is active'))
@@ -59,7 +61,7 @@ class Discount(models.Model):
     def __str__(self) -> str:
         return f'{self.name}'
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse('discount', kwargs={'discount_slug': self.slug})
 
     @property
@@ -94,5 +96,5 @@ class DiscountImage(models.Model):
         verbose_name_plural = _('discount images')
         verbose_name = _('discount image')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Image of discount: {self.discount.name}'

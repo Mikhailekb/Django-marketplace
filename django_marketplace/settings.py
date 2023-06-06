@@ -43,16 +43,17 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_filters',
     'django_user_agents',
-    'project_command',
-    'app_shops',
-    'app_users',
     'allauth',
     'allauth.account',
     'django_admin_inline_paginator',
     'django_celery_results',
     'django_celery_beat',
     'smart_selects',
-    'app_shops.templatetags.custom_filters',
+    'djmoney',
+    'djmoney.contrib.exchange',
+    'project_command',
+    'app_shops',
+    'app_users',
 ]
 
 MIDDLEWARE = [
@@ -198,8 +199,11 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
-
-
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+CURRENCIES = ('RUB',)
+BASE_CURRENCY = 'RUB'
+EXCHANGE_BACKEND = 'app_shops.services.functions.CBRExchangeBackend'
+AUTO_CONVERT_MONEY = True

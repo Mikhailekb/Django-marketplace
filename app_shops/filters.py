@@ -1,6 +1,8 @@
 import django_filters as filters
-from django.db.models import Q
 from django import forms
+from django.db.models import Q
+from djmoney.contrib.exchange.models import convert_money
+from djmoney.money import Money
 
 from .models.product import Product
 
@@ -16,16 +18,22 @@ class ProductFilter(filters.FilterSet):
     # Фильтр на бесплатную доставку на данный момент отсутствует
 
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
-        if data and not data.get('order_by'):
+        if data:
             data = data.dict()
-            data['order_by'] = 'count_sold'
+            if not data.get('order_by'):
+                data['order_by'] = 'count_sold'
+            price = data.get('price')
+            data['price'] = f'{price};{request.LANGUAGE_CODE}'
         super().__init__(data, queryset, request=request, prefix=prefix)
 
     @staticmethod
     def filter_price(queryset, name, value):
-        if len(value.split(';')) == 2:
-            price_from, price_to = value.split(';')
+        if len(value.split(';')) == 3:
+            price_from, price_to, language_code = value.split(';')
             if price_from.isdigit() and price_to.isdigit():
+                if language_code == 'en':
+                    price_from = convert_money(Money(price_from, 'USD'), 'RUB').amount
+                    price_to = convert_money(Money(price_to, 'USD'), 'RUB').amount
                 return queryset.filter(avg_price__gte=price_from, avg_price__lte=price_to)
         return queryset
 

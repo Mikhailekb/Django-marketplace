@@ -9,3 +9,4 @@ class AppShopsConfig(AppConfig):
 
     def ready(self):
         import app_shops.signals
+        from .services import img_processors

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.paginator import Paginator
-from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch
+from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Subquery, Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -9,11 +9,10 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
+from djmoney.contrib.exchange.models import convert_money
+from djmoney.money import Money
 
-from .services.functions import get_exchange_rate
-
-from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME, \
-    EXCHANGE_RATE_LIFETIME
+from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
 from .models.discount import Discount
 from .models.banner import Banner
@@ -29,7 +28,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        goods = Product.objects.select_related('category', 'main_image')\
+        goods = Product.objects.select_related('category', 'main_image') \
             .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
         top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
 
@@ -49,7 +48,7 @@ class CatalogView(FilterView):
     context_object_name = 'goods'
     filterset_class = ProductFilter
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.sort_options: QuerySet = cache.get_or_set('sort_options', SortProduct.objects.all(),
                                                        timeout=SORT_OPTIONS_CACHE_LIFETIME)
@@ -74,7 +73,11 @@ class CatalogView(FilterView):
                       count_sold=Sum('in_shops__count_sold'))
         return self.queryset
 
-    def sorting_update(self):
+    def sorting_update(self) -> None:
+        """
+        Метод, в котором происходит изменение кодовых имен элементов сортировки,
+        в зависимости от полученных данных
+        """
         for item in self.sort_options:
             ordering = None
             filed_name = item.sort_field
@@ -83,13 +86,10 @@ class CatalogView(FilterView):
 
             if filed_name in [self.ordering, ordering]:
                 if self.ordering.startswith('-'):
-                    item.css_class = item.css_cls[2][1]
                     item.sort_field = filed_name
                 else:
-                    item.css_class = item.css_cls[1][1]
                     item.sort_field = f'-{filed_name}'
             else:
-                item.css_class = item.css_cls[0][1]
                 if item.sort_field.startswith('-'):
                     item.sort_field = item.sort_field[1:]
 
@@ -103,11 +103,13 @@ class CatalogView(FilterView):
         self.sorting_update()
 
         price = self.filterset.data.get('price')
-        if price and len(price.split(';')) == 2 and all(item.isdigit() for item in price.split(';')):
-            price_from, price_to = price.split(';')
-        else:
+        if price and len(price.split(';')) == 3 and all(item.isdigit() for item in price.split(';')[:2]):
+            price_from, price_to, language_code = price.split(';')
+        elif self.request.LANGUAGE_CODE == 'ru':
             price_from, price_to = min_price, max_price
-
+        else:
+            price_from = convert_money(Money(min_price, 'RUB'), 'USD').amount
+            price_to = convert_money(Money(max_price, 'RUB'), 'USD').amount
         category = self.request.GET.get('category')
 
         context['sort_options'] = self.sort_options
@@ -132,7 +134,7 @@ class SaleView(ListView):
 
     def get_queryset(self):
         self.queryset = cache.get_or_set('sales', Discount.objects.filter(is_active=True,
-                                                                          date_start__lte=timezone.now()) \
+                                                                          date_start__lte=timezone.now())
                                          .select_related('main_image'),
                                          timeout=SALES_CACHE_LIFETIME)
         return self.queryset
@@ -215,37 +217,33 @@ class ProductDetailView(DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('category', 'main_image').\
+        queryset = queryset.select_related('category', 'main_image'). \
             prefetch_related('images', 'tags',
                              Prefetch('features', queryset=FeatureToProduct.objects.select_related('feature_name')
                                       .prefetch_related('values')),
                              Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')),
-                             Prefetch('reviews', queryset=Review.objects.select_related('user')))
+                             Prefetch('reviews', queryset=Review.objects.select_related('profile')))
 
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = context['product']
-        price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 0)
+        price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 2)
         reviews_count = product.reviews.count()
-        exchange_rate = cache.get_or_set('exchange_rate', get_exchange_rate, timeout=EXCHANGE_RATE_LIFETIME)
 
         context['price'] = price
         context['reviews_count'] = reviews_count
-        context['exchange_rate'] = exchange_rate
 
         return context
 
     def post(self, request, *args, **kwargs):
         product = self.get_object()
-        if request.user.is_authenticated:
-            user = request.user.profile
-            text = request.POST.get('review')
-            if text:
-                review = Review(product=product, user=user, text=text)
-                review.save()
-        else:
+        if not request.user.is_authenticated:
             return redirect('login')
 
+        profile = request.user.profile
+        if text := request.POST.get('review'):
+            review = Review(product=product, profile=profile, text=text)
+            review.save()
         return redirect('product-detail', product_slug=product.slug)
