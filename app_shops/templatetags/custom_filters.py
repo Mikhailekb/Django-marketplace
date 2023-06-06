@@ -6,8 +6,10 @@ from djmoney.money import Money
 
 register = template.Library()
 
+
 @register.filter
 def dollar_conversion(value) -> Money | None:
+    """Конвертация рублей в доллары"""
     if isinstance(value, Money):
         return convert_money(value, 'USD')
     elif isinstance(value, decimal.Decimal | float):
@@ -18,5 +20,4 @@ def dollar_conversion(value) -> Money | None:
 
 @register.filter
 def dollar_conversion_range(value):
-    if value:
-        return int(dollar_conversion(value).amount)
+    return int(dollar_conversion(value).amount)

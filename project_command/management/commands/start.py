@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    help = 'Create and apply migrations'
+    help = 'commands are executed: migrations, fixtures, compilemessages, update_rates, createsuperuser'
 
     def handle(self, *args, **kwargs) -> None:
         management.call_command('migration')

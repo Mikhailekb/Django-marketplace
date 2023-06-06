@@ -203,7 +203,7 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-CURRENCIES = ('RUB', 'USD')
+CURRENCIES = ('RUB',)
 BASE_CURRENCY = 'RUB'
 EXCHANGE_BACKEND = 'app_shops.services.functions.CBRExchangeBackend'
 AUTO_CONVERT_MONEY = True

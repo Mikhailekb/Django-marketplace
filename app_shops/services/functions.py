@@ -5,14 +5,14 @@ import requests
 class CBRExchangeBackend(BaseExchangeBackend):
     GAIN = 0.001
     name = 'cbr.ru'
-    url = 'https://www.cbr-xml-daily.ru/daily_json.js'
+    url = 'https://www.cbr-xml-daily.ru/latest.js'
 
     def get_rates(self, **kwargs):
         """
         Возвращает сопоставление <валюта>: <курс>.
         """
         try:
-            response = requests.get('https://www.cbr-xml-daily.ru/latest.js').json()
+            response = requests.get(self.url).json()
             exchange_rate = response['rates']['USD'] - self.GAIN
             print('USD:', exchange_rate)
             return {'USD': exchange_rate}
