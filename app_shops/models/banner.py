@@ -34,5 +34,18 @@ class Banner(models.Model):
     class Meta:
         verbose_name_plural = _('banners')
         verbose_name = _('banner')
-        ordering = ['created']
+        ordering = ('created',)
 
+
+class SpecialOffer(models.Model):
+    product_shop = models.ForeignKey('ProductShop', on_delete=models.CASCADE)
+    date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
+
+    class Meta:
+        verbose_name_plural = _('special offer')
+        verbose_name = _('special offer')
+
+    def clean(self):
+        # Может быть только 1 экземпляр
+        if not self.pk and SpecialOffer.objects.exists():
+            raise ValidationError(_('Only one instance of this model is allowed.'))
