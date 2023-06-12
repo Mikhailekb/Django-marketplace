@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeView, CatalogView, ClearCache, SaleView, DiscountDetailView, ProductDetailView
+from .views import HomeView, CatalogView, ClearCache, SaleView, DiscountDetailView, ProductDetailView, ComparisonView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('sales/', SaleView.as_view(), name='sales'),
     path('sales/<slug:discount_slug>/', DiscountDetailView.as_view(), name='discount'),
     path('product/<slug:product_slug>/', ProductDetailView.as_view(), name='product-detail'),
+    path('catalog/compare/', ComparisonView.as_view(), name='comparison')
 ]

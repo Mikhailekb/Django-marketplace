@@ -1,4 +1,7 @@
+from collections import defaultdict
+
 from django.contrib import messages
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Subquery, Count
@@ -247,3 +250,93 @@ class ProductDetailView(DetailView):
             review = Review(product=product, profile=profile, text=text)
             review.save()
         return redirect('product-detail', product_slug=product.slug)
+
+class ComparisonView(TemplateView):
+  MAX_VALUE = 3
+  template_name = 'pages/comparison.html'
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    comparison_products = self.request.session.get('comparison_products', default=[])[:3]
+    if comparison_products and isinstance(comparison_products, list) and len(comparison_products) <= self.MAX_VALUE:
+      goods: QuerySet[Product] = Product.objects.filter(id__in=comparison_products) \
+        .annotate(avg_price=Avg('in_shops__price')) \
+        .select_related('category', 'main_image')
+
+      if len(set([item.category_id for item in goods])) == 1:
+        intersecting_features = self._get_intersecting_features(context, comparison_products)
+
+        comparison_list: QuerySet[Product] = goods.prefetch_related(
+          Prefetch('features', queryset=FeatureToProduct.objects.order_by('feature_name')
+                   .select_related('feature_name')
+                   .prefetch_related('values')
+                   .filter(feature_name_id__in=intersecting_features)))
+
+        context['comparison_list'] = comparison_list
+        context['one_category'] = True
+      else:
+        context['comparison_list'] = goods
+    return context
+
+  def _get_intersecting_features(self, context, goods):
+    is_difference = self.request.GET.get('is_difference')
+    if is_difference == 'True':
+      name_btn = _('Show all characteristics')
+      is_difference_value = 'False'
+      values = FeatureToProduct.objects.filter(product_id__in=goods) \
+        .values('product_id', 'feature_name') \
+        .annotate(values=ArrayAgg('values')) \
+        .order_by('product_id', 'feature_name')
+      result = {}
+      for item in values:
+        product_id = item['product_id']
+        feature_name = item['feature_name']
+        value = item['values']
+        if product_id in result:
+          result[product_id][feature_name] = value
+        else:
+          result[product_id] = {feature_name: value}
+
+      common_keys = set.intersection(*[set(d.keys()) for d in result.values()])
+      intersection_feature = {k: {key: value for key, value in v.items() if key in common_keys}
+                              for k, v in result.items()}
+
+      value_dict = defaultdict(set)
+      for v in intersection_feature.values():
+        for feature_name_id, value in v.items():
+          value_dict[feature_name_id].add(value[0])
+
+      value_dict = {k: v for k, v in value_dict.items() if len(v) > 1}
+      intersecting_features = value_dict.keys()
+    else:
+      name_btn = _('Only differing characteristics')
+      is_difference_value = 'True'
+
+      intersecting_features = FeatureToProduct.objects.filter(product_id__in=goods) \
+        .values('feature_name') \
+        .annotate(count=Count('product_id')) \
+        .filter(count=len(goods)) \
+        .values_list('feature_name_id', flat=True, named=False)
+
+    context['name_btn'] = name_btn
+    context['is_difference_value'] = is_difference_value
+    return intersecting_features
+
+  def post(self, request: HttpRequest) -> HttpResponse:
+    current_page = request.META.get('HTTP_REFERER')
+    comparison_products = request.session.get('comparison_products', default=[])
+    if product_id := request.POST.get('add_product'):
+      if len(comparison_products) <= self.MAX_VALUE and product_id in comparison_products:
+        return redirect(current_page)
+      comparison_products.append(product_id)
+    elif product_id := request.POST.get('delete_product'):
+      if not isinstance(comparison_products, list) or product_id not in comparison_products:
+        return redirect(current_page)
+      comparison_products.remove(product_id)
+    elif request.POST.get('delete_all'):
+      request.session['comparison_products'] = comparison_products.clear()
+    else:
+      return redirect(current_page)
+
+    request.session['comparison_products'] = comparison_products
+    return redirect(current_page)

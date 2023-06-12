@@ -90,7 +90,7 @@ class Product(models.Model):
     """
     Модель товара
     """
-    name = models.CharField(max_length=256, verbose_name=_('name'))
+    name = models.CharField(max_length=120, verbose_name=_('name'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
     description_short = models.TextField(verbose_name=_('description short'))
     description_long = models.TextField(verbose_name=_('description long'))
