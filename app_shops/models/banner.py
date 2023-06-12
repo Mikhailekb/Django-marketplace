@@ -7,9 +7,11 @@ from django.core.files.images import get_image_dimensions
 
 
 def get_banner_img_path(instance, name):
+    """Возвращает путь для хранения изображений банера"""
     return f'img/content/banners/{instance.product.slug}/{name}'
 
 def get_slider_img_path(instance, name):
+    """Возвращает путь для хранения изображений экземпляра слайдера"""
     return f'img/content/sliders/{instance.product.slug}/{name}'
 
 
