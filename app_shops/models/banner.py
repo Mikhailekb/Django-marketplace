@@ -11,7 +11,7 @@ def get_banner_img_path(instance, name):
     return f'img/content/banners/{instance.product.slug}/{name}'
 
 def get_small_banner_img_path(instance, name):
-    """Возвращает путь для хранения изображений экземпляра слайдера"""
+    """Возвращает путь для хранения изображений маленького банера"""
     return f'img/content/small_banners/{instance.product.slug}/{name}'
 
 
