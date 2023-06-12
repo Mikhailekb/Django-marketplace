@@ -29,7 +29,6 @@ function updateDisplay(radios, display) {
     if (radio.checked) {
       const selectedToggleText = radio.parentElement.querySelector('.toggle-text');
       display.textContent = selectedToggleText.textContent;
-
     }
   });
 }
