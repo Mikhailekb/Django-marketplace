@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-
 {% block page_content %}
   <div class="Middle Middle_top">
 
@@ -16,9 +15,9 @@
           <div class="Section-columnContent">
             <div class="NavigateProfile">
               <ul class="menu menu_vt">
-                <li class="menu-item"><a class="menu-link" href="account.html">Личный кабинет</a>
+                <li class="menu-item"><a class="menu-link" href="/profile/account/{{ form.name.value }}">Личный кабинет</a>
                 </li>
-                <li class="menu-item_ACTIVE menu-item"><a class="menu-link" href="profile.html">Профиль</a>
+                <li class="menu-item_ACTIVE menu-item"><a class="menu-link" href="/profile/edit/{{ form.name.value }}">Профиль</a>
                 </li>
                 <li class="menu-item"><a class="menu-link" href="historyorder.html">История заказов</a>
                 </li>
@@ -30,59 +29,66 @@
       </div>
       <div class="Section-content">
         <div class="Profile">
-          <form class="form Profile-form" action="#" method="post">
+          <form class="form Profile-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="row">
               <div class="row-block">
                 <div class="form-group">
                   <label class="form-label" for="avatar">Аватар
                   </label>
-                  <div class="Profile-avatar Profile-avatar_noimg">
-
-                    <label class="Profile-fileLabel" for="avatar"><img src="assets/img/icons/upload.png" alt="#.png"/>Загрузить
-                      фото
-                    </label>
-
+                  <div class="Profile-avatar Profile-avatar_noimg" style="position: relative">
+                    <label class="Profile-fileLabel" for="avatar"><img src="{% static 'img/icons/upload.png' %}" alt="#.png"/>Загрузить фото</label>
                     <input class="Profile-file form-input" id="avatar" name="avatar" type="file"
                            data-validate="onlyImgAvatar"/>
+                    {{ form.avatar.errors }}
+                    {{ form.avatar.url }}
+                    {% with default_image='/static/img/icons/profile.png' %}
+                          <img src="{{ image.url|default:default_image }}" style="position: absolute; width: 100%; height: 100%; z-index: -1; object-fit: contain">
+                    {% endwith %}
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="name">ФИО
                   </label>
-                  <input class="form-input" id="name" name="name" type="text" value="" data-validate="require"/>
+                  {{ form.name }}
+                  {{ form.name.errors }}
                 </div>
               </div>
               <div class="row-block">
                 <div class="form-group">
                   <label class="form-label" for="phone">Телефон
                   </label>
-                  <input class="form-input" id="phone" name="phone" type="text" value="+70000000000"/>
+                  {{ form.phone }}
+                  {{ form.phone.errors }}
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="mail">E-mail
                   </label>
-                  <input class="form-input" id="mail" name="mail" type="text" value="send@test.test"
-                         data-validate="require"/>
+                  {{ user_form.email }}
+                  {{ error_form.email.errors }}
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="password">Пароль
                   </label>
-                  <input class="form-input" id="password" name="password" type="password"
-                         placeholder="Тут можно изменить пароль"/>
+                  {{ user_form.password1 }}
+                  {{ error_form.password1.errors }}
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="passwordReply">Подтверждение пароля
                   </label>
-                  <input class="form-input" id="passwordReply" name="passwordReply" type="password"
-                         placeholder="Введите пароль повторно"/>
+                  {{ user_form.password2 }}
+                  {{ error_form.password2.errors }}
                 </div>
                 <div class="form-group">
                   <div class="Profile-btn">
                     <button class="btn btn_success" type="submit">Сохранить
                     </button>
                   </div>
-                  <div class="Profile-success">Профиль успешно сохранен
-                  </div>
+                  {% if request.method == 'POST' and not form.errors %}
+                    <div class="Profile-success" style="display: block" id="success">Профиль успешно сохранен</div>
+                  {% else %}
+                    <div class="Profile-success" style="display: none" id="success">Профиль успешно сохранен</div>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -92,4 +98,13 @@
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript"></script>
+<script>
+  jQuery(function($){
+    $("#id_phone").mask("+7 (999) 999-9999");
+  });
+</script>
 {% endblock %}
+
