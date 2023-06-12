@@ -12,8 +12,6 @@ class OrderForm1(forms.Form):
         attrs={'class': 'form-input', 'data-validate': 'require', 'id': 'phone'}))
     email = forms.EmailField(label=_('E-mail'), validators=[validate_email], widget=forms.TextInput(
                                  attrs={'class': 'form-input', 'data-validate': 'require', 'id': 'email'}))
-    # password_1 = forms.PasswordInput()
-    # password_2 = forms.PasswordInput()
 
 
 class OrderForm2(forms.ModelForm):

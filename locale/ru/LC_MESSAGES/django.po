@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-12 19:27+0500\n"
+"POT-Creation-Date: 2023-06-12 21:37+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,15 +53,15 @@ msgstr "Телефон"
 msgid "E-mail"
 msgstr "Электронная почта"
 
-#: .\app_shops\forms.py:21
+#: .\app_shops\forms.py:19
 msgid "City"
 msgstr "Город"
 
-#: .\app_shops\forms.py:23
+#: .\app_shops\forms.py:21
 msgid "Address"
 msgstr "Адрес"
 
-#: .\app_shops\models\banner.py:21 .\app_shops\models\category.py:14
+#: .\app_shops\models\banner.py:23 .\app_shops\models\category.py:14
 #: .\app_shops\models\discount.py:36 .\app_shops\models\order.py:44
 #: .\app_shops\models\order.py:75 .\app_shops\models\product.py:101
 #: .\app_shops\models\product.py:145 .\app_shops\models\shop.py:29
@@ -69,46 +69,46 @@ msgstr "Адрес"
 msgid "is active"
 msgstr "флаг активности"
 
-#: .\app_shops\models\banner.py:22 .\app_shops\models\product.py:102
+#: .\app_shops\models\banner.py:24 .\app_shops\models\product.py:102
 #: .\app_shops\models\product.py:144 .\app_shops\models\shop.py:30
 msgid "created"
 msgstr "создано"
 
-#: .\app_shops\models\banner.py:23 .\app_shops\models\banner.py:60
+#: .\app_shops\models\banner.py:25 .\app_shops\models\banner.py:62
 msgid "image"
 msgstr "изображение"
 
-#: .\app_shops\models\banner.py:38
+#: .\app_shops\models\banner.py:40
 msgid "banners"
 msgstr "баннеры"
 
-#: .\app_shops\models\banner.py:39
+#: .\app_shops\models\banner.py:41
 msgid "banner"
 msgstr "баннер"
 
-#: .\app_shops\models\banner.py:45 .\app_shops\models\discount.py:35
+#: .\app_shops\models\banner.py:47 .\app_shops\models\discount.py:35
 msgid "date end"
 msgstr "дата конца"
 
-#: .\app_shops\models\banner.py:48 .\app_shops\models\banner.py:49
+#: .\app_shops\models\banner.py:50 .\app_shops\models\banner.py:51
 msgid "special offer"
 msgstr "специальное предложение"
 
-#: .\app_shops\models\banner.py:54
+#: .\app_shops\models\banner.py:56
 msgid "Only one instance of this model is allowed."
 msgstr "Допускается только один экземпляр этой модели."
 
-#: .\app_shops\models\banner.py:64
-msgid "slider items"
-msgstr "Слайды"
+#: .\app_shops\models\banner.py:66
+msgid "small banners"
+msgstr "маленькие баннеры"
 
-#: .\app_shops\models\banner.py:65
-msgid "slider item"
-msgstr "Экземпляр слайдера"
+#: .\app_shops\models\banner.py:67
+msgid "small banner"
+msgstr "маленький баннер"
 
-#: .\app_shops\models\banner.py:70
-msgid "The maximum number of slider items has been reached (3 items)."
-msgstr "Достигнуто максимальное количество элементов слайдера (3 элемента)."
+#: .\app_shops\models\banner.py:72
+msgid "The maximum number of items (3 items) has been reached"
+msgstr "Достигнуто максимальное количество элементов (3 элемента)."
 
 #: .\app_shops\models\category.py:16
 msgid "parent category"
@@ -404,11 +404,11 @@ msgstr "изображения магазина"
 msgid "shop image"
 msgstr "изображение магазина"
 
-#: .\app_shops\views.py:215 .\app_shops\views.py:218 .\app_shops\views.py:221
+#: .\app_shops\views.py:208 .\app_shops\views.py:211 .\app_shops\views.py:214
 msgid "Cache cleared successfully"
 msgstr "Кэш успешно очищен"
 
-#: .\app_shops\views.py:223
+#: .\app_shops\views.py:216
 msgid "Error. Cache not cleared"
 msgstr "Ошибка. Кэш не очищен"
 
@@ -540,36 +540,36 @@ msgstr "Прогресс заполнения"
 msgid "Step 1: User Options"
 msgstr "Шаг 1. Параметры пользователя"
 
-#: .\templates\pages\order.html:22 .\templates\pages\order.html:71
+#: .\templates\pages\order.html:22 .\templates\pages\order.html:54
 msgid "Step 2 Shipping Method"
 msgstr "Шаг 2. Способ доставки"
 
-#: .\templates\pages\order.html:25 .\templates\pages\order.html:102
+#: .\templates\pages\order.html:25 .\templates\pages\order.html:85
 msgid "Step 3. Payment method"
 msgstr "Шаг 3. Способ оплаты"
 
-#: .\templates\pages\order.html:28 .\templates\pages\order.html:125
+#: .\templates\pages\order.html:28 .\templates\pages\order.html:108
 msgid "Step 4. Order confirmation"
 msgstr "Шаг 4. Подтверждение заказа"
 
-#: .\templates\pages\order.html:66 .\templates\pages\order.html:97
-#: .\templates\pages\order.html:120
+#: .\templates\pages\order.html:49 .\templates\pages\order.html:80
+#: .\templates\pages\order.html:103
 msgid "Next"
 msgstr "Дальше"
 
-#: .\templates\pages\order.html:146 .\templates\pages\product.html:152
+#: .\templates\pages\order.html:129 .\templates\pages\product.html:152
 msgid "Delivery type"
 msgstr "Тип доставки"
 
-#: .\templates\pages\order.html:158 .\templates\pages\product.html:160
+#: .\templates\pages\order.html:141 .\templates\pages\product.html:160
 msgid "Payment"
 msgstr "Оплата"
 
-#: .\templates\pages\order.html:224
+#: .\templates\pages\order.html:207
 msgid "Total"
 msgstr "Всего"
 
-#: .\templates\pages\order.html:228
+#: .\templates\pages\order.html:211
 msgid "Pay"
 msgstr "Оплатить"
 
@@ -2322,3 +2322,9 @@ msgstr ""
 msgctxt "stick"
 msgid "club"
 msgstr ""
+
+#~ msgid "slider items"
+#~ msgstr "Слайды"
+
+#~ msgid "slider item"
+#~ msgstr "Экземпляр слайдера"

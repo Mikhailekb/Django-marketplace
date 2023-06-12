@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
-from .models.banner import Banner, SpecialOffer, SliderItem
+from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
 from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem, DeliveryItem
@@ -238,8 +238,8 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = (PaymentItemInLine, DeliveryItemInLine, OrderItemInLine)
 
 
-@admin.register(SliderItem)
-class SliderItemAdmin(admin.ModelAdmin):
+@admin.register(SmallBanner)
+class SmallBannerAdmin(admin.ModelAdmin):
     pass
 
 
