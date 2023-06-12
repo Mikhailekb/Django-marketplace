@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
-from .models.banner import Banner, SpecialOffer
+from .models.banner import Banner, SpecialOffer, SliderItem
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
 from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem, DeliveryItem
@@ -236,5 +236,10 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ('is_paid', )
     inlines = (PaymentItemInLine, DeliveryItemInLine, OrderItemInLine)
+
+
+@admin.register(SliderItem)
+class SliderItemAdmin(admin.ModelAdmin):
+    pass
 
 

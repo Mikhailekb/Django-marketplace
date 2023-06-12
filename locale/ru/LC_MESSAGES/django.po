@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-10 21:43+0500\n"
+"POT-Creation-Date: 2023-06-12 19:27+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgid "photo"
 msgstr "фото"
 
 #: .\app_shops\admin.py:210 .\app_shops\models\category.py:12
-#: .\app_shops\models\order.py:42 .\app_shops\models\order.py:72
+#: .\app_shops\models\order.py:43 .\app_shops\models\order.py:74
 #: .\app_shops\models\product.py:20 .\app_shops\models\product.py:32
 #: .\app_shops\models\product.py:47 .\app_shops\models\product.py:61
 #: .\app_shops\models\product.py:94 .\app_shops\models\shop.py:23
@@ -61,42 +61,54 @@ msgstr "Город"
 msgid "Address"
 msgstr "Адрес"
 
-#: .\app_shops\models\banner.py:18 .\app_shops\models\category.py:14
-#: .\app_shops\models\discount.py:36 .\app_shops\models\order.py:43
-#: .\app_shops\models\order.py:73 .\app_shops\models\product.py:101
+#: .\app_shops\models\banner.py:21 .\app_shops\models\category.py:14
+#: .\app_shops\models\discount.py:36 .\app_shops\models\order.py:44
+#: .\app_shops\models\order.py:75 .\app_shops\models\product.py:101
 #: .\app_shops\models\product.py:145 .\app_shops\models\shop.py:29
 #: .\app_shops\models\shop.py:74
 msgid "is active"
 msgstr "флаг активности"
 
-#: .\app_shops\models\banner.py:19 .\app_shops\models\product.py:102
+#: .\app_shops\models\banner.py:22 .\app_shops\models\product.py:102
 #: .\app_shops\models\product.py:144 .\app_shops\models\shop.py:30
 msgid "created"
 msgstr "создано"
 
-#: .\app_shops\models\banner.py:20
+#: .\app_shops\models\banner.py:23 .\app_shops\models\banner.py:60
 msgid "image"
 msgstr "изображение"
 
-#: .\app_shops\models\banner.py:35
+#: .\app_shops\models\banner.py:38
 msgid "banners"
 msgstr "баннеры"
 
-#: .\app_shops\models\banner.py:36
+#: .\app_shops\models\banner.py:39
 msgid "banner"
 msgstr "баннер"
 
-#: .\app_shops\models\banner.py:42 .\app_shops\models\discount.py:35
+#: .\app_shops\models\banner.py:45 .\app_shops\models\discount.py:35
 msgid "date end"
 msgstr "дата конца"
 
-#: .\app_shops\models\banner.py:45 .\app_shops\models\banner.py:46
+#: .\app_shops\models\banner.py:48 .\app_shops\models\banner.py:49
 msgid "special offer"
 msgstr "специальное предложение"
 
-#: .\app_shops\models\banner.py:51
+#: .\app_shops\models\banner.py:54
 msgid "Only one instance of this model is allowed."
 msgstr "Допускается только один экземпляр этой модели."
+
+#: .\app_shops\models\banner.py:64
+msgid "slider items"
+msgstr "Слайды"
+
+#: .\app_shops\models\banner.py:65
+msgid "slider item"
+msgstr "Экземпляр слайдера"
+
+#: .\app_shops\models\banner.py:70
+msgid "The maximum number of slider items has been reached (3 items)."
+msgstr "Достигнуто максимальное количество элементов слайдера (3 элемента)."
 
 #: .\app_shops\models\category.py:16
 msgid "parent category"
@@ -110,8 +122,8 @@ msgstr "рекомендуемые характеристики"
 msgid "categories"
 msgstr "категории"
 
-#: .\app_shops\models\category.py:24 .\app_shops\models\order.py:59
-#: .\app_shops\models\order.py:89
+#: .\app_shops\models\category.py:24 .\app_shops\models\order.py:61
+#: .\app_shops\models\order.py:93
 msgid "category"
 msgstr "категория"
 
@@ -180,112 +192,113 @@ msgstr "изображения скидки"
 msgid "discount image"
 msgstr "изображение скидки"
 
-#: .\app_shops\models\order.py:11
+#: .\app_shops\models\order.py:12
 msgid "buyer"
 msgstr "покупатель"
 
-#: .\app_shops\models\order.py:12
+#: .\app_shops\models\order.py:13
 msgid "comment"
 msgstr "комментарий"
 
-#: .\app_shops\models\order.py:13
+#: .\app_shops\models\order.py:14
 msgid "is paid"
 msgstr "оплачено"
 
-#: .\app_shops\models\order.py:14
+#: .\app_shops\models\order.py:15
 msgid "is confirmed"
 msgstr "подтверждено"
 
-#: .\app_shops\models\order.py:15
+#: .\app_shops\models\order.py:16
 msgid "is canceled"
 msgstr "отменен"
 
-#: .\app_shops\models\order.py:18
+#: .\app_shops\models\order.py:19
 msgid "orders"
 msgstr "заказы"
 
-#: .\app_shops\models\order.py:19 .\app_shops\models\order.py:26
-#: .\app_shops\models\order.py:57 .\app_shops\models\order.py:87
+#: .\app_shops\models\order.py:20 .\app_shops\models\order.py:27
+#: .\app_shops\models\order.py:59 .\app_shops\models\order.py:91
 msgid "order"
 msgstr "заказ"
 
-#: .\app_shops\models\order.py:28 .\app_shops\models\product.py:76
+#: .\app_shops\models\order.py:29 .\app_shops\models\product.py:76
 #: .\app_shops\models\product.py:109 .\app_shops\models\product.py:126
 #: .\app_shops\models\product.py:141 .\app_shops\models\shop.py:104
 msgid "product"
 msgstr "товар"
 
-#: .\app_shops\models\order.py:30
+#: .\app_shops\models\order.py:31
 msgid "price on add moment"
 msgstr "цена в момент добавления"
 
-#: .\app_shops\models\order.py:31
+#: .\app_shops\models\order.py:32
 msgid "quantity"
 msgstr "количество"
 
-#: .\app_shops\models\order.py:34
+#: .\app_shops\models\order.py:35
 msgid "order items"
 msgstr "объекты заказа"
 
-#: .\app_shops\models\order.py:35
+#: .\app_shops\models\order.py:36
 msgid "order item"
 msgstr "объект заказа"
 
-#: .\app_shops\models\order.py:46
+#: .\app_shops\models\order.py:45 .\app_shops\models\order.py:76
+#: .\app_shops\models\product.py:31
+msgid "codename"
+msgstr "кодовое имя"
+
+#: .\app_shops\models\order.py:48
 msgid "payment categories"
 msgstr "способы оплаты"
 
-#: .\app_shops\models\order.py:47
+#: .\app_shops\models\order.py:49
 msgid "payment category"
 msgstr "способ оплаты"
 
-#: .\app_shops\models\order.py:60
+#: .\app_shops\models\order.py:62
 msgid "from card account"
 msgstr "с банковского счёта"
 
-#: .\app_shops\models\order.py:61
+#: .\app_shops\models\order.py:63
 msgid "is passed"
 msgstr "прошел"
 
-#: .\app_shops\models\order.py:64
+#: .\app_shops\models\order.py:66
 msgid "payment items"
 msgstr "экземпляры оплаты"
 
-#: .\app_shops\models\order.py:65
+#: .\app_shops\models\order.py:67
 msgid "payment item"
 msgstr "экземпляр оплаты"
 
-#: .\app_shops\models\order.py:76
+#: .\app_shops\models\order.py:80
 msgid "delivery categories"
 msgstr "способы доставки"
 
-#: .\app_shops\models\order.py:77
+#: .\app_shops\models\order.py:81
 msgid "delivery category"
 msgstr "способ доставки"
 
-#: .\app_shops\models\order.py:90
+#: .\app_shops\models\order.py:94
 msgid "city"
 msgstr "город"
 
-#: .\app_shops\models\order.py:91 .\app_shops\models\shop.py:28
+#: .\app_shops\models\order.py:95 .\app_shops\models\shop.py:28
 msgid "address"
 msgstr "адрес"
 
-#: .\app_shops\models\order.py:94
+#: .\app_shops\models\order.py:98
 msgid "delivery items"
 msgstr "экземпляры доставки"
 
-#: .\app_shops\models\order.py:95
+#: .\app_shops\models\order.py:99
 msgid "delivery item"
 msgstr "экземпляр доставки"
 
 #: .\app_shops\models\product.py:21
 msgid "sort field"
 msgstr "поле сортировки"
-
-#: .\app_shops\models\product.py:31
-msgid "codename"
-msgstr "кодовое имя"
 
 #: .\app_shops\models\product.py:33
 msgid "goods"
@@ -391,11 +404,11 @@ msgstr "изображения магазина"
 msgid "shop image"
 msgstr "изображение магазина"
 
-#: .\app_shops\views.py:205 .\app_shops\views.py:208 .\app_shops\views.py:211
+#: .\app_shops\views.py:215 .\app_shops\views.py:218 .\app_shops\views.py:221
 msgid "Cache cleared successfully"
 msgstr "Кэш успешно очищен"
 
-#: .\app_shops\views.py:213
+#: .\app_shops\views.py:223
 msgid "Error. Cache not cleared"
 msgstr "Ошибка. Кэш не очищен"
 
@@ -471,39 +484,6 @@ msgstr "Популярные тэги"
 msgid "Sort by:"
 msgstr "Сортировать по:"
 
-#: .\templates\pages\comparison.html:10 .\templates\pages\comparison.html:19
-msgid "Number of goods"
-msgstr ""
-
-#: .\templates\pages\comparison.html:14
-msgid "Delete all products"
-msgstr ""
-
-#: .\templates\pages\comparison.html:34
-msgid "Not enough data to compare"
-msgstr ""
-
-#: .\templates\pages\comparison.html:54
-msgid "Characteristic"
-msgstr ""
-
-#: .\templates\pages\comparison.html:55 .\templates\pages\product.html:118
-msgid "Value"
-msgstr "значение"
-
-#: .\templates\pages\comparison.html:58
-msgid "Common parameters"
-msgstr ""
-
-#: .\templates\pages\comparison.html:75
-#: .\venv\Lib\site-packages\django\forms\formsets.py:417
-msgid "Delete"
-msgstr "Удалить"
-
-#: .\templates\pages\comparison.html:96
-msgid "Add to Cart"
-msgstr ""
-
 #: .\templates\pages\discount.html:12 .\templates\pages\sale.html:12
 msgid "Home"
 msgstr "Главная"
@@ -516,35 +496,39 @@ msgstr "Список скидок"
 msgid "Time left until the end of the discount:"
 msgstr "До окончания скидки осталось:"
 
-#: .\templates\pages\discount.html:36
+#: .\templates\pages\discount.html:36 .\templates\pages\main.html:107
 msgid "days"
-msgstr "дни"
+msgstr "дней"
 
-#: .\templates\pages\discount.html:42
+#: .\templates\pages\discount.html:42 .\templates\pages\main.html:113
 msgid "hours"
-msgstr "часы"
+msgstr "часов"
 
-#: .\templates\pages\discount.html:48
+#: .\templates\pages\discount.html:48 .\templates\pages\main.html:119
 msgid "mins"
-msgstr "минуты"
+msgstr "минут"
 
-#: .\templates\pages\discount.html:54
+#: .\templates\pages\discount.html:54 .\templates\pages\main.html:125
 msgid "secs"
-msgstr "секунды"
+msgstr "секунд"
 
-#: .\templates\pages\main.html:18
+#: .\templates\pages\main.html:19
 msgid "get started"
 msgstr "перейти"
 
-#: .\templates\pages\main.html:71
+#: .\templates\pages\main.html:51
+msgid "from"
+msgstr "от"
+
+#: .\templates\pages\main.html:78
 msgid "LIMITED OFFERS"
 msgstr "ОГРАНИЧЕННЫЕ ПРЕДЛОЖЕНИЯ"
 
-#: .\templates\pages\main.html:134
+#: .\templates\pages\main.html:137
 msgid "Popular goods"
 msgstr "Популярные товары"
 
-#: .\templates\pages\main.html:182
+#: .\templates\pages\main.html:180
 msgid "limited edition"
 msgstr "Ограниченный тираж"
 
@@ -616,6 +600,10 @@ msgstr "Отзывы"
 #: .\templates\pages\product.html:116
 msgid "Feature"
 msgstr "Характеристика"
+
+#: .\templates\pages\product.html:118
+msgid "Value"
+msgstr "значение"
 
 #: .\templates\pages\product.html:122
 msgid "Device type"
@@ -1524,6 +1512,10 @@ msgstr[3] ""
 #: .\venv\Lib\site-packages\django\forms\formsets.py:412
 msgid "Order"
 msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:417
+msgid "Delete"
+msgstr "Удалить"
 
 #: .\venv\Lib\site-packages\django\forms\models.py:763
 #, python-format

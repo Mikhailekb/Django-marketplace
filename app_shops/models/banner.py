@@ -9,6 +9,9 @@ from django.core.files.images import get_image_dimensions
 def get_banner_img_path(instance, name):
     return f'img/content/banners/{instance.product.slug}/{name}'
 
+def get_slider_img_path(instance, name):
+    return f'img/content/sliders/{instance.product.slug}/{name}'
+
 
 class Banner(models.Model):
     """
@@ -49,3 +52,19 @@ class SpecialOffer(models.Model):
         # Может быть только 1 экземпляр
         if not self.pk and SpecialOffer.objects.exists():
             raise ValidationError(_('Only one instance of this model is allowed.'))
+
+
+
+class SliderItem(models.Model):
+    product = models.ForeignKey('Product', null=True, on_delete=models.CASCADE, related_name='child_category')
+    photo = models.ImageField(upload_to=get_slider_img_path, null=True, blank=True, verbose_name=_('image'),
+                              validators=[FileExtensionValidator(['png'])])
+
+    class Meta:
+        verbose_name_plural = _('slider items')
+        verbose_name = _('slider item')
+
+    def clean(self):
+        # Может быть только 3 экземпляра
+        if SliderItem.objects.count() >= 3 and not self.pk:
+            raise ValidationError(_('The maximum number of slider items has been reached (3 items).'))

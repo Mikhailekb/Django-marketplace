@@ -43,18 +43,22 @@
       <div class="wrap">
         <div class="BannersHome">
 
-          {% for product in sliders %}
-            <a class="BannersHomeBlock" href="{{ banner.get_absolute_url }}">
+          {% for item in sliders %}
+            <a class="BannersHomeBlock" href="{{ item.product.get_absolute_url }}">
               <div class="BannersHomeBlock-row">
                 <div class="BannersHomeBlock-block">
-                  <strong class="BannersHomeBlock-title">{{ product.name }}</strong>
-                  <div class="BannersHomeBlock-content">from&#32;
-                    <span class="BannersHomeBlock-price">{{ product.price }}</span>
+                  <strong class="BannersHomeBlock-title slider-title">{{ item.product.name }}</strong>
+                  <div class="BannersHomeBlock-content">{% trans 'from' %}
+                    {% if request.LANGUAGE_CODE == 'ru' %}
+                      <span class="BannersHomeBlock-price">{% money_localize item.price_from 'RUB' %}</span>
+                    {% else %}
+                      <span class="BannersHomeBlock-price">{{ item.price_from|dollar_conversion }}</span>
+                    {% endif %}
                   </div>
                 </div>
                 <div class="BannersHomeBlock-block">
                   <div class="BannersHomeBlock-img">
-                    <img src="{% static product.img %}" alt="{{ product.name }}"/>
+                    <img src="{{ item.photo.url }}" alt="{{ item.slug }}"/>
                   </div>
                 </div>
               </div>
@@ -99,29 +103,25 @@
                 <div class="CountDown" data-date="{{ date_end }}">
                   <div class="CountDown-block">
                     <div class="CountDown-wrap">
-                      <div class="CountDown-days">
-                      </div>
+                      <div class="CountDown-days"></div>
                       <span class="CountDown-label">{% trans 'days' %}</span>
                     </div>
                   </div>
                   <div class="CountDown-block">
                     <div class="CountDown-wrap">
-                      <div class="CountDown-hours">
-                      </div>
+                      <div class="CountDown-hours"></div>
                       <span class="CountDown-label">{% trans 'hours' %}</span>
                     </div>
                   </div>
                   <div class="CountDown-block">
                     <div class="CountDown-wrap">
-                      <div class="CountDown-minutes">
-                      </div>
+                      <div class="CountDown-minutes"></div>
                       <span class="CountDown-label">{% trans 'mins' %}</span>
                     </div>
                   </div>
                   <div class="CountDown-block">
                     <div class="CountDown-wrap">
-                      <div class="CountDown-secs">
-                      </div>
+                      <div class="CountDown-secs"></div>
                       <span class="CountDown-label">{% trans 'secs' %}</span>
                     </div>
                   </div>
@@ -134,8 +134,7 @@
 
       <div class="Section-content">
         <header class="Section-header">
-          <h2 class="Section-title">{% trans "Popular goods" %}
-          </h2>
+          <h2 class="Section-title">{% trans "Popular goods" %}</h2>
         </header>
         <div class="Cards">
           {% for item in top_goods %}
@@ -173,17 +172,14 @@
     </div>
   </div>
 
-
   <div class="Section Section_column Section_columnRight">
     <div class="wrap">
       <div class="Section-content">
         <div class="Slider Slider_carousel">
           <header class="Section-header Section-header_close">
-            <h2 class="Section-title">{% trans "limited edition" %}
-            </h2>
+            <h2 class="Section-title">{% trans "limited edition" %}</h2>
             <div class="Section-control">
-              <div class="Slider-navigate">
-              </div>
+              <div class="Slider-navigate"></div>
             </div>
           </header>
           <div class="Slider-box Cards">
