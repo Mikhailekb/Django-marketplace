@@ -88,14 +88,13 @@
 
           <div class="Cards">
             {% for item in goods %}
-              {% url 'product-detail' item.slug as item_url %}
               <div class="Card">
-                <a class="Card-picture" href="{{ item_url }}">
+                <a class="Card-picture" href="{{ item.get_absolute_url }}">
                   <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
                 </a>
                 <div class="Card-content">
                   <strong class="Card-title">
-                    <a href="{{ item_url }}">{{ item.name }}</a>
+                    <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
