@@ -275,7 +275,7 @@ class OrderView(TemplateView):
 
     def post(self, request: HttpRequest) -> HttpResponse:
         print(request.POST)
-        return redirect('home')
+        return redirect('order')
 
 class ComparisonView(TemplateView):
   MAX_VALUE = 3
