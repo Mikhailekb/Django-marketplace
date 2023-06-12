@@ -47,6 +47,9 @@
 
                     <form id='lang_en' action="{% url 'set_language' %}" method='POST'>
                       {% csrf_token %}
+                      {% if redirect_to %}
+                        <input name="next" type="hidden" value="{{ redirect_to }}">
+                      {% endif %}
                       <input type='hidden' name='language' value='en'/>
                       <div>
                         <button type="submit" class="btn btn-lang">
@@ -58,6 +61,9 @@
 
                     <form id='lang_ru' action="{% url 'set_language' %}" method='POST'>
                       {% csrf_token %}
+                      {% if redirect_to %}
+                        <input name="next" type="hidden" value="{{ redirect_to }}">
+                      {% endif %}
                       <input type='hidden' name='language' value='ru'/>
                       <div>
                         <button type="submit" class="btn btn-lang">

@@ -1,8 +1,8 @@
+from autoslug import AutoSlugField
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from autoslug import AutoSlugField
-from django.core.validators import FileExtensionValidator
 
 
 class Category(models.Model):
@@ -14,19 +14,19 @@ class Category(models.Model):
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     parent = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='child_category', verbose_name=_('parent category'))
-    icon = models.FileField(upload_to='img/icons/departments/', null=True, blank=True, verbose_name=_('icon'),
-                            validators=[FileExtensionValidator(['svg'])])
-    recommended_features = models.ManyToManyField('FeatureName', related_name='categories', blank=True,
-                                                  verbose_name=_('recommended features'))
+    icon = models.FileField(upload_to='img/icons/departments/', null=True, blank=True,
+                            verbose_name=_('icon'), validators=[FileExtensionValidator(['svg'])])
+    recommended_features = models.ManyToManyField('FeatureName', related_name='categories',
+                                                  blank=True, verbose_name=_('recommended features'))
 
     class Meta:
         verbose_name_plural = _('categories')
         verbose_name = _('category')
         ordering = ['name']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.name} ({self.parent})' if self.parent else self.name
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         catalog_url = reverse('catalog')
         return f'{catalog_url}?category={self.slug}'

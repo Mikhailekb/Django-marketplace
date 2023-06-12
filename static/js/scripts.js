@@ -286,43 +286,43 @@
         };
 
         modal().init();
-var range = function () {
-    const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
-    let currencySign;
-    if (LANGUAGE_CODE === 'en') {
-        currencySign = '$';
-    } else {
-        currencySign = '₽';
-    }
+        var range = function () {
+            const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
+            let currencySign;
+            if (LANGUAGE_CODE === 'en') {
+                currencySign = '$';
+            } else {
+                currencySign = '₽';
+            }
 
-    function createRangeText(from, to, currencySign) {
-        let rangeText;
-        if (currencySign === '₽') {
-            rangeText = from + currencySign + ' - ' + to + currencySign;
-        } else {
-            rangeText = currencySign + from + ' - ' + currencySign + to;
-        }
-        return rangeText;
-    }
-
-    return {
-        init: function () {
-            var $range = $('.range'),
-                $line = $range.find('.range-line');
-
-            $line.ionRangeSlider({
-                onStart: function (data) {
-                    var rangeText = createRangeText(data.from, data.to, currencySign);
-                    $('.rangePrice').text(rangeText);
-                },
-                onChange: function (data) {
-                    var rangeText = createRangeText(data.from, data.to, currencySign);
-                    $('.rangePrice').text(rangeText);
+            function createRangeText(from, to, currencySign) {
+                let rangeText;
+                if (currencySign === '₽') {
+                    rangeText = from + currencySign + ' - ' + to + currencySign;
+                } else {
+                    rangeText = currencySign + from + ' - ' + currencySign + to;
                 }
-            });
-        }
-    };
-};
+                return rangeText;
+            }
+
+            return {
+                init: function () {
+                    var $range = $('.range'),
+                        $line = $range.find('.range-line');
+
+                    $line.ionRangeSlider({
+                        onStart: function (data) {
+                            var rangeText = createRangeText(data.from, data.to, currencySign);
+                            $('.rangePrice').text(rangeText);
+                        },
+                        onChange: function (data) {
+                            var rangeText = createRangeText(data.from, data.to, currencySign);
+                            $('.rangePrice').text(rangeText);
+                        }
+                    });
+                }
+            };
+        };
         range().init();
         var table = function () {
             return {
@@ -905,6 +905,8 @@ var range = function () {
                 }
             };
         };
+        Categories().init();
+
 
         let sortLinks = document.getElementsByClassName('Sort-sortBy');
         for (let i = 0; i < sortLinks.length; i++) {
@@ -921,7 +923,7 @@ var range = function () {
 
             currentUrl_obj.searchParams.delete('page');
             currentUrl_obj.searchParams.set('order_by', orderBy)
-            window.location.href = currentUrl_obj;
+            window.location.href = currentUrl_obj.toString();
         }
 
 
@@ -939,7 +941,7 @@ var range = function () {
             let page = url.searchParams.get('page');
 
             currentUrl_obj.searchParams.set('page', page)
-            window.location.href = currentUrl_obj;
+            window.location.href = currentUrl_obj.toString();
         }
 
 
@@ -958,7 +960,7 @@ var range = function () {
 
             currentUrl_obj.searchParams.delete('page');
             currentUrl_obj.searchParams.set('tag', tag)
-            window.location.href = currentUrl_obj;
+            window.location.href = currentUrl_obj.toString();
         }
 
         window.addEventListener('beforeunload', () => {
@@ -972,7 +974,41 @@ var range = function () {
             }
         });
 
-        Categories().init();
+        var SortUpdate = function () {
+            return {
+                init: function () {
+                    let order_by = null;
+                    let order_by_element = document.getElementById('order_by');
+                    if (order_by_element) {
+                        order_by = JSON.parse(order_by_element.textContent);
+                    }
+                    let desc = 'Sort-sortBy_dec';
+                    let asc = 'Sort-sortBy_inc';
+
+                    if (order_by === 'count_sold') {
+                        let sort = document.getElementById('-count_sold');
+                        sort.classList.add(desc);
+                    } else if (order_by === '-count_sold') {
+                        let sort = document.getElementById('count_sold');
+                        sort.classList.add(asc);
+                    } else if (order_by === 'avg_price') {
+                        let sort = document.getElementById('-avg_price');
+                        sort.classList.add(desc);
+                    } else if (order_by === '-avg_price') {
+                        let sort = document.getElementById('avg_price');
+                        sort.classList.add(asc);
+                    } else if (order_by === 'created') {
+                        let sort = document.getElementById('-created');
+                        sort.classList.add(desc);
+                    } else if (order_by === '-created') {
+                        let sort = document.getElementById('created');
+                        sort.classList.add(asc);
+                    }
+                }
+            };
+        };
+        SortUpdate().init()
+
 //ENDion.js
 //END
 

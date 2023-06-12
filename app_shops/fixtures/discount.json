@@ -1,1 +1,80 @@
-[{"model": "app_shops.discount", "pk": 6, "fields": {"name": "Скидка 3", "name_ru": "Скидка 3", "name_en": "Sale 3", "description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor", "description_short_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor", "description_short_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor", "description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "description_long_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "description_long_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "slug": "12", "shop": 2, "discount_amount": null, "discount_percentage": 10, "min_cost": null, "date_start": "2023-05-21T16:16:29Z", "date_end": null, "is_active": true, "main_image": 4}}, {"model": "app_shops.discount", "pk": 7, "fields": {"name": "Скидка 2", "name_ru": "Скидка 2", "name_en": "Sale 2", "description_short": "Lorem ipsum dolor sit amet", "description_short_ru": "Lorem ipsum dolor sit amet", "description_short_en": "Lorem ipsum dolor sit amet", "description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis diam, nec auctor justo mattis quis. Phasellus volutpat sit amet purus eleifend porta. Praesent ut nibh tempor, varius massa et, aliquam nulla. Sed nec laoreet est, ut dictum turpis. Curabitur tincidunt, nunc non posuere viverra, est mi blandit orci, non pretium dui nibh nec ante. Sed eget leo sed augue tincidunt laoreet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.", "description_long_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis diam, nec auctor justo mattis quis. Phasellus volutpat sit amet purus eleifend porta. Praesent ut nibh tempor, varius massa et, aliquam nulla. Sed nec laoreet est, ut dictum turpis. Curabitur tincidunt, nunc non posuere viverra, est mi blandit orci, non pretium dui nibh nec ante. Sed eget leo sed augue tincidunt laoreet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.", "description_long_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis diam, nec auctor justo mattis quis. Phasellus volutpat sit amet purus eleifend porta. Praesent ut nibh tempor, varius massa et, aliquam nulla. Sed nec laoreet est, ut dictum turpis. Curabitur tincidunt, nunc non posuere viverra, est mi blandit orci, non pretium dui nibh nec ante. Sed eget leo sed augue tincidunt laoreet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.", "slug": "123", "shop": 1, "discount_amount": null, "discount_percentage": 10, "min_cost": null, "date_start": "2023-05-28T14:07:59Z", "date_end": "2023-05-28T15:06:57Z", "is_active": true, "main_image": 3}}, {"model": "app_shops.discount", "pk": 8, "fields": {"name": "Скидка 1", "name_ru": "Скидка 1", "name_en": "Sale 1", "description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod", "description_short_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod", "description_short_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod", "description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua", "description_long_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua", "description_long_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua", "slug": "412341", "shop": 2, "discount_amount": "1000.00", "discount_percentage": null, "min_cost": "123.00", "date_start": "2023-05-23T16:16:29Z", "date_end": "2023-05-24T00:00:00Z", "is_active": false, "main_image": 2}}]
+[
+  {
+    "model": "app_shops.discount",
+    "pk": 6,
+    "fields": {
+      "name": "Скидка 3",
+      "name_ru": "Скидка 3",
+      "name_en": "Sale 3",
+      "description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor",
+      "description_short_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor",
+      "description_short_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor",
+      "description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "description_long_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "description_long_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "slug": "12",
+      "shop": 2,
+      "discount_amount_currency": "RUB",
+      "discount_amount": null,
+      "discount_percentage": 10,
+      "min_cost_currency": "RUB",
+      "min_cost": null,
+      "date_start": "2023-05-21T16:16:29Z",
+      "date_end": "2023-05-29T16:31:30Z",
+      "is_active": true,
+      "main_image": 4
+    }
+  },
+  {
+    "model": "app_shops.discount",
+    "pk": 7,
+    "fields": {
+      "name": "Скидка 2",
+      "name_ru": "Скидка 2",
+      "name_en": "Sale 2",
+      "description_short": "Lorem ipsum dolor sit amet",
+      "description_short_ru": "Lorem ipsum dolor sit amet",
+      "description_short_en": "Lorem ipsum dolor sit amet",
+      "description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis diam, nec auctor justo mattis quis. Phasellus volutpat sit amet purus eleifend porta. Praesent ut nibh tempor, varius massa et, aliquam nulla. Sed nec laoreet est, ut dictum turpis. Curabitur tincidunt, nunc non posuere viverra, est mi blandit orci, non pretium dui nibh nec ante. Sed eget leo sed augue tincidunt laoreet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.",
+      "description_long_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis diam, nec auctor justo mattis quis. Phasellus volutpat sit amet purus eleifend porta. Praesent ut nibh tempor, varius massa et, aliquam nulla. Sed nec laoreet est, ut dictum turpis. Curabitur tincidunt, nunc non posuere viverra, est mi blandit orci, non pretium dui nibh nec ante. Sed eget leo sed augue tincidunt laoreet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.",
+      "description_long_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis diam, nec auctor justo mattis quis. Phasellus volutpat sit amet purus eleifend porta. Praesent ut nibh tempor, varius massa et, aliquam nulla. Sed nec laoreet est, ut dictum turpis. Curabitur tincidunt, nunc non posuere viverra, est mi blandit orci, non pretium dui nibh nec ante. Sed eget leo sed augue tincidunt laoreet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.",
+      "slug": "123",
+      "shop": 1,
+      "discount_amount_currency": "RUB",
+      "discount_amount": null,
+      "discount_percentage": 10,
+      "min_cost_currency": "RUB",
+      "min_cost": "200.00",
+      "date_start": "2023-05-29T09:54:42Z",
+      "date_end": "2023-05-29T16:31:30Z",
+      "is_active": true,
+      "main_image": 3
+    }
+  },
+  {
+    "model": "app_shops.discount",
+    "pk": 8,
+    "fields": {
+      "name": "Скидка 1",
+      "name_ru": "Скидка 1",
+      "name_en": "Sale 1",
+      "description_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+      "description_short_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+      "description_short_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+      "description_long": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "description_long_ru": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "description_long_en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "slug": "412341",
+      "shop": 2,
+      "discount_amount_currency": "RUB",
+      "discount_amount": "1000.00",
+      "discount_percentage": null,
+      "min_cost_currency": "RUB",
+      "min_cost": "123.00",
+      "date_start": "2023-05-23T16:16:29Z",
+      "date_end": "2023-05-29T16:31:30Z",
+      "is_active": true,
+      "main_image": 2
+    }
+  }
+]
