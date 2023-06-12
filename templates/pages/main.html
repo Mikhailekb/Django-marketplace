@@ -2,41 +2,42 @@
 {% load static i18n djmoney custom_filters %}
 
 {% block page_content %}
-{% if banners %}
-  <div class="Header-slider">
-    <div class="Slider Slider_main">
-      <div class="Slider-box">
+  {% if banners %}
+    <div class="Header-slider">
+      <div class="Slider Slider_main">
+        <div class="Slider-box">
 
-      {% for banner in banners %}
-        <div class="Slider-item">
-          <div class="Slider-content">
-            <div class="row">
-              <div class="row-block">
+          {% for banner in banners %}
+            <div class="Slider-item">
+              <div class="Slider-content">
+                <div class="row">
+                  <div class="row-block">
                     <strong class="Slider-title">{{ banner.product.name }}</strong>
-                <div class="Slider-text">{{ banner.product.description_short }}</div>
-                <div class="Slider-footer">
-                  <a href="{% url 'product-detail' banner.product.slug %}" class="btn btn_primary Slider-btn" tabindex="0">{% trans "get started" %}</a>
+                    <div class="Slider-text">{{ banner.product.description_short }}</div>
+                    <div class="Slider-footer">
+                      <a href="{% url 'product-detail' banner.product.slug %}" class="btn btn_primary Slider-btn"
+                         tabindex="0">{% trans "get started" %}</a>
+                    </div>
+                  </div>
+                  <div class="row-block">
+                    {% if banner.photo.url %}
+                      <div class="Slider-img"><img src="{{ banner.photo.url }}" alt="slider.png"/></div>
+                    {% endif %}
+                  </div>
                 </div>
               </div>
-              <div class="row-block">
-                {% if banner.photo.url %}
-                <div class="Slider-img"><img src="{{ banner.photo.url }}" alt="slider.png"/></div>
-                {% endif %}
-              </div>
+            </div>
+          {% endfor %}
+        </div>
+        {% if banners|length > 1 %}
+          <div class="Slider-navigateWrap">
+            <div class="Slider-navigate">
             </div>
           </div>
-        </div>
-      {% endfor %}
+        {% endif %}
       </div>
-      {% if banners|length > 1 %}
-      <div class="Slider-navigateWrap">
-        <div class="Slider-navigate">
-        </div>
-      </div>
-      {% endif %}
     </div>
-  </div>
-{% endif %}
+  {% endif %}
   <div class="Middle">
     <div class="Section">
       <div class="wrap">
@@ -52,7 +53,9 @@
                   </div>
                 </div>
                 <div class="BannersHomeBlock-block">
-                  <div class="BannersHomeBlock-img"><img src="{% static product.img %}" alt="{{ product.name }}"/></div>
+                  <div class="BannersHomeBlock-img">
+                    <img src="{% static product.img %}" alt="{{ product.name }}"/>
+                  </div>
                 </div>
               </div>
             </a>
@@ -65,22 +68,22 @@
   <div class="Section Section_column Section_columnLeft Section_columnDesktop">
     <div class="wrap">
       {% if product_with_timer %}
-      <div class="Section-column">
-        <div class="Section-columnSection Section-columnSection_mark">
-          <header class="Section-columnHeader">
-            <strong class="Section-columnTitle">{% trans "LIMITED OFFERS" %}
-            </strong>
-          </header>
+        <div class="Section-column">
+          <div class="Section-columnSection Section-columnSection_mark">
+            <header class="Section-columnHeader">
+              <strong class="Section-columnTitle">{% trans "LIMITED OFFERS" %}
+              </strong>
+            </header>
 
-          <div class="Card">
+            <div class="Card">
               <a class="Card-picture" href="{{ product_with_timer.product.get_absolute_url }}">
                 <img src="{{ product_with_timer.product.main_image.middle.url }}" alt="card.jpg"/>
               </a>
-            <div class="Card-content">
+              <div class="Card-content">
                 <strong class="Card-title">
                   <a href="{{ product_with_timer.product.get_absolute_url }}">{{ product_with_timer.product.name }}</a>
-              </strong>
-              <div class="Card-description">
+                </strong>
+                <div class="Card-description">
                   <div class="Card-cost">
                     {% if request.LANGUAGE_CODE == 'ru' %}
                       <span class="Card-priceOld">{{ product_with_timer.price }}</span>
@@ -89,44 +92,44 @@
                       <span class="Card-priceOld">{{ product_with_timer.price|dollar_conversion }}</span>
                       <span class="Card-price">{{ product_with_timer.discount_price|dollar_conversion }}</span>
                     {% endif %}
-                </div>
+                  </div>
                   <div class="Card-category">{{ product_with_timer.product.category }}</div>
-              </div>
+                </div>
 
                 <div class="CountDown" data-date="{{ date_end }}">
-                <div class="CountDown-block">
-                  <div class="CountDown-wrap">
-                    <div class="CountDown-days">
+                  <div class="CountDown-block">
+                    <div class="CountDown-wrap">
+                      <div class="CountDown-days">
                       </div>
-                      <span class="CountDown-label">days</span>
+                      <span class="CountDown-label">{% trans 'days' %}</span>
                     </div>
                   </div>
-                <div class="CountDown-block">
-                  <div class="CountDown-wrap">
-                    <div class="CountDown-hours">
+                  <div class="CountDown-block">
+                    <div class="CountDown-wrap">
+                      <div class="CountDown-hours">
+                      </div>
+                      <span class="CountDown-label">{% trans 'hours' %}</span>
                     </div>
-                    <span class="CountDown-label">hours</span>
                   </div>
-                </div>
-                <div class="CountDown-block">
-                  <div class="CountDown-wrap">
-                    <div class="CountDown-minutes">
+                  <div class="CountDown-block">
+                    <div class="CountDown-wrap">
+                      <div class="CountDown-minutes">
+                      </div>
+                      <span class="CountDown-label">{% trans 'mins' %}</span>
                     </div>
-                    <span class="CountDown-label">mins</span>
                   </div>
-                </div>
-                <div class="CountDown-block">
-                  <div class="CountDown-wrap">
-                    <div class="CountDown-secs">
+                  <div class="CountDown-block">
+                    <div class="CountDown-wrap">
+                      <div class="CountDown-secs">
+                      </div>
+                      <span class="CountDown-label">{% trans 'secs' %}</span>
                     </div>
-                    <span class="CountDown-label">secs</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       {% endif %}
 
       <div class="Section-content">
@@ -136,14 +139,13 @@
         </header>
         <div class="Cards">
           {% for item in top_goods %}
-            {% url 'product-detail' item.slug as item_url %}
             <div class="Card">
-              <a class="Card-picture" href="{{ item_url }}">
+              <a class="Card-picture" href="{{ item.get_absolute_url }}">
                 <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
               </a>
               <div class="Card-content">
                 <strong class="Card-title">
-                  <a href="{{ item_url }}">{{ item.name }}</a>
+                  <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
                 </strong>
                 <div class="Card-description">
                   <div class="Card-cost">
@@ -189,8 +191,10 @@
             {% for product in slider_items %}
               <div class="Slider-item">
                 <div class="Slider-content">
-                  <div class="Card"><a class="Card-picture" href="#"><img src="{% static product.img %}"
-                                                                          alt="card.jpg"/></a>
+                  <div class="Card">
+                    <a class="Card-picture" href="#">
+                      <img src="{% static product.img %}" alt="card.jpg"/>
+                    </a>
                     <div class="Card-content">
                       <strong class="Card-title"><a href="#">{{ product.name }}</a></strong>
                       <div class="Card-description">
@@ -198,8 +202,10 @@
                           <span class="Card-price">{{ product.price }}</span>
                         </div>
                         <div class="Card-category">{{ product.category }}</div>
-                        <div class="Card-hover"><a class="Card-btn" href="#">
-                          <img src="{% static 'img/icons/card/cart.svg' %}" alt="{{ product.name }}"/></a>
+                        <div class="Card-hover">
+                          <a class="Card-btn" href="#">
+                            <img src="{% static 'img/icons/card/cart.svg' %}" alt="{{ product.name }}"/>
+                          </a>
                         </div>
                       </div>
                     </div>
