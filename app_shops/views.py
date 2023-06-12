@@ -18,7 +18,7 @@ from djmoney.money import Money
 from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
 from .forms import OrderForm1, OrderForm2, OrderForm3
-from .models.banner import Banner, SpecialOffer, SliderItem
+from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
 from .models.shop import ProductShop
@@ -38,7 +38,7 @@ class HomeView(TemplateView):
 
         banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
 
-        sliders = SliderItem.objects.all()[:3].select_related('product').annotate(price_from=Min('product__in_shops__price'))
+        small_banners = SmallBanner.objects.all()[:3].select_related('product').annotate(price_from=Min('product__in_shops__price'))
         if product_with_timer := SpecialOffer.objects.all().first():
             context['product_with_timer'] = ProductShop.objects.with_discount_price() \
                     .get(id=product_with_timer.product_shop_id)
@@ -46,7 +46,7 @@ class HomeView(TemplateView):
 
         context['top_goods'] = top_products
         context['banners'] = banners
-        context['sliders'] = sliders
+        context['small_banners'] = small_banners
 
         return context
 
