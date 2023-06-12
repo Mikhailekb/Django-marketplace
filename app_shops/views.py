@@ -39,13 +39,6 @@ class HomeView(TemplateView):
         banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
 
         sliders = SliderItem.objects.all()[:3].select_related('product').annotate(price_from=Min('product__in_shops__price'))
-        # sliders = Product.objects.filter(id__in=slider_product_id.values('product_id')).annotate(price_from=Min('in_shops__price'))
-
-        # slider_product_id = SliderItem.objects.all()[:3].only('product_id')
-        # sliders = Product.objects.filter(id__in=slider_product_id.values('product_id')).annotate(price_from=Min('in_shops__price'))
-
-        print(sliders)
-
         if product_with_timer := SpecialOffer.objects.all().first():
             context['product_with_timer'] = ProductShop.objects.with_discount_price() \
                     .get(id=product_with_timer.product_shop_id)
