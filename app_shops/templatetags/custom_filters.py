@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import decimal
 
 from django import template
@@ -12,7 +14,7 @@ def dollar_conversion(value) -> Money | None:
     """Конвертация рублей в доллары"""
     if isinstance(value, Money):
         return convert_money(value, 'USD')
-    elif isinstance(value, decimal.Decimal | float):
+    elif isinstance(value, (decimal.Decimal, float)):
         return convert_money(Money(value, 'RUB'), 'USD')
     elif isinstance(value, str) and value.isdigit():
         return convert_money(Money(value, 'RUB'), 'USD')
