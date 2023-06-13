@@ -6,6 +6,9 @@ from app_shops.models.order import DeliveryItem, PaymentItem, DeliveryCategory, 
 
 
 class OrderForm1(forms.Form):
+    """
+    Форма оформления заказа. Первый этап
+    """
     full_name = forms.CharField(label=_('Full name'), max_length=100, widget=forms.TextInput(
                                     attrs={'class': 'form-input', 'data-validate': 'require', 'id': 'full_name'}))
     phone = forms.CharField(label=_('Tel'), max_length=100, widget=forms.TextInput(
@@ -15,6 +18,9 @@ class OrderForm1(forms.Form):
 
 
 class OrderForm2(forms.ModelForm):
+    """
+    Форма оформления заказа. Второй этап
+    """
     category = forms.ModelChoiceField(queryset=DeliveryCategory.objects.filter(is_active=True), widget=forms.RadioSelect)
     city = forms.CharField(label=_('City'), max_length=100, widget=forms.TextInput(
                                attrs={'class': 'form-input', 'data-validate': 'require', 'id': 'city'}))
@@ -39,6 +45,9 @@ class OrderForm2(forms.ModelForm):
 
 
 class OrderForm3(forms.ModelForm):
+    """
+    Форма оформления заказа. Третий этап
+    """
     category = forms.ModelChoiceField(queryset=PaymentCategory.objects.filter(is_active=True),
                                       widget=forms.RadioSelect)
 

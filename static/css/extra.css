@@ -5196,7 +5196,7 @@ input[type="radio"] {
 
 .Section-header .Section-title {
     margin-right: auto;
-    margin-bottom: 20;
+    margin-bottom: 20px;
 }
 
 .Section-header_sm {
@@ -6576,3 +6576,8 @@ input[type="radio"] {
     text-transform: uppercase;
 }
 
+
+
+.small-banner-title {
+    font-size: 20px;
+}

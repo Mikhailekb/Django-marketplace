@@ -157,7 +157,7 @@ msgstr "дата начала"
 
 #: .\app_shops\models\discount.py:41
 msgid "discounts"
-msgstr "скидка"
+msgstr "скидки"
 
 #: .\app_shops\models\discount.py:42 .\app_shops\models\discount.py:92
 msgid "discount"
