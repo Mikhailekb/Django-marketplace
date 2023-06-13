@@ -681,18 +681,18 @@
             var $remove = $('.Amount-remove');
             return {
                 init: function () {
-                    $add.on('click', function (e) {
-                        e.preventDefault();
-                        var $inputThis = $(this).siblings($input).filter($input);
-                        var value = parseFloat($inputThis.val());
-                        $inputThis.val(value + 1);
-                    });
-                    $remove.on('click', function (e) {
-                        e.preventDefault();
-                        var $inputThis = $(this).siblings($input).filter($input);
-                        var value = parseFloat($inputThis.val());
-                        $inputThis.val(value > 0 ? value - 1 : 0);
-                    });
+                    // $add.on('click', function (e) {
+                    //     // e.preventDefault();
+                    //     var $inputThis = $(this).siblings($input).filter($input);
+                    //     var value = parseFloat($inputThis.val());
+                    //     $inputThis.val(value + 1);
+                    // });
+                    // $remove.on('click', function (e) {
+                    //     // e.preventDefault();
+                    //     var $inputThis = $(this).siblings($input).filter($input);
+                    //     var value = parseFloat($inputThis.val());
+                    //     $inputThis.val(value > 0 ? value - 1 : 0);
+                    // });
                 }
             };
         };

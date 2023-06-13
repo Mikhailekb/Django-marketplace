@@ -19,12 +19,23 @@ class Cart:
         """
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(product.price)}
+            self.cart[product_id] = {'quantity': 0, 'price': str(product.price.amount)}
         if update_quantity:
             self.cart[product_id]['quantity'] = quantity
         else:
             self.cart[product_id]['quantity'] += quantity
         self.save()
+
+    def minus(self, product):
+        """
+        Удалить один экземпляр продукта из корзины
+        """
+        product_id = str(product.id)
+        if product_id in self.cart:
+            self.cart[product_id]['quantity'] -= 1
+            self.save()
+        if self.cart[product_id]['quantity'] < 1:
+            self.remove(product)
 
     def save(self):
         """Обновление сессии cart"""

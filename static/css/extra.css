@@ -153,6 +153,8 @@
     font-size: 22px;
     padding: 3px 8px;
     min-width: auto;
+    cursor: auto;
+    user-select: none;
 }
 
 .Amount_product {
@@ -1159,10 +1161,12 @@
 .Cart-total .Cart-price_old {
     display: inline-block;
     margin-left: 10px;
+    white-space: nowrap;
 }
 
 .Cart-total .Cart-price {
     margin-left: 10px;
+    white-space: nowrap;
 }
 
 .Cart-total .Cart-title {
@@ -1358,6 +1362,7 @@ a.Cart-title {
 .Cart-price {
     font-size: 22px;
     color: #0063d1;
+    white-space: nowrap;
 }
 
 .Cart-price_old {
@@ -1492,6 +1497,7 @@ a.Cart-title {
     text-transform: uppercase;
     letter-spacing: 1.3px;
     display: block;
+    white-space: nowrap;
 }
 
 .Categories {
@@ -6541,4 +6547,11 @@ input[type="radio"] {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.cart-empty {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
