@@ -62,7 +62,7 @@ class Discount(models.Model):
         return f'{self.name}'
 
     def get_absolute_url(self) -> str:
-        return reverse('discount', kwargs={'discount_slug': self.slug})
+        return reverse('discount', kwargs={'promo_slug': self.slug})
 
     @property
     def day_start(self) -> str:

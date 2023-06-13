@@ -1003,6 +1003,12 @@
                     } else if (order_by === '-created') {
                         let sort = document.getElementById('created');
                         sort.classList.add(asc);
+                    } else if (order_by === 'feedback') {
+                        let sort = document.getElementById('-feedback');
+                        sort.classList.add(desc);
+                    } else if (order_by === '-feedback') {
+                        let sort = document.getElementById('feedback');
+                        sort.classList.add(asc);
                     }
                 }
             };

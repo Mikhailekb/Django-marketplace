@@ -535,7 +535,7 @@
 @media screen and (min-width: 990px) {
     .Cards {
         width: auto;
-        margin: 0px -1% -3.6%;
+        margin: 0 -1% 0;
     }
 }
 
@@ -3741,7 +3741,7 @@ a.Cart-title {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 79px;
+    /*margin-top: 79px;*/
 }
 
 .Pagination-ins {
@@ -5201,7 +5201,7 @@ input[type="radio"] {
 
 .Section-header .Section-title {
     margin-right: auto;
-    margin-bottom: 0;
+    margin-bottom: 20px;
 }
 
 .Section-header_sm {
@@ -6554,4 +6554,17 @@ input[type="radio"] {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+.comparison-form {
+    align-self: start;
+}
+
+.comparison-header {
+    justify-content: space-between;
+}
+
+.small-banner-title {
+    font-size: 20px;
 }

@@ -1,5 +1,6 @@
 from autoslug import AutoSlugField
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField, ImageSpecField
 from smart_selects.db_fields import ChainedManyToManyField
@@ -109,6 +110,9 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    def get_absolute_url(self) -> str:
+        return reverse('product-detail', kwargs={'product_slug': self.slug})
 
 
 class ProductImage(models.Model):
