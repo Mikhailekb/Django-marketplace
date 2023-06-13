@@ -52,7 +52,7 @@
                   </div>
                 </div>
                 <div class="ProductCard-cartElement">
-                  <a class="btn btn_primary" href="#modal_open">
+                  <a class="btn btn_primary" href="{% url 'cart_add' random_product_id %}?next={{ request.path|urlencode }}">
                     <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
                     <span class="btn-content">{% trans 'Buy' %}</span>
                   </a>
