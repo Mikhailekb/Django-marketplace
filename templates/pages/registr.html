@@ -15,21 +15,21 @@
       <form method="post">
         {% csrf_token %}
         <div>
-          {{ form.username }}
+          <input class="user-input" type="text" name="username" id="name" placeholder="Имя"/>
           {{ form.username.errors }}
         </div>
         <div>
-          {{ form.email }}
+          <input class="user-input" type="email" name="email" id="name" placeholder="E-mail"/>
           {{ form.email.errors }}
         </div>
         <div>
-          {{ form.password }}
+          <input type="password" name="password" id="name" placeholder="Пароль"/>
           {{ form.password.errors }}
         </div>
         <input type="submit" value="Зарегистрироваться"/>
-
-
-        <a class="registr" href="{% url 'login' %}">Вход</a>
+        <a class="registr" href="login.html">
+          Вход
+        </a>
         <div class="clear"></div>
       </form>
     </div>
