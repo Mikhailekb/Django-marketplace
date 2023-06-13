@@ -6,11 +6,13 @@ from django.utils.translation import gettext_lazy as _
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
-from .models.banner import Banner
+from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
+from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem, DeliveryItem
 from .models.product import ProductImage, FeatureValue, Product, TagProduct, FeatureName, FeatureToProduct, Review
 from .models.shop import ShopImage, ProductShop, Shop
+from .models.banner import Banner
 
 AdminSite.site_header = 'Megano'
 AdminSite.site_title = 'Megano'
@@ -84,6 +86,19 @@ class FeatureToProductInLine(admin.StackedInline):
 class ReviewInLine(admin.StackedInline):
     model = Review
     extra = 1
+
+
+class OrderItemInLine(TabularInlinePaginated):
+    model = OrderItem
+    extra = 0
+
+
+class PaymentItemInLine(admin.StackedInline):
+    model = PaymentItem
+
+
+class DeliveryItemInLine(admin.StackedInline):
+    model = DeliveryItem
 
 
 @admin.register(Category)
@@ -193,3 +208,38 @@ class BannerAdmin(admin.ModelAdmin):
 
     get_img.short_description = _('photo')
     get_foreing_name.short_description = _('name')
+
+
+@admin.register(SpecialOffer)
+class SpecialOfferAdmin(admin.ModelAdmin):
+
+    def has_add_permission(self, request: HttpRequest):
+        return not SpecialOffer.objects.exists()
+
+    def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
+        kwargs['queryset'] = ProductShop.objects.filter(is_active=True, discount__isnull=False)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+
+@admin.register(PaymentCategory)
+class PaymentCategoryAdmin(TranslationAdmin):
+    pass
+
+
+@admin.register(DeliveryCategory)
+class DeliveryCategoryAdmin(TranslationAdmin):
+    pass
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    readonly_fields = ('is_paid', )
+    inlines = (PaymentItemInLine, DeliveryItemInLine, OrderItemInLine)
+
+
+@admin.register(SmallBanner)
+class SmallBannerAdmin(admin.ModelAdmin):
+    pass
+
+

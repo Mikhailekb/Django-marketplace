@@ -141,3 +141,4 @@ db.sqlite3
 !**/migrations/__init__.py
 
 /cache
+**/CACHE
