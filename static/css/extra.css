@@ -4149,7 +4149,7 @@ a.Cart-title {
 
 .ProductCard-photo img {
     max-width: 100%;
-    max-height: 250px;
+    max-height: 100%;
 }
 
 @media screen and (max-width: 990px) {
@@ -6549,4 +6549,8 @@ input[type="radio"] {
 
 .comparison-header {
     justify-content: space-between;
+}
+
+.small-banner-title {
+    font-size: 20px;
 }

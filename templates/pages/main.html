@@ -47,7 +47,7 @@
             <a class="BannersHomeBlock" href="{{ item.product.get_absolute_url }}">
               <div class="BannersHomeBlock-row">
                 <div class="BannersHomeBlock-block">
-                  <strong class="BannersHomeBlock-title slider-title">{{ item.product.name }}</strong>
+                  <strong class="BannersHomeBlock-title small-banner-title">{{ item.product.name }}</strong>
                   <div class="BannersHomeBlock-content">{% trans 'from' %}
                     {% if request.LANGUAGE_CODE == 'ru' %}
                       <span class="BannersHomeBlock-price">{% money_localize item.price_from 'RUB' %}</span>
