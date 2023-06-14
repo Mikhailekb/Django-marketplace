@@ -1,6 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
-{% load i18n %}
+{% load i18n static djmoney custom_filters%}
 
 {% block page_content %}
 {% if banners %}
@@ -142,7 +141,13 @@
                 </strong>
                 <div class="Card-description">
                   <div class="Card-cost">
-                    <span class="Card-price">{{ item.avg_price | floatformat:2 }} ₽</span>
+                    <span class="Card-price">
+                      {% if request.LANGUAGE_CODE == 'ru' %}
+                        <span class="Card-price">{% money_localize item.avg_price 'RUB' %}</span>
+                      {% else %}
+                        <span class="Card-price">{{ item.avg_price|dollar_conversion }}</span>
+                      {% endif %}
+                    </span>
                   </div>
                   <div class="Card-category">{{ item.category.name }}</div>
                   <div class="Card-hover">

@@ -130,13 +130,13 @@
               <div class="Tabs-block" id="sellers">
                 <div class="Section-content">
                   <div class="Orders">
-                    {% for shop in product.in_shops.all %}
+                    {% for shop, price in sellers.items %}
                       <div class="Order Order_anons">
                         <div class="Order-personal">
                           <div class="row">
                             <div class="row-block">
                               <a class="Order-title" href="oneorder.html">
-                                {{ shop.shop.name }}
+                                {{ shop }}
                               </a>
                               <div class="ProductCard-cartElement" style="margin-top: 10px;">
                                 <a class="btn btn_primary" href="#model_open">
@@ -169,9 +169,19 @@
                                 </div>
                                 <div class="Order-infoContent">
                                   {% if request.LANGUAGE_CODE == 'ru' %}
-                                    <span class="Order-price">{{ shop.price }}</span>
+                                    {% if price.price_new %}
+                                      <span class="Card-priceOld" style="font-size: 18px">{% money_localize price.price_old 'RUB' %}</span>
+                                      <span class="Card-price" style="color: #000; font-weight: 400; font-size: 18px">{% money_localize price.price_new 'RUB' %}</span>
+                                    {% else %}
+                                      <span class="Order-price">{% money_localize price.price_old 'RUB' %}</span>
+                                    {% endif %}
                                   {% else %}
-                                    <span class="Order-price">{{ shop.price|dollar_conversion }}</span>
+                                    {% if price.price_new %}
+                                      <span class="Card-priceOld" style="font-size: 18px">{{ price.price_old|dollar_conversion }}</span>
+                                      <span class="Card-price" style="color: #000; font-weight: 400; font-size: 18px">{{ price.price_new|dollar_conversion }}</span>
+                                    {% else %}
+                                      <span class="Order-price">{{ price.price_old|dollar_conversion }}</span>
+                                    {% endif %}
                                   {% endif %}
                                 </div>
                               </div>
@@ -255,7 +265,7 @@
                   <form class="form" method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                      <textarea class="form-textarea" name="review" id="review" placeholder="Отзыв"></textarea>
+                      {{ review_form }}
                     </div>
                     <div class="form-group">
                       <button class="btn btn_muted" type="submit">{% trans 'Submit review' %}
