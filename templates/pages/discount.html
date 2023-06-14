@@ -66,12 +66,12 @@
       <div class="Cards">
         {% for item in page_obj %}
           <div class="Card">
-            <a class="Card-picture" href="#">
+            <a class="Card-picture" href="{{ item.product.get_absolute_url }}">
               <img src="{{ item.product.main_image.middle.url }}" alt="{{ item.product.slug }}"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
-                <a href="#">{{ item.product.name }}</a>
+                <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
               </strong>
               <div class="Card-description">
                 <div class="Card-cost">

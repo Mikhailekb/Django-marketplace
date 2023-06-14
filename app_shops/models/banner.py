@@ -7,7 +7,12 @@ from django.core.files.images import get_image_dimensions
 
 
 def get_banner_img_path(instance, name):
+    """Возвращает путь для хранения изображений банера"""
     return f'img/content/banners/{instance.product.slug}/{name}'
+
+def get_small_banner_img_path(instance, name):
+    """Возвращает путь для хранения изображений маленького банера"""
+    return f'img/content/small_banners/{instance.product.slug}/{name}'
 
 
 class Banner(models.Model):
@@ -34,5 +39,34 @@ class Banner(models.Model):
     class Meta:
         verbose_name_plural = _('banners')
         verbose_name = _('banner')
-        ordering = ['created']
+        ordering = ('created',)
 
+
+class SpecialOffer(models.Model):
+    product_shop = models.ForeignKey('ProductShop', on_delete=models.CASCADE)
+    date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
+
+    class Meta:
+        verbose_name_plural = _('special offer')
+        verbose_name = _('special offer')
+
+    def clean(self):
+        # Может быть только 1 экземпляр
+        if not self.pk and SpecialOffer.objects.exists():
+            raise ValidationError(_('Only one instance of this model is allowed.'))
+
+
+
+class SmallBanner(models.Model):
+    product = models.ForeignKey('Product', null=True, on_delete=models.CASCADE, related_name='child_category')
+    photo = models.ImageField(upload_to=get_small_banner_img_path, null=True, blank=True, verbose_name=_('image'),
+                              validators=[FileExtensionValidator(['png'])])
+
+    class Meta:
+        verbose_name_plural = _('small banners')
+        verbose_name = _('small banner')
+
+    def clean(self):
+        # Может быть только 3 экземпляра
+        if SmallBanner.objects.count() >= 3 and not self.pk:
+            raise ValidationError(_('The maximum number of items (3 items) has been reached'))

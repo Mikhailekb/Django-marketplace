@@ -62,7 +62,7 @@ class Discount(models.Model):
         return f'{self.name}'
 
     def get_absolute_url(self) -> str:
-        return reverse('discount', kwargs={'discount_slug': self.slug})
+        return reverse('discount', kwargs={'promo_slug': self.slug})
 
     @property
     def day_start(self) -> str:
@@ -73,11 +73,11 @@ class Discount(models.Model):
         return datetime.date.strftime(self.date_start, '%b')
 
     @property
-    def day_end(self) -> str | None:
+    def day_end(self) -> str:
         return datetime.date.strftime(self.date_end, '%d') if self.date_end else None
 
     @property
-    def month_end(self) -> str | None:
+    def month_end(self) -> str:
         return datetime.date.strftime(self.date_end, '%b') if self.date_end else None
 
 

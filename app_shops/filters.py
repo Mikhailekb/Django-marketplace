@@ -8,7 +8,7 @@ from .models.product import Product
 
 
 class ProductFilter(filters.FilterSet):
-    order_by = filters.OrderingFilter(fields=('count_sold', 'avg_price', 'created'))
+    order_by = filters.OrderingFilter(fields=('count_sold', 'avg_price', 'created', 'feedback'))
 
     price = filters.CharFilter(method='filter_price')
     name = filters.CharFilter(method='filter_name_or_description')

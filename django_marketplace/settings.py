@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_filters',
     'django_user_agents',
-    'allauth',
-    'allauth.account',
     'django_admin_inline_paginator',
     'django_celery_results',
     'django_celery_beat',
@@ -52,8 +50,11 @@ INSTALLED_APPS = [
     'djmoney',
     'djmoney.contrib.exchange',
     'project_command',
+    'django_cleanup.apps.CleanupConfig',
     'app_shops',
     'app_users',
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -177,8 +178,8 @@ CACHES = {
 USER_AGENTS_CACHE = 'default'
 
 AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 LOGIN_URL = '/profile/login'

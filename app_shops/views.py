@@ -1,24 +1,27 @@
+from collections import defaultdict
+
 from django.contrib import messages
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.paginator import Paginator
-from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Subquery, Count
+from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django_filters.views import FilterView
 from djmoney.contrib.exchange.models import convert_money
 from djmoney.money import Money
 
 from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
+from .forms import OrderForm1, OrderForm2, OrderForm3, ReviewForm
+from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
-from .models.banner import Banner
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
 from .models.shop import ProductShop
-from .forms import ReviewForm
 
 
 class HomeView(TemplateView):
@@ -30,13 +33,20 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         goods = Product.objects.select_related('category', 'main_image') \
-            .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
+                .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
         top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
 
         banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
 
+        small_banners = SmallBanner.objects.all()[:3].select_related('product').annotate(price_from=Min('product__in_shops__price'))
+        if product_with_timer := SpecialOffer.objects.all().first():
+            context['product_with_timer'] = ProductShop.objects.with_discount_price() \
+                    .get(id=product_with_timer.product_shop_id)
+            context['date_end'] = product_with_timer.date_end.strftime('%d.%m.%Y %H:%M')
+
         context['top_goods'] = top_products
         context['banners'] = banners
+        context['small_banners'] = small_banners
 
         return context
 
@@ -71,7 +81,8 @@ class CatalogView(FilterView):
             .annotate(avg_price=Avg('in_shops__price'),
                       min_price=Min('in_shops__price'),
                       max_price=Max('in_shops__price'),
-                      count_sold=Sum('in_shops__count_sold'))
+                      count_sold=Sum('in_shops__count_sold'),
+                      feedback=Count('reviews'))
         return self.queryset
 
     def sorting_update(self) -> None:
@@ -153,7 +164,7 @@ class DiscountDetailView(DetailView):
     model = Discount
     template_name = 'pages/discount.html'
     context_object_name = 'discount'
-    slug_url_kwarg = 'discount_slug'
+    slug_url_kwarg = 'promo_slug'
 
     def get(self, request, *args, **kwargs):
         self.object: Discount = self.get_object()
@@ -266,3 +277,22 @@ class ProductDetailView(DetailView):
                            for price in price_list]) / len(price_list))
 
         return shop_prices, price
+
+
+class OrderView(TemplateView):
+    """
+    Представление для отображения страницы оформления заказа
+    """
+    template_name = 'pages/order.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['form1'] = OrderForm1
+        context['form2'] = OrderForm2
+        context['form3'] = OrderForm3
+        return context
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        print(request.POST)
+        return redirect('order')
