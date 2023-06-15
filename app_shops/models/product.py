@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField, ImageSpecField
 from smart_selects.db_fields import ChainedManyToManyField
+from random import sample
 
 from app_users.models import Profile
 
@@ -91,7 +92,7 @@ class Product(models.Model):
     """
     Модель товара
     """
-    name = models.CharField(max_length=256, verbose_name=_('name'))
+    name = models.CharField(max_length=120, verbose_name=_('name'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
     description_short = models.TextField(verbose_name=_('description short'))
     description_long = models.TextField(verbose_name=_('description long'))
@@ -113,6 +114,9 @@ class Product(models.Model):
 
     def get_absolute_url(self) -> str:
         return reverse('product-detail', kwargs={'product_slug': self.slug})
+    
+    def get_random_related_id(self) -> int:
+         return sample(list(self.in_shops.filter(is_active=True)), 1)[0].id
 
 
 class ProductImage(models.Model):

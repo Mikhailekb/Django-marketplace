@@ -107,11 +107,11 @@
                     </div>
                     <div class="Card-category">{{ item.category.name }}</div>
                     <div class="Card-hover">
-                      <form class="Card-btn comparison" action="#" method="#">
-{#                        {% csrf_token %}#}
-                        <button class="btn-reset btn-comparison" type="submit" name="add_product" value="{{ item.id }}">
-                          <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
-                        </button>
+                      <form class="Card-btn comparison" action="{% url 'comparison' %}" method="post">
+                        {% csrf_token %}
+                      <button class="btn-reset btn-comparison" type="submit" name="add_product" value="{{ item.id }}">
+                        <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
+                      </button>
                       </form>
                       <a class="Card-btn" href="#">
                         <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>

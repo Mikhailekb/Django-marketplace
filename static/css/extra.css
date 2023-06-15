@@ -153,6 +153,8 @@
     font-size: 22px;
     padding: 3px 8px;
     min-width: auto;
+    cursor: auto;
+    user-select: none;
 }
 
 .Amount_product {
@@ -1159,10 +1161,12 @@
 .Cart-total .Cart-price_old {
     display: inline-block;
     margin-left: 10px;
+    white-space: nowrap;
 }
 
 .Cart-total .Cart-price {
     margin-left: 10px;
+    white-space: nowrap;
 }
 
 .Cart-total .Cart-title {
@@ -1358,6 +1362,7 @@ a.Cart-title {
 .Cart-price {
     font-size: 22px;
     color: #0063d1;
+    white-space: nowrap;
 }
 
 .Cart-price_old {
@@ -1492,6 +1497,7 @@ a.Cart-title {
     text-transform: uppercase;
     letter-spacing: 1.3px;
     display: block;
+    white-space: nowrap;
 }
 
 .Categories {
@@ -4152,6 +4158,12 @@ a.Cart-title {
     max-height: 100%;
 }
 
+
+.compare-photo img {
+    max-height: 250px;
+}
+
+
 @media screen and (max-width: 990px) {
     .ProductCard-photo {
         min-height: auto;
@@ -4185,11 +4197,12 @@ a.Cart-title {
 
 .ProductCard-title {
     display: block;
-    min-height: 80px;
     line-height: 1.2em;
-    font-size: 32px;
+    font-size: 25px;
     font-weight: 600;
     margin-bottom: 17px;
+    text-align: center;
+    min-height: 60px;
 }
 
 .ProductCard-footer {
@@ -6523,7 +6536,7 @@ input[type="radio"] {
 }
 
 .btn-reset {
-    padding: 0;
+    padding:  5px 6px 0 6px;
     border: none;
     font: inherit;
     color: inherit;
@@ -6543,6 +6556,14 @@ input[type="radio"] {
     align-items: center;
 }
 
+.cart-empty {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .comparison-form {
     align-self: start;
 }
@@ -6550,6 +6571,32 @@ input[type="radio"] {
 .comparison-header {
     justify-content: space-between;
 }
+
+
+.blockquote {
+    color: #878a91;
+    font-family: ‘Merriweather’, serif;
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 40px;
+    margin: 0 30px 40px;
+    text-align: center;
+    text-shadow: #2a8d7b -1px -1px;
+}
+
+.author {
+    color: #878a91;
+    font-family: ‘Merriweather’, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 30px;
+    letter-spacing: 3px;
+    text-align: center;
+    text-shadow: #53b4a2 1px 1px;
+    text-transform: uppercase;
+}
+
+
 
 .small-banner-title {
     font-size: 20px;

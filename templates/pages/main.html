@@ -159,7 +159,7 @@
                     <a class="Card-btn" href="#">
                       <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
                     </a>
-                    <a class="Card-btn" href="#">
+                    <a class="Card-btn" href="{% url 'cart_add' item.get_random_related_id %}?next={{ request.path|urlencode }}">
                       <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
                     </a>
                   </div>
