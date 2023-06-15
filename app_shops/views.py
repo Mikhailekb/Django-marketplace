@@ -22,6 +22,8 @@ from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
 from .models.shop import ProductShop
+from app_cart.forms import CartAddProductForm
+from random import sample
 
 
 class HomeView(TemplateView):
@@ -243,9 +245,13 @@ class ProductDetailView(DetailView):
         product = context['product']
         price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 2)
         reviews_count = product.reviews.count()
+        cart_product_form = CartAddProductForm()
 
         context['price'] = price
         context['reviews_count'] = reviews_count
+        context['cart_product_form'] = cart_product_form
+        context['random_product_id'] = sample(list(product.in_shops.filter(is_active=True)), 1)[0].id
+        
 
         return context
 

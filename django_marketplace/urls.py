@@ -24,6 +24,7 @@ urlpatterns = [
     path('i18n', include('django.conf.urls.i18n')),
     path('', include('app_shops.urls')),
     path('profile/', include('app_users.urls')),
+    path('cart/', include('app_cart.urls')),
 ]
 
 if settings.DEBUG:

@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField, ImageSpecField
 from smart_selects.db_fields import ChainedManyToManyField
+from random import sample
 
 from app_users.models import Profile
 
@@ -113,6 +114,9 @@ class Product(models.Model):
 
     def get_absolute_url(self) -> str:
         return reverse('product-detail', kwargs={'product_slug': self.slug})
+    
+    def get_random_related_id(self) -> int:
+         return sample(list(self.in_shops.filter(is_active=True)), 1)[0].id
 
 
 class ProductImage(models.Model):
