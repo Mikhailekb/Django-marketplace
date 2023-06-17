@@ -17,7 +17,7 @@ from djmoney.money import Money
 
 from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
-from .forms import OrderForm1, OrderForm2, OrderForm3
+from .forms import OrderForm1, OrderForm2, OrderForm3, ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
@@ -242,12 +242,15 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        product = context['product']
-        price = round(product.in_shops.all().aggregate(Avg('price')).get('price__avg'), 2)
+        product: Product = context['product']
+        discounts_query = ProductShop.objects.with_discount_price().select_related('shop').filter(product=product)
         reviews_count = product.reviews.count()
+        shop_prices, price = self.get_prices(discounts_query)
         cart_product_form = CartAddProductForm()
 
+        context['review_form'] = ReviewForm
         context['price'] = price
+        context['sellers'] = shop_prices
         context['reviews_count'] = reviews_count
         context['cart_product_form'] = cart_product_form
         context['random_product_id'] = sample(list(product.in_shops.filter(is_active=True)), 1)[0].id
@@ -261,10 +264,25 @@ class ProductDetailView(DetailView):
             return redirect('login')
 
         profile = request.user.profile
-        if text := request.POST.get('review'):
-            review = Review(product=product, profile=profile, text=text)
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = Review(product=product, profile=profile, text=form.cleaned_data.get('text'))
             review.save()
         return redirect('product-detail', product_slug=product.slug)
+
+    @staticmethod
+    def get_prices(discounts_query):
+        shop_prices = {product_shop.shop.name: {'price_old': product_shop.price.amount}
+                       if not product_shop.discount_price
+                       else {'price_old': product_shop.price.amount, 'price_new': product_shop.discount_price}
+                       for product_shop in discounts_query}
+        price_list = [price.get('price_new') if price.get('price_new') else price.get('price_old')
+                      for price in shop_prices.values()]
+
+        price = float(sum([float(price) if not isinstance(price, Money) else float(price.amount)
+                           for price in price_list]) / len(price_list))
+
+        return shop_prices, price
 
 
 class OrderView(TemplateView):
