@@ -136,7 +136,7 @@
                           <div class="row">
                             <div class="row-block">
                               <a class="Order-title" href="oneorder.html">
-                                {{ shop }}
+                                {{ shop.name }}
                               </a>
                               <div class="ProductCard-cartElement" style="margin-top: 10px;">
                                 <a class="btn btn_primary" href="{% url 'cart_add' shop.id %}?next={{ request.path|urlencode }}">

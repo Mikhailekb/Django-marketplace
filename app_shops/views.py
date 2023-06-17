@@ -272,7 +272,7 @@ class ProductDetailView(DetailView):
 
     @staticmethod
     def get_prices(discounts_query):
-        shop_prices = {product_shop.shop.name: {'price_old': product_shop.price.amount}
+        shop_prices = {product_shop.shop: {'price_old': product_shop.price.amount}
                        if not product_shop.discount_price
                        else {'price_old': product_shop.price.amount, 'price_new': product_shop.discount_price}
                        for product_shop in discounts_query}
