@@ -1,3 +1,5 @@
+{% load i18n %}
+
 {% block footer %}
   <footer class="Footer">
     <div class="wrap">
@@ -8,27 +10,27 @@
           </a>
         </div>
         <div class="row-block">
-          <strong class="Footer-title">Навигация</strong>
+          <strong class="Footer-title">{% trans 'Navigation' %}</strong>
           <ul class="menu menu_vt Footer-menu">
             <li class="menu-item">
-              <a class="menu-link" href="{% url 'home' %}">Главная</a>
+              <a class="menu-link" href="{% url 'home' %}">{% trans 'Home' %}</a>
             </li>
             <li class="menu-item">
-              <a class="menu-link" href="{% url 'catalog' %}">Каталог</a>
+              <a class="menu-link" href="{% url 'catalog' %}">{% trans 'Catalog' %}</a>
             </li>
             <li class="menu-item">
-              <a class="menu-link" href="#">Сравнение</a>
+              <a class="menu-link" href="{% url 'comparison' %}">{% trans 'Comparison' %}</a>
             </li>
             <li class="menu-item">
-              <a class="menu-link" href="{% url 'sales' %}">Скидки</a>
+              <a class="menu-link" href="{% url 'sales' %}">{% trans 'Sales' %}</a>
             </li>
             <li class="menu-item">
-              <a class="menu-link" href="#">Профиль</a>
+              <a class="menu-link" href="#">{% trans 'Profile' %}</a>
             </li>
           </ul>
         </div>
         <div class="row-block">
-          <strong class="Footer-title">Контакты
+          <strong class="Footer-title">{% trans 'Contacts' %}
           </strong>
           <p>Phone: 8.800.200.600<br>Email: xxx@meg.com<br>
           </p>

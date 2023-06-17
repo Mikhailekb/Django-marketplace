@@ -1,5 +1,7 @@
 from decimal import Decimal
 from django.conf import settings
+from djmoney.money import Money
+
 from app_shops.models.shop import ProductShop
 
 
@@ -57,7 +59,7 @@ class Cart:
         """
         product_ids = self.cart.keys()
         # получение объектов product и добавление их в корзину
-        products = ProductShop.objects.filter(id__in=product_ids).select_related('product').select_related('shop')
+        products = ProductShop.objects.filter(id__in=product_ids).select_related('product', 'shop')
         for product in products:
             self.cart[str(product.id)]['product'] = product
 

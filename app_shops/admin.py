@@ -92,9 +92,21 @@ class OrderItemInLine(TabularInlinePaginated):
     model = OrderItem
     extra = 0
 
+    readonly_fields = ('product', 'price_on_add_moment', 'quantity')
+
+    def has_add_permission(self, request, obj):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class PaymentItemInLine(admin.StackedInline):
     model = PaymentItem
+    readonly_fields = ('is_passed', 'payment_category', 'total_price', 'from_account')
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class DeliveryItemInLine(admin.StackedInline):
@@ -234,8 +246,15 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    readonly_fields = ('is_paid', )
+    fields = ('buyer', 'comment', 'is_paid', 'is_canceled', 'created', 'updated')
+    readonly_fields = ('buyer' , 'is_paid', 'created', 'updated')
     inlines = (PaymentItemInLine, DeliveryItemInLine, OrderItemInLine)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(SmallBanner)

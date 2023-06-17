@@ -156,12 +156,19 @@
                   </div>
                   <div class="Card-category">{{ item.category.name }}</div>
                   <div class="Card-hover">
-                    <a class="Card-btn" href="#">
-                      <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
-                    </a>
-                    <a class="Card-btn" href="{% url 'cart_add' item.get_random_related_id %}?next={{ request.path|urlencode }}">
-                      <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
-                    </a>
+                    <form class="Card-btn comparison" action="{% url 'comparison' %}" method="post">
+                      {% csrf_token %}
+                      <button class="btn-reset btn-comparison" type="submit" name="add_product" value="{{ item.id }}">
+                        <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
+                      </button>
+                    </form>
+
+                    <form class="Card-btn comparison" action="{% url 'cart_add' item.get_random_related_id %}" method="post">
+                      {% csrf_token %}
+                      <button class="btn-reset btn-comparison" type="submit">
+                        <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
+                      </button>
+                    </form>
                   </div>
                 </div>
               </div>

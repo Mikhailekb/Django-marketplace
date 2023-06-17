@@ -101,16 +101,16 @@
               <div class="menuModal" id="navigate" style="">
                 <ul class="menu menu_main" style="position: static;">
                   <li class="menu-item">
-                    <a class="menu-link" href="{% url 'home' %}">Главная</a>
+                    <a class="menu-link" href="{% url 'home' %}">{% trans 'Home' %}</a>
                   </li>
-                  <li class="menu-item"><span class="menu-label menu-label_success">Скидки</span>
-                    <a class="menu-link" href="{% url 'catalog' %}">Каталог</a>
-                  </li>
-                  <li class="menu-item">
-                    <a class="menu-link" href="{% url 'comparison' %}">Сравнение</a>
+                  <li class="menu-item"><span class="menu-label menu-label_success">{% trans 'Sales' %}</span>
+                    <a class="menu-link" href="{% url 'catalog' %}">{% trans 'Catalog' %}</a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="{% url 'sales' %}">Скидки</a>
+                    <a class="menu-link" href="{% url 'comparison' %}">{% trans 'Comparison' %}</a>
+                  </li>
+                  <li class="menu-item">
+                    <a class="menu-link" href="{% url 'sales' %}">{% trans 'Sales' %}</a>
                   </li>
                 </ul>
               </div>
@@ -123,11 +123,11 @@
                       <img class="CartBlock-img" src="/static/img/icons/loon-icon.svg" alt="loon-icon.svg">
                     </button>
                     <div class="dropdown-content">
-                      <a class="dropdown-content-a" href="#">Личный кабинет</a>
+                      <a class="dropdown-content-a" href="#">{% trans 'Personal account' %}</a>
                       {% if request.user.is_staff %}
-                        <a class="dropdown-content-a" href="{% url 'admin:index' %}">Административный раздел</a>
+                        <a class="dropdown-content-a" href="{% url 'admin:index' %}">{% trans 'Administrative section' %}</a>
                       {% endif %}
-                      <a class="dropdown-content-a" href="#">Выход</a>
+                      <a class="dropdown-content-a" href="#">{% trans 'Logout' %}</a>
                     </div>
                   </div>
                 {% endif %}
@@ -213,7 +213,7 @@
                   <input class="search-input" id="query" name="name" type="text"
                          placeholder="NVIDIA GeForce RTX 3060">
                   <button class="search-button" type="submit" id="search">
-                    <img src="/static/img/icons/search.svg" alt="search.svg">Поиск
+                    <img src="/static/img/icons/search.svg" alt="search.svg">{% trans 'Search' %}
                   </button>
                 </form>
               </div>

@@ -52,7 +52,8 @@
                   </div>
                 </div>
                 <div class="ProductCard-cartElement">
-                  <a class="btn btn_primary" href="{% url 'cart_add' random_product_id %}?next={{ request.path|urlencode }}">
+                  <a class="btn btn_primary"
+                     href="{% url 'cart_add' random_product_id %}?next={{ request.path|urlencode }}">
                     <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
                     <span class="btn-content">{% trans 'Buy' %}</span>
                   </a>
@@ -130,16 +131,16 @@
               <div class="Tabs-block" id="sellers">
                 <div class="Section-content">
                   <div class="Orders">
-                    {% for shop, price in sellers.items %}
+                    {% for product_shop, price in sellers.items %}
                       <div class="Order Order_anons">
                         <div class="Order-personal">
                           <div class="row">
                             <div class="row-block">
-                              <a class="Order-title" href="oneorder.html">
-                                {{ shop }}
+                              <a class="Order-title" href="#">
+                                {{ product_shop.shop.name }}
                               </a>
                               <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                                <a class="btn btn_primary" href="{% url 'cart_add' shop.id %}?next={{ request.path|urlencode }}">
+                                <a class="btn btn_primary" href="{% url 'cart_add' product_shop.id %}?next={{ request.path|urlencode }}">
                                   <img class="btn-icon" src="../../static/img/icons/card/cart_white.svg"
                                        alt="cart_white.svg"/>
                                   <span class="btn-content">{% trans 'Buy' %}</span>
@@ -170,15 +171,19 @@
                                 <div class="Order-infoContent">
                                   {% if request.LANGUAGE_CODE == 'ru' %}
                                     {% if price.price_new %}
-                                      <span class="Card-priceOld" style="font-size: 18px">{% money_localize price.price_old 'RUB' %}</span>
-                                      <span class="Card-price" style="color: #000; font-weight: 400; font-size: 18px">{% money_localize price.price_new 'RUB' %}</span>
+                                      <span class="Card-priceOld"
+                                            style="font-size: 18px">{% money_localize price.price_old 'RUB' %}</span>
+                                      <span class="Card-price"
+                                            style="color: #000; font-weight: 400; font-size: 18px">{% money_localize price.price_new 'RUB' %}</span>
                                     {% else %}
                                       <span class="Order-price">{% money_localize price.price_old 'RUB' %}</span>
                                     {% endif %}
                                   {% else %}
                                     {% if price.price_new %}
-                                      <span class="Card-priceOld" style="font-size: 18px">{{ price.price_old|dollar_conversion }}</span>
-                                      <span class="Card-price" style="color: #000; font-weight: 400; font-size: 18px">{{ price.price_new|dollar_conversion }}</span>
+                                      <span class="Card-priceOld"
+                                            style="font-size: 18px">{{ price.price_old|dollar_conversion }}</span>
+                                      <span class="Card-price"
+                                            style="color: #000; font-weight: 400; font-size: 18px">{{ price.price_new|dollar_conversion }}</span>
                                     {% else %}
                                       <span class="Order-price">{{ price.price_old|dollar_conversion }}</span>
                                     {% endif %}
