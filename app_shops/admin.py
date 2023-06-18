@@ -50,14 +50,13 @@ class ProductShopInLine(TabularInlinePaginated):
               'discount_price', 'discount', 'is_active')
     readonly_fields = ('discount_price',)
 
-    def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
-        shop_id = request.path.split('/')[4]
-        if shop_id.isdigit():
-            if db_field.name == 'discount':
-                kwargs['queryset'] = Discount.objects.filter(
-                    shop_id=shop_id, is_active=True).only('name')
-            elif db_field.name == 'product':
-                kwargs['queryset'] = Product.objects.filter(is_active=True).only('name')
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'discount':
+            shop_id = request.path.split('/')[4]
+            if shop_id.isdigit():
+                kwargs['queryset'] = Discount.objects.filter(shop_id=shop_id, is_active=True).only('name')
+        elif db_field.name == 'product':
+            kwargs['queryset'] = Product.objects.filter(is_active=True).only('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request: HttpRequest):
@@ -94,8 +93,14 @@ class ReviewInLine(admin.StackedInline):
 class OrderItemInLine(TabularInlinePaginated):
     model = OrderItem
     extra = 0
-
+    ordering = ('id',)
     readonly_fields = ('product', 'price_on_add_moment', 'quantity')
+
+    def get_queryset(self, request):
+        order_id = request.path.split('/')[4]
+        return OrderItem.objects.filter(order_id=order_id).select_related('product', 'product__product') \
+            .only('order_id', 'product__product__name_ru', 'product__product__name_en',
+                  'price_on_add_moment', 'price_on_add_moment_currency', 'quantity')
 
     def has_add_permission(self, request, obj):
         return False
@@ -122,6 +127,7 @@ class CategoryAdmin(TranslationAdmin):
     list_display = ('name', 'get_icon', 'is_active', 'parent', 'slug')
     list_filter = ('is_active',)
     readonly_fields = ('slug',)
+    raw_id_fields = ('parent',)
     list_select_related = ('parent',)
     filter_horizontal = ('recommended_features',)
     change_list_template = 'admin/categories_list.html'
@@ -187,14 +193,6 @@ class DiscountAdmin(TranslationAdmin):
                 kwargs['queryset'] = DiscountImage.objects.filter(discount_id=discount_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def formfield_for_manytomany(self, db_field, request: HttpRequest, **kwargs):
-        if db_field.name == 'goods':
-            discount_id = request.path.split('/')[4]
-            if discount_id.isdigit():
-                discount = Discount.objects.get(id=discount_id)
-                kwargs['queryset'] = ProductShop.objects.filter(shop_id=discount.shop_id)
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
-
     def has_add_permission(self, request: HttpRequest):
         return False
 
@@ -215,6 +213,7 @@ class FeatureNameAdmin(TranslationAdmin):
 class BannerAdmin(admin.ModelAdmin):
     list_display = ('get_foreing_name', 'is_active', 'created', 'get_img')
     list_filter = ('is_active',)
+    list_select_related = ('product',)
 
     def get_img(self, obj):
         return mark_safe(f'<img style="width: 150px; height: 150px; object-fit: contain;" src={obj.photo.url}>')
@@ -228,6 +227,7 @@ class BannerAdmin(admin.ModelAdmin):
 
 @admin.register(SpecialOffer)
 class SpecialOfferAdmin(admin.ModelAdmin):
+    raw_id_fields = ('product_shop',)
 
     def has_add_permission(self, request: HttpRequest):
         return not SpecialOffer.objects.exists()
