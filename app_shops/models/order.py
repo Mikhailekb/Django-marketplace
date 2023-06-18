@@ -18,13 +18,13 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False, verbose_name=_('is paid'))
     is_canceled = models.BooleanField(default=False, verbose_name=_('is canceled'))
 
-    class Meta:
-        verbose_name_plural = _('orders')
-        verbose_name = _('order')
-
     def __str__(self):
         order = _('order')
         return f'{order.capitalize()} №{self.id}'
+
+    class Meta:
+        verbose_name_plural = _('orders')
+        verbose_name = _('order')
 
 
 class OrderItem(models.Model):
@@ -51,12 +51,12 @@ class PaymentCategory(models.Model):
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name_plural = _('payment categories')
         verbose_name = _('payment category')
-
-    def __str__(self):
-        return self.name
 
 
 class PaymentItem(models.Model):
@@ -75,7 +75,6 @@ class PaymentItem(models.Model):
     from_account = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('from account'))
     is_passed = models.BooleanField(default=False, choices=IS_PASSED_CHOICES, verbose_name=_('is passed'))
 
-
     class Meta:
         verbose_name_plural = _('payment items')
         verbose_name = _('payment item')
@@ -89,13 +88,12 @@ class DeliveryCategory(models.Model):
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
 
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name_plural = _('delivery categories')
         verbose_name = _('delivery category')
-
-    def __str__(self):
-        return self.name
 
 
 class DeliveryItem(models.Model):

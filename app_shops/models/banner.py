@@ -24,14 +24,6 @@ class Banner(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     photo = models.ImageField(upload_to=get_banner_img_path, null=True, blank=True, verbose_name=_('image'),
                               validators=[FileExtensionValidator(['png'])])
-    
-    def clean(self):
-        w, h = get_image_dimensions(self.photo)
-        if w < 250:
-            raise ValidationError(f'The image is {w} pixel wide. It\'s supposed to be >= 250px')
-        if h < 250:
-            raise ValidationError(f'The image is {h} pixel high. It\'s supposed to be >= 250px')
-    
 
     def __str__(self):
         return f'The banner of {self.product.name}'
@@ -41,8 +33,18 @@ class Banner(models.Model):
         verbose_name = _('banner')
         ordering = ('created',)
 
+    def clean(self):
+        w, h = get_image_dimensions(self.photo)
+        if w < 250:
+            raise ValidationError(f'The image is {w} pixel wide. It\'s supposed to be >= 250px')
+        if h < 250:
+            raise ValidationError(f'The image is {h} pixel high. It\'s supposed to be >= 250px')
+
 
 class SpecialOffer(models.Model):
+    """
+    Модель специального предложения на главной страницы
+    """
     product_shop = models.ForeignKey('ProductShop', on_delete=models.CASCADE)
     date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
 
@@ -58,6 +60,9 @@ class SpecialOffer(models.Model):
 
 
 class SmallBanner(models.Model):
+    """
+    Модель маленького баннера на главной страницы
+    """
     product = models.ForeignKey('Product', null=True, on_delete=models.CASCADE, related_name='child_category')
     photo = models.ImageField(upload_to=get_small_banner_img_path, null=True, blank=True, verbose_name=_('image'),
                               validators=[FileExtensionValidator(['png'])])
