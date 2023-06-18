@@ -1,6 +1,5 @@
 from decimal import Decimal
 from django.conf import settings
-from djmoney.money import Money
 
 from app_shops.models.shop import ProductShop
 

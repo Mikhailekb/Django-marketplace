@@ -53,7 +53,7 @@
                 </div>
                 <div class="ProductCard-cartElement">
                   <a class="btn btn_primary"
-                     href="{% url 'cart_add' random_product_id %}?next={{ request.path|urlencode }}">
+                     href="{% url 'cart_add' random_product_id %}">
                     <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
                     <span class="btn-content">{% trans 'Buy' %}</span>
                   </a>
@@ -140,7 +140,7 @@
                                 {{ product_shop.shop.name }}
                               </a>
                               <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                                <a class="btn btn_primary" href="{% url 'cart_add' product_shop.id %}?next={{ request.path|urlencode }}">
+                                <a class="btn btn_primary" href="{% url 'cart_add' product_shop.id %}">
                                   <img class="btn-icon" src="../../static/img/icons/card/cart_white.svg"
                                        alt="cart_white.svg"/>
                                   <span class="btn-content">{% trans 'Buy' %}</span>
