@@ -4197,6 +4197,15 @@ a.Cart-title {
 
 .ProductCard-title {
     display: block;
+    min-height: 80px;
+    line-height: 1.2em;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 17px;
+}
+
+.ProductCard-comparison-title {
+    display: block;
     line-height: 1.2em;
     font-size: 25px;
     font-weight: 600;
@@ -6536,7 +6545,7 @@ input[type="radio"] {
 }
 
 .btn-reset {
-    padding:  5px 6px 0 6px;
+    padding:  0;
     border: none;
     font: inherit;
     color: inherit;
