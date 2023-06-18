@@ -38,13 +38,13 @@
 
       <div class="Product">
         {% if comparison_list.count == 1 or comparison_list is None %}
-          <h2 class="ProductCard-title">{% trans 'Not enough data to compare' %}</h2>
+          <h2 class="ProductCard-comparison-title">{% trans 'Not enough data to compare' %}</h2>
         {% else %}
           <div class="ProductCard">
             {% for item in comparison_list %}
               <div class="ProductCard-desc">
                 <div class="ProductCard-header">
-                  <h2 class="ProductCard-title">{{ item.name }}
+                  <h2 class="ProductCard-comparison-title">{{ item.name }}
                   </h2>
                   <div class="ProductCard-look">
                     <div class="ProductCard-photo compare-photo">
