@@ -54,7 +54,6 @@
                     <span class="toggle-text">{% trans 'With free shipping' %}</span>
                   </label>
                 </div>
-
                 <div class="form-group">
                   <div class="buttons">
                     <button type="submit" class="btn btn_square btn_dark btn_narrow">{% trans 'Filter' %}</button>
@@ -80,9 +79,13 @@
           <div class="Sort">
             <div class="Sort-title">{% trans 'Sort by:' %}</div>
             <div class="Sort-variants">
-              {% for option in sort_options %}
-                <a class="Sort-sortBy" id={{ option.sort_field }}
-                        href="?order_by={{ option.sort_field }}">{{ option.name }}</a>
+              {% for option in sort %}
+                <a class="Sort-sortBy"
+                  {% if order_by == option.name %} id="-{{ option.name }}" href="?order_by=-{{ option.name }}"
+                  {% else %} id="{{ option.name }}" href="?order_by={{ option.name }}" {% endif %}
+                >
+                  {{ option.value }}
+                </a>
               {% endfor %}
             </div>
           </div>

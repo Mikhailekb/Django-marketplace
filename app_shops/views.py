@@ -21,7 +21,7 @@ from djmoney.money import Money
 
 from app_cart.cart import Cart
 from app_cart.forms import CartAddProductForm
-from django_marketplace.constants import SORT_OPTIONS_CACHE_LIFETIME, TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
+from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
 from .forms import OrderForm, ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
@@ -67,11 +67,6 @@ class CatalogView(FilterView):
     context_object_name = 'goods'
     filterset_class = ProductFilter
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.sort_options: QuerySet = cache.get_or_set('sort_options', SortProduct.objects.all(),
-                                                       timeout=SORT_OPTIONS_CACHE_LIFETIME)
-
     def get_paginate_by(self, queryset):
         self.paginate_by = 8
         if self.request.user_agent.is_mobile:
@@ -93,26 +88,6 @@ class CatalogView(FilterView):
                       feedback=Count('reviews'))
         return self.queryset
 
-    def _sorting_update(self) -> None:
-        """
-        Метод, в котором происходит изменение кодовых имен элементов сортировки,
-        в зависимости от полученных данных
-        """
-        for item in self.sort_options:
-            ordering = None
-            filed_name = item.sort_field
-            if self.ordering and self.ordering.startswith('-'):
-                ordering = self.ordering[1:]
-
-            if filed_name in [self.ordering, ordering]:
-                if self.ordering.startswith('-'):
-                    item.sort_field = filed_name
-                else:
-                    item.sort_field = f'-{filed_name}'
-            else:
-                if item.sort_field.startswith('-'):
-                    item.sort_field = item.sort_field[1:]
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
@@ -120,7 +95,6 @@ class CatalogView(FilterView):
         max_price = aggregate.get('max')
 
         self.ordering = self.filterset.data.get('order_by') or 'count_sold'
-        self._sorting_update()
 
         price = self.filterset.data.get('price')
         if price and len(price.split(';')) == 3 and all(item.isdigit() for item in price.split(';')[:2]):
@@ -132,7 +106,7 @@ class CatalogView(FilterView):
             price_to = convert_money(Money(max_price, 'RUB'), 'USD').amount
         category = self.request.GET.get('category')
 
-        context['sort_options'] = self.sort_options
+        context['sort'] = SortProduct
         context['tags'] = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
         context['order_by'] = self.ordering
         context['category'] = category or ''
@@ -211,7 +185,6 @@ class ClearCache(View):
             raise PermissionError
 
         if 'product_cache' in request.POST:
-            cache.delete('sort_options')
             cache.delete('tags')
             messages.success(self.request, _('Cache cleared successfully'))
         elif 'categories_cache' in request.POST:

@@ -14,15 +14,14 @@ def get_good_img_path(instance, name) -> str:
     return f'img/content/products/{instance.product.slug}/{name}'
 
 
-class SortProduct(models.Model):
+class SortProduct(models.TextChoices):
     """
     Модель параметров сортировки товаров
     """
-    name = models.CharField(max_length=100, verbose_name=_('name'))
-    sort_field = models.CharField(max_length=100, verbose_name=_('sort field'))
-
-    def __str__(self) -> str:
-        return self.name
+    count_sold = _('Popularity')
+    avg_price = _('Cost')
+    created = _('Novelty')
+    feedback = _('Feedback')
 
 
 class TagProduct(models.Model):
