@@ -8,6 +8,9 @@ from app_shops.models.order import DeliveryCategory, PaymentCategory
 
 
 class OrderForm(forms.Form):
+    """
+    Форма оформления заказа
+    """
     delivery_qs = DeliveryCategory.objects.filter(is_active=True)
     payment_qs = PaymentCategory.objects.filter(is_active=True)
 
