@@ -68,10 +68,12 @@ class PaymentItem(models.Model):
         (False, _('Payment failed'))
     )
 
-    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='payment_item', verbose_name=_('order'))
-    payment_category = models.ForeignKey('PaymentCategory', on_delete=models.CASCADE, related_name='items',
-                                 verbose_name=_('category'))
-    total_price = MoneyField(max_digits=10, null=True, decimal_places=2, default_currency='RUB', verbose_name=_('total price'))
+    order = models.OneToOneField(
+        'Order', on_delete=models.CASCADE, related_name='payment_item', verbose_name=_('order'))
+    payment_category = models.ForeignKey('PaymentCategory', on_delete=models.PROTECT, related_name='items',
+                                         verbose_name=_('category'))
+    total_price = MoneyField(max_digits=10, null=True, decimal_places=2,
+                             default_currency='RUB', verbose_name=_('total price'))
     from_account = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('from account'))
     is_passed = models.BooleanField(default=False, choices=IS_PASSED_CHOICES, verbose_name=_('is passed'))
 
@@ -86,7 +88,6 @@ class DeliveryCategory(models.Model):
     """
     name = models.CharField(max_length=50, verbose_name=_('name'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
 
     def __str__(self):
         return self.name
@@ -100,9 +101,10 @@ class DeliveryItem(models.Model):
     """
     Экземпляр доставки
     """
-    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='delivery_items', verbose_name=_('order'))
-    delivery_category = models.ForeignKey('DeliveryCategory', on_delete=models.CASCADE, related_name='items',
-                                 verbose_name=_('delivery category'))
+    order = models.OneToOneField(
+        'Order', on_delete=models.CASCADE, related_name='delivery_items', verbose_name=_('order'))
+    delivery_category = models.ForeignKey('DeliveryCategory', on_delete=models.PROTECT, related_name='items',
+                                          verbose_name=_('delivery category'))
     name = models.CharField(max_length=100, verbose_name=_('name'))
     phone = PhoneNumberField(verbose_name=_('phone'))
     email = models.EmailField(verbose_name=_('email'))

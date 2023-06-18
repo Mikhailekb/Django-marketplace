@@ -89,7 +89,8 @@ class DiscountImage(models.Model):
     small = ImageSpecField(source='image', id='app_shops:thumbnail_200x200')
     middle = ImageSpecField(source='image', id='app_shops:thumbnail_500x500')
     large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800')
-    discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name='images', verbose_name=_('discount'))
+    discount = models.ForeignKey(
+        Discount, on_delete=models.CASCADE, related_name='images', verbose_name=_('discount'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
 
     def __str__(self) -> str:

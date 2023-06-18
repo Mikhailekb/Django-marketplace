@@ -6,13 +6,13 @@ from django.utils.translation import gettext_lazy as _
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
-from .models.banner import Banner, SpecialOffer, SmallBanner
+from .models.banner import Banner
+from .models.banner import SpecialOffer, SmallBanner
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
 from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem, DeliveryItem
 from .models.product import ProductImage, FeatureValue, Product, TagProduct, FeatureName, FeatureToProduct, Review
 from .models.shop import ShopImage, ProductShop, Shop
-from .models.banner import Banner
 
 AdminSite.site_header = 'Megano'
 AdminSite.site_title = 'Megano'
@@ -31,7 +31,8 @@ class DiscountInLine(TranslationStackedInline):
     model = Discount
     extra = 0
     fields = (
-        'name', 'description_short', 'description_long', ('discount_amount', 'discount_percentage'),
+        'name', 'description_short', 'description_long',
+        ('discount_amount', 'discount_percentage'),
         'min_cost', 'date_start', 'date_end', 'is_active')
     show_change_link = True
 
@@ -45,14 +46,16 @@ class ProductShopInLine(TabularInlinePaginated):
     model = ProductShop
     extra = 1
     raw_id_fields = ('product',)
-    fields = ('product', 'count_left', 'count_sold', 'price', 'discount_price', 'discount', 'is_active')
-    readonly_fields = ('discount_price', )
+    fields = ('product', 'count_left', 'count_sold', 'price',
+              'discount_price', 'discount', 'is_active')
+    readonly_fields = ('discount_price',)
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         shop_id = request.path.split('/')[4]
         if shop_id.isdigit():
             if db_field.name == 'discount':
-                kwargs['queryset'] = Discount.objects.filter(shop_id=shop_id, is_active=True).only('name')
+                kwargs['queryset'] = Discount.objects.filter(
+                    shop_id=shop_id, is_active=True).only('name')
             elif db_field.name == 'product':
                 kwargs['queryset'] = Product.objects.filter(is_active=True).only('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -103,7 +106,8 @@ class OrderItemInLine(TabularInlinePaginated):
 
 class PaymentItemInLine(admin.StackedInline):
     model = PaymentItem
-    readonly_fields = ('is_passed', 'payment_category', 'total_price', 'from_account')
+    readonly_fields = ('is_passed', 'payment_category',
+                       'total_price', 'from_account')
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -233,7 +237,6 @@ class SpecialOfferAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-
 @admin.register(PaymentCategory)
 class PaymentCategoryAdmin(TranslationAdmin):
     pass
@@ -246,8 +249,9 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    fields = ('buyer', 'comment', 'is_paid', 'is_canceled', 'created', 'updated')
-    readonly_fields = ('buyer' , 'is_paid', 'created', 'updated')
+    fields = ('buyer', 'comment', 'is_paid',
+              'is_canceled', 'created', 'updated')
+    readonly_fields = ('buyer', 'is_paid', 'created', 'updated')
     inlines = (PaymentItemInLine, DeliveryItemInLine, OrderItemInLine)
 
     def has_delete_permission(self, request, obj=None):
@@ -260,5 +264,3 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(SmallBanner)
 class SmallBannerAdmin(admin.ModelAdmin):
     pass
-
-

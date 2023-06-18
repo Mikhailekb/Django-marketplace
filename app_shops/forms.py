@@ -3,6 +3,7 @@ from django.core.validators import validate_email
 from django.db import ProgrammingError
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
+
 from app_shops.models.order import DeliveryCategory, PaymentCategory
 
 
@@ -11,12 +12,11 @@ class OrderForm(forms.Form):
     payment_qs = PaymentCategory.objects.filter(is_active=True)
 
     try:
-        initial_delivery = delivery_qs.first() if delivery_qs.exists() else None
-        initial_payment = payment_qs.first() if payment_qs.exists() else None
+        initial_delivery = delivery_qs.first()
+        initial_payment = payment_qs.first()
     except ProgrammingError:
         initial_delivery = None
-        initial_payment  = None
-
+        initial_payment = None
 
     name = forms.CharField(label=_('Full name'), max_length=100, widget=forms.TextInput(
         attrs={'class': 'form-input', 'data-validate': 'require', 'id': 'name'}))

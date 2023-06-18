@@ -41,7 +41,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         goods = Product.objects.select_related('category', 'main_image') \
             .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
-        top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
+        top_products = goods.order_by(
+            '-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
 
         banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
 
@@ -254,7 +255,7 @@ class ProductDetailView(DetailView):
                        if not product_shop.discount_price
                        else {'price_old': product_shop.price.amount, 'price_new': product_shop.discount_price}
                        for product_shop in discounts_query}
-        price_list = [price.get('price_new') if price.get('price_new') else price.get('price_old')
+        price_list = [price.get('price_new') or price.get('price_old')
                       for price in shop_prices.values()]
 
         price = float(sum([float(price) if not isinstance(price, Money) else float(price.amount)
@@ -269,14 +270,16 @@ class ComparisonView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        comparison_products = self.request.session.get('comparison_products', default=[])[:3]
+        comparison_products = self.request.session.get(
+            'comparison_products', default=[])[:3]
         if comparison_products and isinstance(comparison_products, list) and len(comparison_products) <= self.MAX_VALUE:
             goods: QuerySet[Product] = Product.objects.filter(id__in=comparison_products) \
                 .annotate(avg_price=Avg('in_shops__price')) \
                 .select_related('category', 'main_image')
 
             if len({item.category_id for item in goods}) == 1:
-                allowable_feature_names = self._get_allowable_feature_names(context, comparison_products)
+                allowable_feature_names = self._get_allowable_feature_names(
+                    context, comparison_products)
 
                 comparison_list: QuerySet[Product] = goods.prefetch_related(
                     Prefetch('features', queryset=FeatureToProduct.objects.order_by('feature_name')
@@ -391,8 +394,8 @@ class OrderView(UserPassesTestMixin, FormView):
         city = form.cleaned_data.get('city')
         address = form.cleaned_data.get('address')
 
-        DeliveryItem.objects.create(order=order, delivery_category=delivery_category, name=name, phone=phone,
-                                    email=email, city=city, address=address)
+        DeliveryItem.objects.create(order=order, delivery_category=delivery_category, name=name,
+                                    phone=phone, email=email, city=city, address=address)
 
         payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
 
