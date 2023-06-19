@@ -1,3 +1,4 @@
+import decimal
 from collections import defaultdict
 from random import sample
 from typing import Any, Sequence
@@ -30,6 +31,8 @@ from .models.order import PaymentCategory, DeliveryCategory, Order, PaymentItem,
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
 from .models.shop import ProductShop
 
+
+Decimal = decimal.Decimal
 
 class HomeView(TemplateView):
     """
@@ -91,26 +94,17 @@ class CatalogView(FilterView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
-        min_price = aggregate.get('min')
-        max_price = aggregate.get('max')
 
-        self.ordering = self.filterset.data.get('order_by') or 'count_sold'
+        self.ordering = self.filterset.data.get('order_by', 'count_sold')
+        category = self.request.GET.get('category', default='')
+        tags = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
 
-        price = self.filterset.data.get('price')
-        if price and len(price.split(';')) == 3 and all(item.isdigit() for item in price.split(';')[:2]):
-            price_from, price_to, language_code = price.split(';')
-        elif self.request.LANGUAGE_CODE == 'ru':
-            price_from, price_to = min_price, max_price
-        else:
-            price_from = convert_money(Money(min_price, 'RUB'), 'USD').amount
-            price_to = convert_money(Money(max_price, 'RUB'), 'USD').amount
-        category = self.request.GET.get('category')
+        min_price, max_price, price_from, price_to = self._get_price_range()
 
         context['sort'] = SortProduct
-        context['tags'] = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
+        context['tags'] = tags
         context['order_by'] = self.ordering
-        context['category'] = category or ''
+        context['category'] = category
         context['price_from'] = price_from
         context['price_to'] = price_to
         context['min_price'] = min_price
@@ -118,6 +112,21 @@ class CatalogView(FilterView):
         context['form'] = self.filterset.form
 
         return context
+
+    def _get_price_range(self) -> tuple[Decimal, Decimal, str, str]:
+        price = self.filterset.data.get('price')
+        aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
+        min_price = aggregate.get('min')
+        max_price = aggregate.get('max')
+
+        if price and len(price.split(';')) == 3 and all(item.isdigit() for item in price.split(';')[:2]):
+            price_from, price_to, language_code = price.split(';')
+        elif self.request.LANGUAGE_CODE == 'ru':
+            price_from, price_to = min_price, max_price
+        else:
+            price_from = convert_money(Money(min_price, 'RUB'), 'USD').amount
+            price_to = convert_money(Money(max_price, 'RUB'), 'USD').amount
+        return min_price, max_price, price_from, price_to
 
 
 class SaleView(ListView):
@@ -128,10 +137,9 @@ class SaleView(ListView):
     context_object_name = 'sales'
 
     def get_queryset(self):
-        self.queryset = cache.get_or_set('sales', Discount.objects.filter(is_active=True,
-                                                                          date_start__lte=timezone.now())
-                                         .select_related('main_image'),
-                                         timeout=SALES_CACHE_LIFETIME)
+        self.queryset = cache.get_or_set('sales', Discount.objects
+                                         .filter(is_active=True, date_start__lte=timezone.now())
+                                         .select_related('main_image'), timeout=SALES_CACHE_LIFETIME)
         return self.queryset
 
     def get_paginate_by(self, queryset):
@@ -252,8 +260,8 @@ class ProductDetailView(DetailView):
     @staticmethod
     def get_prices(discounts_query):
         shop_prices = {product_shop: {'price_old': product_shop.price.amount}
-                       if not product_shop.discount_price
-                       else {'price_old': product_shop.price.amount, 'price_new': product_shop.discount_price}
+        if not product_shop.discount_price
+        else {'price_old': product_shop.price.amount, 'price_new': product_shop.discount_price}
                        for product_shop in discounts_query}
         price_list = [price.get('price_new') or price.get('price_old')
                       for price in shop_prices.values()]
@@ -394,7 +402,7 @@ class OrderView(UserPassesTestMixin, FormView):
         address = form.cleaned_data.get('address')
 
         order = Order.objects.create(buyer=self.request.user, delivery_category=delivery_category, name=name,
-                                    phone=phone, email=email, city=city, address=address, comment=comment)
+                                     phone=phone, email=email, city=city, address=address, comment=comment)
 
         payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
 
@@ -488,8 +496,8 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get(self.pk_url_kwarg)
-        queryset = Order.objects.filter(pk=pk).select_related('delivery_category', 'payment_item').prefetch_related(Prefetch(
-            'items', queryset=OrderItem.objects.select_related(
+        queryset = Order.objects.filter(pk=pk).select_related('delivery_category', 'payment_item').prefetch_related(
+            Prefetch('items', queryset=OrderItem.objects.select_related(
                 'product_shop', 'product_shop__product', 'product_shop__product__main_image')))
 
         try:
