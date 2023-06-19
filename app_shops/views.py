@@ -1,6 +1,6 @@
 from collections import defaultdict
 from random import sample
-from typing import Iterable, Any
+from typing import Any, Sequence
 
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -293,12 +293,12 @@ class ComparisonView(TemplateView):
                 context['comparison_list'] = goods
         return context
 
-    def _get_allowable_feature_names(self, context: dict[str, Any], goods: list) -> Iterable:
+    def _get_allowable_feature_names(self, context: dict[str, Any], goods: Sequence) -> Sequence:
         """
         Метод, в котором происходит получение допустимых характеристик.
         Допустимыми являются те, которые встречаются у всех товаров из QuerySet.
         Также если is_difference = True, то исключается такое название характеристики,
-        у которой идентичные значения у всех товаров из QuerySet.
+        у которого идентичные значения у всех товаров из QuerySet.
         """
         is_difference = self.request.GET.get('is_difference')
         if is_difference == 'True':
@@ -403,8 +403,8 @@ class OrderView(UserPassesTestMixin, FormView):
         for product_shop_id, values in cart.cart.items():
             price = values.get('price')
             quantity = values.get('quantity')
-
-            item = OrderItem(order=order, product_shop_id=product_shop_id, price_on_add_moment=price, quantity=quantity)
+            item = OrderItem(order=order, product_shop_id=product_shop_id,
+                             price_on_add_moment=price, quantity=quantity)
             goods.append(item)
         OrderItem.objects.bulk_create(goods)
 
@@ -502,7 +502,7 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
 
         return self.object
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 

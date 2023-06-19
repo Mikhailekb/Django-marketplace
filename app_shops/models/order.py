@@ -37,7 +37,7 @@ class OrderItem(models.Model):
     Объект заказа
     """
     order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='items', verbose_name=_('order'))
-    product_shop = models.ForeignKey('ProductShop', on_delete=models.CASCADE, related_name='in_orders',
+    product_shop = models.ForeignKey('ProductShop', on_delete=models.PROTECT, related_name='in_orders',
                                 verbose_name=_('product'))
     price_on_add_moment = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB',
                                      verbose_name=_('price on add moment'))

@@ -250,7 +250,7 @@ msgstr "количество"
 
 #: .\app_shops\models\order.py:42
 msgid "order items"
-msgstr "объекты заказа"
+msgstr "товары"
 
 #: .\app_shops\models\order.py:43
 msgid "order item"

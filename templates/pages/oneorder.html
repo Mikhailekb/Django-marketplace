@@ -38,7 +38,7 @@
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">{{ form.email.label }}:</div>
-                      <div class="Order-infoContent">{{ order.email}}
+                      <div class="Order-infoContent">{{ order.email }}
                       </div>
                     </div>
                   </div>
@@ -83,17 +83,34 @@
                 {% for item in order.items.all %}
                   <div class="Cart-product">
                     <div class="Cart-block Cart-block_row">
-                      <div class="Cart-block Cart-block_pict">
-                        <a class="Cart-pict" href="{{ item.product_shop.product.get_absolute_url }}">
-                          <img class="Cart-img" src="{{ item.product_shop.product.main_image.small.url }}"
-                               alt="{{ item.product_shop.product.slug }}"/>
-                        </a>
-                      </div>
-                      <div class="Cart-block Cart-block_info">
-                        <a class="Cart-title"
-                           href="{{ item.product_shop.product.get_absolute_url }}">{{ item.product_shop.product.name }}</a>
-                        <div class="Cart-desc">{{ item.product_shop.product.short_description }}</div>
-                      </div>
+
+                      {% if item.product_shop.is_active %}
+                        <div class="Cart-block Cart-block_pict">
+                          <a class="Cart-pict" href="{{ item.product_shop.product.get_absolute_url }}">
+                            <img class="Cart-img" src="{{ item.product_shop.product.main_image.small.url }}"
+                                 alt="{{ item.product_shop.product.slug }}"/>
+                          </a>
+                        </div>
+                        <div class="Cart-block Cart-block_info">
+                          <a class="Cart-title"
+                             href="{{ item.product_shop.product.get_absolute_url }}">{{ item.product_shop.product.name }}</a>
+                          <div class="Cart-desc">{{ item.product_shop.product.short_description }}</div>
+                        </div>
+
+                      {% else %}
+
+                        <div class="Cart-block Cart-block_pict">
+                          <div class="Cart-pict">
+                            <img class="Cart-img" src="{{ item.product_shop.product.main_image.small.url }}"
+                                 alt="{{ item.product_shop.product.slug }}"/>
+                          </div>
+                        </div>
+                        <div class="Cart-block Cart-block_info">
+                          <div class="Cart-title">{{ item.product_shop.product.name }}</div>
+                          <div class="Cart-desc">{{ item.product_shop.product.short_description }}</div>
+                        </div>
+                      {% endif %}
+
                       <div class="Cart-block Cart-block_price">
                         {% if request.LANGUAGE_CODE == 'ru' %}
                           <div class="Cart-price">{{ item.price_on_add_moment }}</div>
