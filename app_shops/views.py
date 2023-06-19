@@ -8,7 +8,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -26,7 +26,7 @@ from .filters import ProductFilter
 from .forms import OrderForm, ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
-from .models.order import PaymentCategory, DeliveryCategory, Order, DeliveryItem, PaymentItem, OrderItem
+from .models.order import PaymentCategory, DeliveryCategory, Order, PaymentItem, OrderItem
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
 from .models.shop import ProductShop
 
@@ -385,7 +385,6 @@ class OrderView(UserPassesTestMixin, FormView):
 
     def form_valid(self, form):
         comment = form.cleaned_data.get('comment')
-        order = Order.objects.create(buyer=self.request.user, comment=comment)
 
         delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
         name = form.cleaned_data.get('name')
@@ -394,18 +393,18 @@ class OrderView(UserPassesTestMixin, FormView):
         city = form.cleaned_data.get('city')
         address = form.cleaned_data.get('address')
 
-        DeliveryItem.objects.create(order=order, delivery_category=delivery_category, name=name,
-                                    phone=phone, email=email, city=city, address=address)
+        order = Order.objects.create(buyer=self.request.user, delivery_category=delivery_category, name=name,
+                                    phone=phone, email=email, city=city, address=address, comment=comment)
 
         payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
 
         goods = []
         cart = Cart(self.request)
-        for product_id, values in cart.cart.items():
+        for product_shop_id, values in cart.cart.items():
             price = values.get('price')
             quantity = values.get('quantity')
 
-            item = OrderItem(order=order, product_id=product_id, price_on_add_moment=price, quantity=quantity)
+            item = OrderItem(order=order, product_shop_id=product_shop_id, price_on_add_moment=price, quantity=quantity)
             goods.append(item)
         OrderItem.objects.bulk_create(goods)
 
@@ -480,41 +479,40 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
     model = Order
     context_object_name = 'order'
 
-    def __init__(self):
-        super().__init__()
-        self.payment_item = None
-
     def test_func(self) -> bool:
         user = self.request.user
-        order = self.get_object()
-        buyer_id = order.buyer_id
-        self.payment_item = order.payment_item
+        self.object = self.get_object()
+        buyer_id = self.object.buyer_id
 
-        return (buyer_id == user.id and self.payment_item.from_account) or user.is_superuser
+        return (buyer_id == user.id and self.object.payment_item.from_account) or user.is_staff
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        queryset = Order.objects.filter(pk=pk).select_related('delivery_category', 'payment_item').prefetch_related(Prefetch(
+            'items', queryset=OrderItem.objects.select_related(
+                'product_shop', 'product_shop__product', 'product_shop__product__main_image')))
+
+        try:
+            self.object = queryset.get()
+        except queryset.model.DoesNotExist as e:
+            raise Http404(
+                _("No %(verbose_name)s found matching the query")
+                % {'verbose_name': queryset.model._meta.verbose_name}
+            ) from e
+
+        return self.object
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        order: Order = kwargs.get('object')
-        delivery = DeliveryItem.objects.get(order_id=order.id)
-        values = {
-            'name': delivery.name,
-            'phone': delivery.phone,
-            'email': delivery.email,
-            'city': delivery.city,
-            'address': delivery.address,
-            'comment': order.comment,
-        }
+        context['form'] = OrderForm
+        context['order'] = self.object
 
-        form = OrderForm(values)
-        goods = order.items.all()
-
-        context['form'] = form
-        context['goods'] = goods
-        context['delivery_category'] = delivery.delivery_category.name
-        context['payment'] = self.payment_item
-
-        if self.payment_item.is_passed:
+        if self.object.payment_item.is_passed:
             self.request.session.pop('order', None)
         else:
-            self.request.session['order'] = order.id
+            self.request.session['order'] = self.object
         return context

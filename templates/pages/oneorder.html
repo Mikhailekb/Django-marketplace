@@ -28,47 +28,47 @@
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">{{ form.name.label }}:</div>
-                      <div class="Order-infoContent">{{ form.name.value }}
+                      <div class="Order-infoContent">{{ order.name }}
                       </div>
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">{{ form.phone.label }}:</div>
-                      <div class="Order-infoContent">{{ form.phone.value }}
+                      <div class="Order-infoContent">{{ order.phone }}
                       </div>
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">{{ form.email.label }}:</div>
-                      <div class="Order-infoContent">{{ form.email.value }}
+                      <div class="Order-infoContent">{{ order.email}}
                       </div>
                     </div>
                   </div>
                   <div class="row-block">
                     <div class="Order-info Order-info_delivery">
                       <div class="Order-infoType">{% trans 'Delivery type' %}:</div>
-                      <div class="Order-infoContent">{{ delivery_category }}
+                      <div class="Order-infoContent">{{ order.delivery_category.name }}
                       </div>
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">{{ form.city.label }}:</div>
-                      <div class="Order-infoContent">{{ form.city.value }}
+                      <div class="Order-infoContent">{{ order.city }}
                       </div>
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">{{ form.address.label }}:</div>
-                      <div class="Order-infoContent">{{ form.address.value }}
+                      <div class="Order-infoContent">{{ order.address }}
                       </div>
                     </div>
                     <div class="Order-info Order-info_pay">
                       <div class="Order-infoType">{% trans 'Payment' %}:</div>
-                      <div class="Order-infoContent">{{ payment.payment_category.name }}
+                      <div class="Order-infoContent">{{ order.payment_item.payment_category.name }}
                       </div>
                     </div>
                     <div class="Order-info Order-info_status">
                       <div class="Order-infoType">{% trans 'Status' %}:</div>
-                      <div class="Order-infoContent">{{ payment.get_is_passed_display }}
+                      <div class="Order-infoContent">{{ order.payment_item.get_is_passed_display }}
                       </div>
                     </div>
-                    {% if not payment.is_passed %}
+                    {% if not order.payment_item.is_passed %}
                       <div class="Order-info Order-info_error">
                         <div class="Order-infoType">Оплата не прошла:
                         </div>
@@ -80,19 +80,19 @@
                 </div>
               </div>
               <div class="Cart Cart_order">
-                {% for item in goods %}
+                {% for item in order.items.all %}
                   <div class="Cart-product">
                     <div class="Cart-block Cart-block_row">
                       <div class="Cart-block Cart-block_pict">
-                        <a class="Cart-pict" href="{{ item.product.product.get_absolute_url }}">
-                          <img class="Cart-img" src="{{ item.product.product.main_image.small.url }}"
-                               alt="{{ item.product.product.slug }}"/>
+                        <a class="Cart-pict" href="{{ item.product_shop.product.get_absolute_url }}">
+                          <img class="Cart-img" src="{{ item.product_shop.product.main_image.small.url }}"
+                               alt="{{ item.product_shop.product.slug }}"/>
                         </a>
                       </div>
                       <div class="Cart-block Cart-block_info">
                         <a class="Cart-title"
-                           href="{{ item.product.product.get_absolute_url }}">{{ item.product.product.name }}</a>
-                        <div class="Cart-desc">{{ item.product.product.short_description }}</div>
+                           href="{{ item.product_shop.product.get_absolute_url }}">{{ item.product_shop.product.name }}</a>
+                        <div class="Cart-desc">{{ item.product_shop.product.short_description }}</div>
                       </div>
                       <div class="Cart-block Cart-block_price">
                         {% if request.LANGUAGE_CODE == 'ru' %}
@@ -113,13 +113,13 @@
                     <strong class="Cart-title">
                       {% trans 'Total' %}:
                       {% if request.LANGUAGE_CODE == 'ru' %}
-                        <span class="Cart-price">{{ payment.total_price }}</span>
+                        <span class="Cart-price">{{ order.payment_item.total_price }}</span>
                       {% else %}
-                        <span class="Cart-price">{{ payment.total_price|dollar_conversion }}</span>
+                        <span class="Cart-price">{{ order.payment_item.total_price|dollar_conversion }}</span>
                       {% endif %}
                     </strong>
                   </div>
-                  {% if not payment.is_passed %}
+                  {% if not order.payment_item.is_passed %}
                     <div class="Cart-block">
                       <a class="btn btn_primary btn_lg" href="{% url 'payment' %}">{% trans 'Pay' %}</a>
                     </div>

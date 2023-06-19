@@ -44,7 +44,6 @@ class ProductShopManager(models.Manager):
     """
     Менеджер для ProductShop, добавляющий метод вычисления цены со скидкой
     """
-
     def with_discount_price(self):
         min_cost_expression = Case(
             When(discount__is_active=False,

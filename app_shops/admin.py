@@ -10,7 +10,7 @@ from .models.banner import Banner
 from .models.banner import SpecialOffer, SmallBanner
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
-from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem, DeliveryItem
+from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem
 from .models.product import ProductImage, FeatureValue, Product, TagProduct, FeatureName, FeatureToProduct, Review
 from .models.shop import ShopImage, ProductShop, Shop
 
@@ -94,18 +94,19 @@ class OrderItemInLine(TabularInlinePaginated):
     model = OrderItem
     extra = 0
     ordering = ('id',)
-    readonly_fields = ('product', 'price_on_add_moment', 'quantity')
+    readonly_fields = ('product_shop', 'price_on_add_moment', 'quantity')
 
     def get_queryset(self, request):
         order_id = request.path.split('/')[4]
-        return OrderItem.objects.filter(order_id=order_id).select_related('product', 'product__product') \
-            .only('order_id', 'product__product__name_ru', 'product__product__name_en',
+        return OrderItem.objects.filter(order_id=order_id).select_related('product_shop', 'product_shop__product') \
+            .only('order_id', 'product_shop__product__name_ru', 'product_shop__product__name_en',
                   'price_on_add_moment', 'price_on_add_moment_currency', 'quantity')
-
-    def has_add_permission(self, request, obj):
+    @staticmethod
+    def has_add_permission(*args):
         return False
 
-    def has_delete_permission(self, request, obj=None):
+    @staticmethod
+    def has_delete_permission(*args):
         return False
 
 
@@ -114,12 +115,10 @@ class PaymentItemInLine(admin.StackedInline):
     readonly_fields = ('is_passed', 'payment_category',
                        'total_price', 'from_account')
 
-    def has_delete_permission(self, request, obj=None):
+    @staticmethod
+    def has_delete_permission(*args):
         return False
 
-
-class DeliveryItemInLine(admin.StackedInline):
-    model = DeliveryItem
 
 
 @admin.register(Category)
@@ -193,7 +192,8 @@ class DiscountAdmin(TranslationAdmin):
                 kwargs['queryset'] = DiscountImage.objects.filter(discount_id=discount_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def has_add_permission(self, request: HttpRequest):
+    @staticmethod
+    def has_add_permission(*args):
         return False
 
 
@@ -249,15 +249,17 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    fields = ('buyer', 'comment', 'is_paid',
-              'is_canceled', 'created', 'updated')
-    readonly_fields = ('buyer', 'is_paid', 'created', 'updated')
-    inlines = (PaymentItemInLine, DeliveryItemInLine, OrderItemInLine)
+    fields = ('buyer', 'comment', 'delivery_category', 'name', 'phone',
+              'email', 'city', 'address', 'is_canceled', 'created', 'updated')
+    readonly_fields = ('buyer', 'created', 'updated')
+    inlines = (PaymentItemInLine, OrderItemInLine)
 
-    def has_delete_permission(self, request, obj=None):
+    @staticmethod
+    def has_delete_permission(*args):
         return False
 
-    def has_add_permission(self, request):
+    @staticmethod
+    def has_add_permission(*args):
         return False
 
 
