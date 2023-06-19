@@ -514,5 +514,5 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
         if self.object.payment_item.is_passed:
             self.request.session.pop('order', None)
         else:
-            self.request.session['order'] = self.object
+            self.request.session['order'] = self.object.id
         return context
