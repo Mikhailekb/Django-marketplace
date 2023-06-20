@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static i18n %}
+{% load static i18n djmoney custom_filters %}
 
 {% block page_content %}
   <div class="Middle Middle_top">
@@ -12,6 +12,7 @@
             </header>
             <div class="Section-columnContent">
               <div class="NavigateProfile">
+
                 <form action="" method="post">
                   {% csrf_token %}
                   <ul class="menu menu_vt Order-navigate">
@@ -42,40 +43,59 @@
             </header>
             <div class="row">
               <div class="row-block">
-                {{ form1.as_p }}
+                <p>
+                  {{ form.name.errors }}
+                  {{ form.name.label_tag }}
+                  {{ form.name }}
+                </p>
+
+                <p>
+                  {{ form.phone.errors }}
+                  {{ form.phone.label_tag }}
+                  {{ form.phone }}
+                </p>
+
+                <p>
+                  {{ form.email.errors }}
+                  {{ form.email.label_tag }}
+                  {{ form.email }}
+                </p>
               </div>
             </div>
             <div class="Order-footer">
               <a class="btn btn_success Order-next" href="#step2">{% trans 'Next' %}</a>
             </div>
           </div>
+
           <div class="Order-block" id="step2">
             <header class="Section-header Section-header_sm">
               <h2 class="Section-title">{% trans 'Step 2 Shipping Method' %}</h2>
             </header>
-            <div class="form-group">
-              {% for radio in form2.category %}
+
+            {{ form.delivery_category.errors }}
+            <p class="form-group">
+              {% for radio in form.delivery_category %}
                 <div>
                   <label class="toggle">
-                    {% if forloop.counter == 1 %}
-                      <input type="radio" name="delivery" value="{{ radio.choice_label.value }}" checked/>
-                    {% else %}
-                      <input type="radio" name="delivery" value="{{ radio.choice_label.value }}"/>
-                    {% endif %}
+                    {{ radio.tag }}
                     <span class="toggle-box"></span>
-                    <span class="toggle-text">{{ radio.choice_label.name }}</span>
+                    <span class="toggle-text">{{ radio.choice_label }}</span>
                   </label>
                 </div>
               {% endfor %}
-            </div>
-            {% for field in form2 %}
-              {% if field.name != 'category' %}
-                <div class="form-group">
-                  <label for="{{ field.auto_id }}">{{ field.label }}</label>
-                  {{ field }}
-                </div>
-              {% endif %}
-            {% endfor %}
+            </p>
+            <p>
+              {{ form.city.errors }}
+              {{ form.city.label_tag }}
+              {{ form.city }}
+            </p>
+
+            <p>
+              {{ form.address.errors }}
+              {{ form.address.label_tag }}
+              {{ form.address }}
+            </p>
+
             <div class="Order-footer">
               <a class="btn btn_success Order-next" href="#step3">{% trans 'Next' %}</a>
             </div>
@@ -84,21 +104,20 @@
             <header class="Section-header Section-header_sm">
               <h2 class="Section-title">{% trans 'Step 3. Payment method' %}</h2>
             </header>
-            <div class="form-group">
-              {% for radio in form3.category %}
+
+            {{ form.payment_category.errors }}
+            <p class="form-group">
+              {% for radio in form.payment_category %}
                 <div>
                   <label class="toggle">
-                    {% if forloop.counter == 1 %}
-                      <input type="radio" name="pay" value="{{ radio.choice_label.value }}" checked/>
-                    {% else %}
-                      <input type="radio" name="pay" value="{{ radio.choice_label.value }}"/>
-                    {% endif %}
+                    {{ radio.tag }}
                     <span class="toggle-box"></span>
-                    <span class="toggle-text">{{ radio.choice_label.name }}</span>
+                    <span class="toggle-text">{{ radio.choice_label }}</span>
                   </label>
                 </div>
               {% endfor %}
-            </div>
+            </p>
+
             <div class="Order-footer">
               <a class="btn btn_success Order-next" href="#step4">{% trans 'Next' %}</a>
             </div>
@@ -107,20 +126,21 @@
             <header class="Section-header Section-header_sm">
               <h2 class="Section-title">{% trans 'Step 4. Order confirmation' %}</h2>
             </header>
+
             <div class="Order-infoBlock">
               <div class="Order-personal">
                 <div class="row">
                   <div class="row-block">
                     <div class="Order-info">
-                      <div class="Order-infoType">{{ form1.full_name.label }}:</div>
+                      <div class="Order-infoType">{{ form.name.label }}:</div>
                       <div class="Order-infoContent" id="full_name_value"></div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">{{ form1.phone.label }}:</div>
+                      <div class="Order-infoType">{{ form.phone.label }}:</div>
                       <div class="Order-infoContent" id="phone_value"></div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">{{ form1.email.label }}:</div>
+                      <div class="Order-infoType">{{ form.email.label }}:</div>
                       <div class="Order-infoContent" id="email_value"></div>
                     </div>
                   </div>
@@ -130,11 +150,11 @@
                       <div class="Order-infoContent" id="delivery_value"></div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">{{ form2.city.label }}:</div>
+                      <div class="Order-infoType">{{ form.city.label }}:</div>
                       <div class="Order-infoContent" id="city_value"></div>
                     </div>
                     <div class="Order-info">
-                      <div class="Order-infoType">{{ form2.address.label }}:</div>
+                      <div class="Order-infoType">{{ form.address.label }}:</div>
                       <div class="Order-infoContent" id="address_value"></div>
                     </div>
                     <div class="Order-info Order-info_pay">
@@ -143,69 +163,46 @@
                     </div>
                   </div>
                 </div>
+                <p>
+                  {{ form.comment.label_tag }}
+                  {{ form.comment }}
+                </p>
               </div>
+              {% for message in form.errors.not_enough_goods %}
+                <div>{{ message }}</div>
+              {% endfor %}
               <div class="Cart Cart_order">
-                <div class="Cart-product">
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_pict">
-                      <a class="Cart-pict" href="#">
-                        <img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg"/>
-                      </a>
+                {% for item in cart %}
+                  <div class="Cart-product">
+                    <div class="Cart-block Cart-block_row">
+                      <div class="Cart-block Cart-block_pict">
+                        <a class="Cart-pict" href="{{ item.product.product.get_absolute_url }}">
+                          <img class="Cart-img" src="{{ item.product.product.main_image.small.url }}"
+                               alt="{{ item.product.product.slug }}"/>
+                        </a>
+                      </div>
+                      <div class="Cart-block Cart-block_info">
+                        <a class="Cart-title"
+                           href="{{ item.product.product.get_absolute_url }}">{{ item.product.product.name }}</a>
+                        <div class="Cart-desc">{{ item.product.product.short_description }}</div>
+                      </div>
+                      <div class="Cart-block Cart-block_price">
+                        {% if request.LANGUAGE_CODE == 'ru' %}
+                          <div class="Cart-price">{% money_localize item.price 'RUB' %}</div>
+                        {% else %}
+                          <div class="Cart-price">{{ item.price|dollar_conversion }}</div>
+                        {% endif %}
+                      </div>
                     </div>
-                    <div class="Cart-block Cart-block_info">
-                      <a class="Cart-title" href="#">Ноутбук</a>
-                      <div class="Cart-desc">Это супер ноутбук, 3 гб. 4 ядра</div>
-                    </div>
-                    <div class="Cart-block Cart-block_price">
-                      <div class="Cart-price">80.00$</div>
-                    </div>
-                  </div>
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_amount">1 шт.</div>
-                  </div>
-                </div>
-                <div class="Cart-product">
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_pict">
-                      <a class="Cart-pict" href="#">
-                        <img class="Cart-img" src="assets/img/content/sale/product.png" alt="product.png"/>
-                      </a>
-                    </div>
-                    <div class="Cart-block Cart-block_info">
-                      <a class="Cart-title" href="#">Планшет</a>
-                      <div class="Cart-desc">Это планшет с современным железом. Процессор последнего поколения</div>
-                    </div>
-                    <div class="Cart-block Cart-block_price">
-                      <div class="Cart-price">40.99$</div>
+                    <div class="Cart-block Cart-block_row">
+                      <div class="Cart-block Cart-block_amount">{{ item.quantity }} {% trans 'pcs.' %}</div>
                     </div>
                   </div>
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_amount">1 шт.</div>
-                  </div>
-                </div>
-                <div class="Cart-product">
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_pict">
-                      <a class="Cart-pict" href="#">
-                        <img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg"/>
-                      </a>
-                    </div>
-                    <div class="Cart-block Cart-block_info">
-                      <a class="Cart-title" href="#">Ноутбук</a>
-                      <div class="Cart-desc">Это супер ноутбук, 3 гб. 4 ядра</div>
-                    </div>
-                    <div class="Cart-block Cart-block_price">
-                      <div class="Cart-price">80.00$</div>
-                    </div>
-                  </div>
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_amount">1 шт.</div>
-                  </div>
-                </div>
+                {% endfor %}
                 <div class="Cart-total">
                   <div class="Cart-block Cart-block_total">
-                    <strong class="Cart-title">{% trans 'Total' %}:
-                    </strong><span class="Cart-price">200.99$</span>
+                    <strong class="Cart-title">{% trans 'Total' %}:</strong>
+                    <span class="Cart-price">{{ cart.get_total_price }}</span>
                   </div>
                   <div class="Cart-block">
                     <button class="btn btn_primary btn_lg" type="submit">{% trans 'Pay' %}</button>

@@ -8,11 +8,13 @@ from .models.product import Product
 
 
 class ProductFilter(filters.FilterSet):
-    order_by = filters.OrderingFilter(fields=('count_sold', 'avg_price', 'created', 'feedback'))
+    order_by = filters.OrderingFilter(
+        fields=('count_sold', 'avg_price', 'created', 'feedback'))
 
     price = filters.CharFilter(method='filter_price')
     name = filters.CharFilter(method='filter_name_or_description')
-    in_stock = filters.BooleanFilter(method='filter_in_stock', widget=forms.CheckboxInput)
+    in_stock = filters.BooleanFilter(
+        method='filter_in_stock', widget=forms.CheckboxInput)
     tag = filters.CharFilter(field_name='tags__codename')
 
     # Фильтр на бесплатную доставку на данный момент отсутствует
@@ -32,8 +34,10 @@ class ProductFilter(filters.FilterSet):
             price_from, price_to, language_code = value.split(';')
             if price_from.isdigit() and price_to.isdigit():
                 if language_code == 'en':
-                    price_from = convert_money(Money(price_from, 'USD'), 'RUB').amount
-                    price_to = convert_money(Money(price_to, 'USD'), 'RUB').amount
+                    price_from = convert_money(
+                        Money(price_from, 'USD'), 'RUB').amount
+                    price_to = convert_money(
+                        Money(price_to, 'USD'), 'RUB').amount
                 return queryset.filter(avg_price__gte=price_from, avg_price__lte=price_to)
         return queryset
 

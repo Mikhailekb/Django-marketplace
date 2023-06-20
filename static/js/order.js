@@ -1,5 +1,5 @@
 const inputs = [
-  {inputID: 'full_name', displayID: 'full_name_value'},
+  {inputID: 'name', displayID: 'full_name_value'},
   {inputID: 'phone', displayID: 'phone_value'},
   {inputID: 'email', displayID: 'email_value'},
   {inputID: 'city', displayID: 'city_value'},
@@ -10,6 +10,8 @@ function setInputEvent(input, display) {
   const inputEl = document.getElementById(input);
   const displayEl = document.getElementById(display);
 
+  displayEl.textContent = inputEl.value;
+
   inputEl.addEventListener('input', () => {
     displayEl.textContent = inputEl.value;
   });
@@ -18,10 +20,10 @@ function setInputEvent(input, display) {
 inputs.forEach(input => setInputEvent(input.inputID, input.displayID));
 
 
-const deliveryRadios = document.querySelectorAll('input[name="delivery"]');
+const deliveryRadios = document.querySelectorAll('input[name="delivery_category"]');
 const deliveryDisplay = document.getElementById('delivery_value');
 
-const payRadios = document.querySelectorAll('input[name="pay"]');
+const payRadios = document.querySelectorAll('input[name="payment_category"]');
 const payDisplay = document.getElementById('pay_value');
 
 function updateDisplay(radios, display) {

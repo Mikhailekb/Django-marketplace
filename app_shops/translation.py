@@ -3,7 +3,7 @@ from modeltranslation.translator import register, TranslationOptions
 from .models.category import Category
 from .models.discount import Discount
 from .models.order import PaymentCategory, DeliveryCategory
-from .models.product import Product, TagProduct, SortProduct, FeatureName, FeatureValue
+from .models.product import Product, TagProduct, FeatureName, FeatureValue
 from .models.shop import Shop
 
 
@@ -13,22 +13,17 @@ class CategoryTranslationOptions(TranslationOptions):
 
 
 @register(Product)
-class CategoryTranslationOptions(TranslationOptions):
+class ProductTranslationOptions(TranslationOptions):
     fields = ('name', 'description_short', 'description_long')
 
 
 @register(Shop)
-class CategoryTranslationOptions(TranslationOptions):
+class ShopTranslationOptions(TranslationOptions):
     fields = ('name', 'description', 'address')
 
 
 @register(TagProduct)
-class CategoryTranslationOptions(TranslationOptions):
-    fields = ('name',)
-
-
-@register(SortProduct)
-class SortProductTranslationOptions(TranslationOptions):
+class TagProductTranslationOptions(TranslationOptions):
     fields = ('name',)
 
 

@@ -5,15 +5,12 @@ from app_shops.models.shop import ProductShop
 from .cart import Cart
 
 
-
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(ProductShop, id=product_id)
     cart.add(product=product)
 
-    next = request.GET.get('next', '/')
-    return HttpResponseRedirect(next)
-
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def cart_change_quantity(request, product_id, type):
@@ -37,4 +34,3 @@ def cart_detail(request):
     cart = Cart(request)
 
     return render(request, 'pages/cart.html', {'cart': cart})
-

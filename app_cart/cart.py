@@ -1,12 +1,16 @@
 from decimal import Decimal
 from django.conf import settings
+from djmoney.money import Money
+
 from app_shops.models.shop import ProductShop
+from app_shops.templatetags.custom_filters import dollar_conversion
 
 
 class Cart:
 
     def __init__(self, request):
         """Инициализация объекта корзины."""
+        self.request = request
         self.session = request.session
         session_cart = self.session.get(settings.CART_SESSION_ID)
         if not session_cart:
@@ -57,7 +61,7 @@ class Cart:
         """
         product_ids = self.cart.keys()
         # получение объектов product и добавление их в корзину
-        products = ProductShop.objects.filter(id__in=product_ids).select_related('product').select_related('shop')
+        products = ProductShop.objects.filter(id__in=product_ids).select_related('product', 'shop')
         for product in products:
             self.cart[str(product.id)]['product'] = product
 
@@ -76,7 +80,11 @@ class Cart:
         """
         Подсчет стоимости товаров в корзине.
         """
-        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+        sum_cart = sum(Money(item['price'], 'RUB').amount * item['quantity'] for item in self.cart.values())
+        if self.request.LANGUAGE_CODE == 'ru':
+            return Money(sum_cart, 'RUB')
+        else:
+            return dollar_conversion(sum_cart)
 
     def clear(self):
         """Удаление корзины из сессии"""

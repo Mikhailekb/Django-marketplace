@@ -9,10 +9,9 @@ from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
-from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem, DeliveryItem
+from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem
 from .models.product import ProductImage, FeatureValue, Product, TagProduct, FeatureName, FeatureToProduct, Review
 from .models.shop import ShopImage, ProductShop, Shop
-from .models.banner import Banner
 
 AdminSite.site_header = 'Megano'
 AdminSite.site_title = 'Megano'
@@ -31,7 +30,8 @@ class DiscountInLine(TranslationStackedInline):
     model = Discount
     extra = 0
     fields = (
-        'name', 'description_short', 'description_long', ('discount_amount', 'discount_percentage'),
+        'name', 'description_short', 'description_long',
+        ('discount_amount', 'discount_percentage'),
         'min_cost', 'date_start', 'date_end', 'is_active')
     show_change_link = True
 
@@ -45,16 +45,17 @@ class ProductShopInLine(TabularInlinePaginated):
     model = ProductShop
     extra = 1
     raw_id_fields = ('product',)
-    fields = ('product', 'count_left', 'count_sold', 'price', 'discount_price', 'discount', 'is_active')
-    readonly_fields = ('discount_price', )
+    fields = ('product', 'count_left', 'count_sold', 'price',
+              'discount_price', 'discount', 'is_active')
+    readonly_fields = ('discount_price',)
 
-    def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
-        shop_id = request.path.split('/')[4]
-        if shop_id.isdigit():
-            if db_field.name == 'discount':
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'discount':
+            shop_id = request.path.split('/')[4]
+            if shop_id.isdigit():
                 kwargs['queryset'] = Discount.objects.filter(shop_id=shop_id, is_active=True).only('name')
-            elif db_field.name == 'product':
-                kwargs['queryset'] = Product.objects.filter(is_active=True).only('name')
+        elif db_field.name == 'product':
+            kwargs['queryset'] = Product.objects.filter(is_active=True).only('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request: HttpRequest):
@@ -91,14 +92,32 @@ class ReviewInLine(admin.StackedInline):
 class OrderItemInLine(TabularInlinePaginated):
     model = OrderItem
     extra = 0
+    ordering = ('id',)
+    readonly_fields = ('product_shop', 'price_on_add_moment', 'quantity')
+
+    def get_queryset(self, request):
+        order_id = request.path.split('/')[4]
+        return OrderItem.objects.filter(order_id=order_id).select_related('product_shop', 'product_shop__product') \
+            .only('order_id', 'product_shop__product__name_ru', 'product_shop__product__name_en',
+                  'price_on_add_moment', 'price_on_add_moment_currency', 'quantity')
+    @staticmethod
+    def has_add_permission(*args):
+        return False
+
+    @staticmethod
+    def has_delete_permission(*args):
+        return False
 
 
 class PaymentItemInLine(admin.StackedInline):
     model = PaymentItem
+    readonly_fields = ('is_passed', 'payment_category',
+                       'total_price', 'from_account')
 
+    @staticmethod
+    def has_delete_permission(*args):
+        return False
 
-class DeliveryItemInLine(admin.StackedInline):
-    model = DeliveryItem
 
 
 @admin.register(Category)
@@ -106,6 +125,7 @@ class CategoryAdmin(TranslationAdmin):
     list_display = ('name', 'get_icon', 'is_active', 'parent', 'slug')
     list_filter = ('is_active',)
     readonly_fields = ('slug',)
+    raw_id_fields = ('parent',)
     list_select_related = ('parent',)
     filter_horizontal = ('recommended_features',)
     change_list_template = 'admin/categories_list.html'
@@ -171,15 +191,8 @@ class DiscountAdmin(TranslationAdmin):
                 kwargs['queryset'] = DiscountImage.objects.filter(discount_id=discount_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def formfield_for_manytomany(self, db_field, request: HttpRequest, **kwargs):
-        if db_field.name == 'goods':
-            discount_id = request.path.split('/')[4]
-            if discount_id.isdigit():
-                discount = Discount.objects.get(id=discount_id)
-                kwargs['queryset'] = ProductShop.objects.filter(shop_id=discount.shop_id)
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
-
-    def has_add_permission(self, request: HttpRequest):
+    @staticmethod
+    def has_add_permission(*args):
         return False
 
 
@@ -199,6 +212,7 @@ class FeatureNameAdmin(TranslationAdmin):
 class BannerAdmin(admin.ModelAdmin):
     list_display = ('get_foreing_name', 'is_active', 'created', 'get_img')
     list_filter = ('is_active',)
+    list_select_related = ('product',)
 
     def get_img(self, obj):
         return mark_safe(f'<img style="width: 150px; height: 150px; object-fit: contain;" src={obj.photo.url}>')
@@ -212,6 +226,7 @@ class BannerAdmin(admin.ModelAdmin):
 
 @admin.register(SpecialOffer)
 class SpecialOfferAdmin(admin.ModelAdmin):
+    raw_id_fields = ('product_shop',)
 
     def has_add_permission(self, request: HttpRequest):
         return not SpecialOffer.objects.exists()
@@ -219,7 +234,6 @@ class SpecialOfferAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         kwargs['queryset'] = ProductShop.objects.filter(is_active=True, discount__isnull=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
 
 
 @admin.register(PaymentCategory)
@@ -234,12 +248,20 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    readonly_fields = ('is_paid', )
-    inlines = (PaymentItemInLine, DeliveryItemInLine, OrderItemInLine)
+    fields = ('buyer', 'comment', 'delivery_category', 'name', 'phone',
+              'email', 'city', 'address', 'is_canceled', 'created', 'updated')
+    readonly_fields = ('buyer', 'created', 'updated')
+    inlines = (PaymentItemInLine, OrderItemInLine)
+
+    @staticmethod
+    def has_delete_permission(*args):
+        return False
+
+    @staticmethod
+    def has_add_permission(*args):
+        return False
 
 
 @admin.register(SmallBanner)
 class SmallBannerAdmin(admin.ModelAdmin):
     pass
-
-

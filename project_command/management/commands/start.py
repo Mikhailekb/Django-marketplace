@@ -8,7 +8,8 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs) -> None:
         management.call_command('migration')
         management.call_command('fixtures')
-        management.call_command('compilemessages', '--locale=ru', '--locale=en')
+        management.call_command(
+            'compilemessages', '--locale=ru', '--locale=en')
         print('Getting the exchange rate...')
         management.call_command('update_rates')
         management.call_command('createsuperuser')

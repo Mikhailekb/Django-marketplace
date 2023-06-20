@@ -1,72 +1,75 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load static djmoney custom_filters %}
 
 
 {% block page_content %}
   <div class="Middle Middle_top">
-  <div class="Section">
-    <div class="wrap">
-      {% if cart|length >= 1 %}
-        <form class="form Cart" action="#" method="post">
-          {% for item in cart %}
-          {% with product=item.product.product %}
-            <div class="Cart-product">
-              <div class="Cart-block Cart-block_row">
-                <div class="Cart-block Cart-block_pict">
-                  <a class="Cart-pict" href="{% url 'product-detail' product.slug %}">
-                    <img class="Cart-img" src="{{ product.main_image.small.url }}" alt="card.jpg"/>
-                  </a>
-                </div>
-                <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{% url 'product-detail' product.slug %}">{{product.name}}</a>
-                  <div class="Cart-desc">
-                    {{product.description_short}}
+    <div class="Section">
+      <div class="wrap">
+        {% if cart|length >= 1 %}
+          <form class="form Cart" action="#" method="post">
+            {% for item in cart %}
+              {% with product=item.product.product %}
+                <div class="Cart-product">
+                  <div class="Cart-block Cart-block_row">
+                    <div class="Cart-block Cart-block_pict">
+                      <a class="Cart-pict" href="{% url 'product-detail' product.slug %}">
+                        <img class="Cart-img" src="{{ product.main_image.small.url }}" alt="card.jpg"/>
+                      </a>
+                    </div>
+                    <div class="Cart-block Cart-block_info">
+                      <a class="Cart-title" href="{% url 'product-detail' product.slug %}">{{ product.name }}</a>
+                      <div class="Cart-desc">
+                        {{ product.description_short }}
+                      </div>
+                    </div>
+                    <div class="Cart-block Cart-block_price">
+                      {% if request.LANGUAGE_CODE == 'ru' %}
+                        <div class="Cart-price">{% money_localize item.price 'RUB' %}</div>
+                      {% else %}
+                        <div class="Cart-price">{{ item.price|dollar_conversion }}</div>
+                      {% endif %}
+                    </div>
                   </div>
-                </div>
-                <div class="Cart-block Cart-block_price">
-                  <div class="Cart-price">{{ item.price }} ₽
-                  </div>
-                </div>
-              </div>
-              <div class="Cart-block Cart-block_row">
-                <div class="Cart-block Cart-block_seller">
-                  <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-    
-                </div>
-                <div class="Cart-block Cart-block_amount">
-                  <div class="Cart-amount">
-                    <div class="Amount">
-                      <a class="Amount-remove" href="{% url 'cart_change' item.product.id 'minus' %}"></a>
-                      <input class="Amount-input form-input" name="amount" type="text" value="{{ item.quantity }}" readonly/>
-                      <a class="Amount-add" href="{% url 'cart_change' item.product.id 'plus' %}">
+                  <div class="Cart-block Cart-block_row">
+                    <div class="Cart-block Cart-block_seller"></div>
+                    <div class="Cart-block Cart-block_amount">
+                      <div class="Cart-amount">
+                        <div class="Amount">
+                          <a class="Amount-remove" href="{% url 'cart_change' item.product.id 'minus' %}"></a>
+                          <input class="Amount-input form-input" name="amount" type="text" value="{{ item.quantity }}"
+                                 readonly/>
+                          <a class="Amount-add" href="{% url 'cart_change' item.product.id 'plus' %}">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="Cart-block Cart-block_delete">
+                      <a class="Cart-delete" href="{% url 'cart_remove' item.product.id %}">
+                        <img src="{% static 'img/icons/card/delete.svg' %}" alt="delete.svg"/>
                       </a>
                     </div>
                   </div>
                 </div>
-                <div class="Cart-block Cart-block_delete">
-                  <a class="Cart-delete" href="{% url 'cart_remove' item.product.id %}">
-                    <img src="{% static 'img/icons/card/delete.svg' %}" alt="delete.svg"/>
-                  </a>
-                </div>
-              </div>
-            </div>
-          {% endwith %}
-          {% endfor %}
-        </form>
+              {% endwith %}
+            {% endfor %}
+          </form>
 
-        <div class="Cart-total">
-          <div class="Cart-block Cart-block_total">
-            <strong class="Cart-title">Итого:
-            </strong><span class="Cart-price">{{ cart.get_total_price }}₽</span>
+          <div class="Cart-total">
+            <div class="Cart-block Cart-block_total">
+              <strong class="Cart-title">Итого:</strong>
+              <span class="Cart-price">{{ cart.get_total_price }}</span>
+            </div>
+            <div class="Cart-block">
+              <a class="btn btn_success btn_lg" href="{% url 'order' %}">Оформить заказ</a>
+            </div>
           </div>
-          <div class="Cart-block"><a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
+        {% else %}
+          <div class="cart-empty">
+            <h2>Товаров нет</h2>
           </div>
-        </div>
-      {% else %}
-        <div class="cart-empty">
-          <h2>Товаров нет</h2>
-        </div>
-      {% endif %}
+        {% endif %}
+      </div>
     </div>
-  </div>
   </div>
 {% endblock %}

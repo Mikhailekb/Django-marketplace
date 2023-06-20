@@ -1,4 +1,4 @@
-Django==3.2.18
+Django==3.2.19
 django_debug_toolbar==4.1.0
 python-decouple==3.8
 Jinja2==3.1.2

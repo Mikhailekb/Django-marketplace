@@ -32,16 +32,18 @@ class Shop(models.Model):
     main_image = models.OneToOneField('ShopImage', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='main_for_shop')
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
         verbose_name_plural = _('shops')
         verbose_name = _('shop')
 
-    def __str__(self) -> str:
-        return self.name
-
 
 class ProductShopManager(models.Manager):
-
+    """
+    Менеджер для ProductShop, добавляющий метод вычисления цены со скидкой
+    """
     def with_discount_price(self):
         min_cost_expression = Case(
             When(discount__is_active=False,
@@ -104,9 +106,9 @@ class ShopImage(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
 
+    def __str__(self) -> str:
+        return f'Image of shop: {self.shop.name}'
+
     class Meta:
         verbose_name_plural = _('shop images')
         verbose_name = _('shop image')
-
-    def __str__(self) -> str:
-        return f'Image of shop: {self.shop.name}'
