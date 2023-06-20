@@ -168,6 +168,9 @@
                   {{ form.comment }}
                 </p>
               </div>
+              {% for message in form.errors.not_enough_goods %}
+                <div>{{ message }}</div>
+              {% endfor %}
               <div class="Cart Cart_order">
                 {% for item in cart %}
                   <div class="Cart-product">
