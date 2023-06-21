@@ -248,9 +248,9 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    fields = ('buyer', 'comment', 'delivery_category', 'name', 'phone',
+    fields = ('buyer', 'comment', 'delivery_category', 'is_free_delivery', 'name', 'phone',
               'email', 'city', 'address', 'is_canceled', 'created', 'updated')
-    readonly_fields = ('buyer', 'created', 'updated')
+    readonly_fields = ('buyer', 'created', 'updated', 'is_free_delivery')
     inlines = (PaymentItemInLine, OrderItemInLine)
 
     @staticmethod

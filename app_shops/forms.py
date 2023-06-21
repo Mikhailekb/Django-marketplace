@@ -40,6 +40,7 @@ class OrderForm(forms.Form):
     payment_category = forms.ModelChoiceField(queryset=payment_qs,
                                               widget=forms.RadioSelect,
                                               initial=initial_payment)
+    is_free_delivery = forms.BooleanField(required=False)
 
 
 class ReviewForm(forms.Form):

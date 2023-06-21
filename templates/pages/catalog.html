@@ -49,7 +49,7 @@
 
                 <div class="form-group">
                   <label class="toggle">
-                    {{ form.free_shipping }}
+                    {{ form.free_delivery }}
                     <span class="toggle-box"></span>
                     <span class="toggle-text">{% trans 'With free shipping' %}</span>
                   </label>
@@ -107,7 +107,6 @@
                       {% else %}
                         <span class="Card-price">{{ item.avg_price|dollar_conversion }}</span>
                       {% endif %}
-
                     </div>
                     <div class="Card-category">{{ item.category.name }}</div>
                     <div class="Card-hover">

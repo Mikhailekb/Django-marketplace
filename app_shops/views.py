@@ -1,5 +1,5 @@
-from decimal import Decimal
 from collections import defaultdict
+from decimal import Decimal
 from random import sample
 from typing import Any, Sequence
 
@@ -9,7 +9,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import HttpRequest, HttpResponse, Http404, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -22,7 +22,7 @@ from djmoney.money import Money
 
 from app_cart.cart import Cart
 from app_cart.forms import CartAddProductForm
-from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
+from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME, ORDER_AMOUNT_WHICH_DELIVERY_FREE
 from .filters import ProductFilter
 from .forms import OrderForm, ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
@@ -389,29 +389,48 @@ class OrderView(UserPassesTestMixin, FormView):
         initial['email'] = user.email
         return initial
 
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        cart = Cart(self.request)
+        goods = self._get_goods_in_cart(cart)
+
+        total_price = cart.get_total_price()
+        is_free_delivery = (
+                total_price.amount >= ORDER_AMOUNT_WHICH_DELIVERY_FREE
+                and all(goods[0].shop_id == item.shop_id for item in goods)
+        )
+        context['is_free_delivery'] = is_free_delivery
+        return context
+
+    @staticmethod
+    def _get_goods_in_cart(cart):
+        goods_id = cart.cart.keys()
+        return ProductShop.objects.filter(id__in=goods_id)
+
     def form_valid(self, form):
         comment = form.cleaned_data.get('comment')
-
+        is_free_delivery = form.cleaned_data.get('is_free_delivery', False)
         delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
         name = form.cleaned_data.get('name')
         phone = form.cleaned_data.get('phone')
         email = form.cleaned_data.get('email')
         city = form.cleaned_data.get('city')
         address = form.cleaned_data.get('address')
+        order = Order.objects.create(buyer=self.request.user, delivery_category=delivery_category, name=name,
+                                     phone=phone, email=email, city=city, address=address,
+                                     is_free_delivery=is_free_delivery, comment=comment)
 
         cart = Cart(self.request)
-        order = Order.objects.create(buyer=self.request.user, delivery_category=delivery_category, name=name,
-                                     phone=phone, email=email, city=city, address=address, comment=comment)
+        total_price = cart.get_total_price()
+        if not is_free_delivery:
+            total_price += delivery_category.price
 
         goods, error_messages = self._check_count_left_goods(cart, order)
-
         if error_messages:
             form.errors['not_enough_goods'] = error_messages
             return super().form_invalid(form)
 
         OrderItem.objects.bulk_create(goods)
-
-        total_price = cart.get_total_price()
         payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
         PaymentItem.objects.create(order=order, payment_category=payment_category, total_price=total_price)
 
@@ -441,6 +460,22 @@ class OrderView(UserPassesTestMixin, FormView):
                                      price_on_add_moment=price, quantity=quantity)
                     goods.append(item)
         return goods, error_messages
+
+
+def get_delivery_category_info(request):
+    delivery_category_id = request.GET.get('delivery_category_id')
+
+    delivery_category = DeliveryCategory.objects.filter(id=delivery_category_id).first()
+    price = (
+        str(delivery_category.price)
+        if request.LANGUAGE_CODE == 'ru'
+        else str(convert_money(delivery_category.price, 'USD'))
+    )
+    response_data = {
+        'title': delivery_category.name,
+        'price': price
+    }
+    return JsonResponse(response_data)
 
 
 class PaymentView(UserPassesTestMixin, TemplateView):

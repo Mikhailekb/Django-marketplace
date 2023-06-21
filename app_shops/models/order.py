@@ -19,6 +19,7 @@ class Order(models.Model):
     email = models.EmailField(verbose_name=_('email'))
     city = models.CharField(max_length=100, verbose_name=_('city'))
     address = models.TextField(max_length=256, verbose_name=_('address'))
+    is_free_delivery = models.BooleanField(default=False, verbose_name=_('is free delivery'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
     is_canceled = models.BooleanField(default=False, verbose_name=_('is canceled'))
@@ -93,6 +94,7 @@ class DeliveryCategory(models.Model):
     """
     name = models.CharField(max_length=50, verbose_name=_('name'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
+    price = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB', verbose_name=_('price'))
 
     def __str__(self):
         return self.name

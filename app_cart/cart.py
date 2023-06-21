@@ -81,10 +81,7 @@ class Cart:
         Подсчет стоимости товаров в корзине.
         """
         sum_cart = sum(Money(item['price'], 'RUB').amount * item['quantity'] for item in self.cart.values())
-        if self.request.LANGUAGE_CODE == 'ru':
-            return Money(sum_cart, 'RUB')
-        else:
-            return dollar_conversion(sum_cart)
+        return Money(sum_cart, 'RUB')
 
     def clear(self):
         """Удаление корзины из сессии"""
