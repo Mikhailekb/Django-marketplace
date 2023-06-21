@@ -1,4 +1,5 @@
 from django.urls import path
+
 from .views import HomeView, CatalogView, ClearCache, SaleView, DiscountDetailView, ProductDetailView, \
     OrderView, ComparisonView, PaymentView, ProgressPaymentView, OrderDetailView
 

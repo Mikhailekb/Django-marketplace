@@ -1,6 +1,7 @@
+from decimal import Decimal
 from collections import defaultdict
 from random import sample
-from typing import Iterable, Any
+from typing import Any, Sequence
 
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -8,7 +9,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -26,7 +27,7 @@ from .filters import ProductFilter
 from .forms import OrderForm, ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
-from .models.order import PaymentCategory, DeliveryCategory, Order, DeliveryItem, PaymentItem, OrderItem
+from .models.order import PaymentCategory, DeliveryCategory, Order, PaymentItem, OrderItem
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
 from .models.shop import ProductShop
 
@@ -41,7 +42,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         goods = Product.objects.select_related('category', 'main_image') \
             .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')))
-        top_products = goods.order_by('-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
+        top_products = goods.order_by(
+            '-in_shops__count_sold')[:8].annotate(avg_price=Avg('in_shops__price'))
 
         banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
 
@@ -90,26 +92,17 @@ class CatalogView(FilterView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
-        min_price = aggregate.get('min')
-        max_price = aggregate.get('max')
 
-        self.ordering = self.filterset.data.get('order_by') or 'count_sold'
+        self.ordering = self.filterset.data.get('order_by', 'count_sold')
+        category = self.request.GET.get('category', default='')
+        tags = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
 
-        price = self.filterset.data.get('price')
-        if price and len(price.split(';')) == 3 and all(item.isdigit() for item in price.split(';')[:2]):
-            price_from, price_to, language_code = price.split(';')
-        elif self.request.LANGUAGE_CODE == 'ru':
-            price_from, price_to = min_price, max_price
-        else:
-            price_from = convert_money(Money(min_price, 'RUB'), 'USD').amount
-            price_to = convert_money(Money(max_price, 'RUB'), 'USD').amount
-        category = self.request.GET.get('category')
+        min_price, max_price, price_from, price_to = self._get_price_range()
 
         context['sort'] = SortProduct
-        context['tags'] = cache.get_or_set('tags', TagProduct.objects.all(), timeout=TAGS_CACHE_LIFETIME)
+        context['tags'] = tags
         context['order_by'] = self.ordering
-        context['category'] = category or ''
+        context['category'] = category
         context['price_from'] = price_from
         context['price_to'] = price_to
         context['min_price'] = min_price
@@ -117,6 +110,21 @@ class CatalogView(FilterView):
         context['form'] = self.filterset.form
 
         return context
+
+    def _get_price_range(self) -> tuple[Decimal, Decimal, str, str]:
+        price = self.filterset.data.get('price')
+        aggregate: dict = self.queryset.aggregate(min=Min('min_price'), max=Max('max_price'))
+        min_price = aggregate.get('min')
+        max_price = aggregate.get('max')
+
+        if price and len(price.split(';')) == 3 and all(item.isdigit() for item in price.split(';')[:2]):
+            price_from, price_to, language_code = price.split(';')
+        elif self.request.LANGUAGE_CODE == 'ru':
+            price_from, price_to = min_price, max_price
+        else:
+            price_from = convert_money(Money(min_price, 'RUB'), 'USD').amount
+            price_to = convert_money(Money(max_price, 'RUB'), 'USD').amount
+        return min_price, max_price, price_from, price_to
 
 
 class SaleView(ListView):
@@ -127,10 +135,9 @@ class SaleView(ListView):
     context_object_name = 'sales'
 
     def get_queryset(self):
-        self.queryset = cache.get_or_set('sales', Discount.objects.filter(is_active=True,
-                                                                          date_start__lte=timezone.now())
-                                         .select_related('main_image'),
-                                         timeout=SALES_CACHE_LIFETIME)
+        self.queryset = cache.get_or_set('sales', Discount.objects
+                                         .filter(is_active=True, date_start__lte=timezone.now())
+                                         .select_related('main_image'), timeout=SALES_CACHE_LIFETIME)
         return self.queryset
 
     def get_paginate_by(self, queryset):
@@ -251,10 +258,10 @@ class ProductDetailView(DetailView):
     @staticmethod
     def get_prices(discounts_query):
         shop_prices = {product_shop: {'price_old': product_shop.price.amount}
-                       if not product_shop.discount_price
-                       else {'price_old': product_shop.price.amount, 'price_new': product_shop.discount_price}
+        if not product_shop.discount_price
+        else {'price_old': product_shop.price.amount, 'price_new': product_shop.discount_price}
                        for product_shop in discounts_query}
-        price_list = [price.get('price_new') if price.get('price_new') else price.get('price_old')
+        price_list = [price.get('price_new') or price.get('price_old')
                       for price in shop_prices.values()]
 
         price = float(sum([float(price) if not isinstance(price, Money) else float(price.amount)
@@ -269,14 +276,16 @@ class ComparisonView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        comparison_products = self.request.session.get('comparison_products', default=[])[:3]
+        comparison_products = self.request.session.get(
+            'comparison_products', default=[])[:3]
         if comparison_products and isinstance(comparison_products, list) and len(comparison_products) <= self.MAX_VALUE:
             goods: QuerySet[Product] = Product.objects.filter(id__in=comparison_products) \
                 .annotate(avg_price=Avg('in_shops__price')) \
                 .select_related('category', 'main_image')
 
             if len({item.category_id for item in goods}) == 1:
-                allowable_feature_names = self._get_allowable_feature_names(context, comparison_products)
+                allowable_feature_names = self._get_allowable_feature_names(
+                    context, comparison_products)
 
                 comparison_list: QuerySet[Product] = goods.prefetch_related(
                     Prefetch('features', queryset=FeatureToProduct.objects.order_by('feature_name')
@@ -290,12 +299,12 @@ class ComparisonView(TemplateView):
                 context['comparison_list'] = goods
         return context
 
-    def _get_allowable_feature_names(self, context: dict[str, Any], goods: list) -> Iterable:
+    def _get_allowable_feature_names(self, context: dict[str, Any], goods: Sequence) -> Sequence:
         """
         Метод, в котором происходит получение допустимых характеристик.
         Допустимыми являются те, которые встречаются у всех товаров из QuerySet.
         Также если is_difference = True, то исключается такое название характеристики,
-        у которой идентичные значения у всех товаров из QuerySet.
+        у которого идентичные значения у всех товаров из QuerySet.
         """
         is_difference = self.request.GET.get('is_difference')
         if is_difference == 'True':
@@ -382,7 +391,6 @@ class OrderView(UserPassesTestMixin, FormView):
 
     def form_valid(self, form):
         comment = form.cleaned_data.get('comment')
-        order = Order.objects.create(buyer=self.request.user, comment=comment)
 
         delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
         name = form.cleaned_data.get('name')
@@ -391,22 +399,20 @@ class OrderView(UserPassesTestMixin, FormView):
         city = form.cleaned_data.get('city')
         address = form.cleaned_data.get('address')
 
-        DeliveryItem.objects.create(order=order, delivery_category=delivery_category, name=name, phone=phone,
-                                    email=email, city=city, address=address)
-
-        payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
-
-        goods = []
         cart = Cart(self.request)
-        for product_id, values in cart.cart.items():
-            price = values.get('price')
-            quantity = values.get('quantity')
+        order = Order.objects.create(buyer=self.request.user, delivery_category=delivery_category, name=name,
+                                     phone=phone, email=email, city=city, address=address, comment=comment)
 
-            item = OrderItem(order=order, product_id=product_id, price_on_add_moment=price, quantity=quantity)
-            goods.append(item)
+        goods, error_messages = self._check_count_left_goods(cart, order)
+
+        if error_messages:
+            form.errors['not_enough_goods'] = error_messages
+            return super().form_invalid(form)
+
         OrderItem.objects.bulk_create(goods)
 
         total_price = cart.get_total_price()
+        payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
         PaymentItem.objects.create(order=order, payment_category=payment_category, total_price=total_price)
 
         self.request.session['order'] = order.id
@@ -416,6 +422,25 @@ class OrderView(UserPassesTestMixin, FormView):
         elif payment_category.codename == 'some-other-way':
             self.success_url = reverse_lazy('home')
         return super().form_valid(form)
+
+    @staticmethod
+    def _check_count_left_goods(cart, order):
+        goods = []
+        error_messages = []
+        for product_shop_id, values in cart.cart.items():
+            if product_shop := ProductShop.objects.filter(id=product_shop_id, is_active=True).get():
+                price = values.get('price')
+                quantity = values.get('quantity')
+                if product_shop.count_left - quantity < 0:
+                    not_valid = True
+                    name = product_shop.product.name
+                    message = _(f"{name}: in stock - {product_shop.count_left}, in cart - {quantity}")
+                    error_messages.append(message)
+                else:
+                    item = OrderItem(order=order, product_shop_id=product_shop_id,
+                                     price_on_add_moment=price, quantity=quantity)
+                    goods.append(item)
+        return goods, error_messages
 
 
 class PaymentView(UserPassesTestMixin, TemplateView):
@@ -446,14 +471,25 @@ class PaymentView(UserPassesTestMixin, TemplateView):
         order_id = self.request.session.get('order', None)
         payment = PaymentItem.objects.get(order_id=order_id)
         payment.from_account = account
-        order = Order.objects.get(id=order_id)
+        order: Order = Order.objects.get(id=order_id)
 
         if last_sym.isdigit() and int(last_sym) % 2 == 0:
             payment.is_passed = True
             order.is_paid = True
+
+            products_to_update = []
+            for order_item in order.items.all():
+                quantity = order_item.quantity
+                product_shop = order_item.product_shop
+
+                product_shop.count_left -= quantity
+                product_shop.count_sold += quantity
+
+                products_to_update.append(product_shop)
+            ProductShop.objects.bulk_update(products_to_update, ['count_left', 'count_sold'])
+
         payment.save()
         order.save()
-
         return redirect(reverse('payment_progress'))
 
 
@@ -477,41 +513,40 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
     model = Order
     context_object_name = 'order'
 
-    def __init__(self):
-        super().__init__()
-        self.payment_item = None
-
     def test_func(self) -> bool:
         user = self.request.user
-        order = self.get_object()
-        buyer_id = order.buyer_id
-        self.payment_item = order.payment_item
+        self.object = self.get_object()
+        buyer_id = self.object.buyer_id
 
-        return (buyer_id == user.id and self.payment_item.from_account) or user.is_superuser
+        return (buyer_id == user.id and self.object.payment_item.from_account) or user.is_staff
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        queryset = Order.objects.filter(pk=pk).select_related('delivery_category', 'payment_item').prefetch_related(
+            Prefetch('items', queryset=OrderItem.objects.select_related(
+                'product_shop', 'product_shop__product', 'product_shop__product__main_image')))
+
+        try:
+            self.object = queryset.get()
+        except queryset.model.DoesNotExist as e:
+            raise Http404(
+                _("No %(verbose_name)s found matching the query")
+                % {'verbose_name': queryset.model._meta.verbose_name}
+            ) from e
+
+        return self.object
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        order: Order = kwargs.get('object')
-        delivery = DeliveryItem.objects.get(order_id=order.id)
-        values = {
-            'name': delivery.name,
-            'phone': delivery.phone,
-            'email': delivery.email,
-            'city': delivery.city,
-            'address': delivery.address,
-            'comment': order.comment,
-        }
+        context['form'] = OrderForm
+        context['order'] = self.object
 
-        form = OrderForm(values)
-        goods = order.items.all()
-
-        context['form'] = form
-        context['goods'] = goods
-        context['delivery_category'] = delivery.delivery_category.name
-        context['payment'] = self.payment_item
-
-        if self.payment_item.is_passed:
+        if self.object.payment_item.is_passed:
             self.request.session.pop('order', None)
         else:
-            self.request.session['order'] = order.id
+            self.request.session['order'] = self.object.id
         return context

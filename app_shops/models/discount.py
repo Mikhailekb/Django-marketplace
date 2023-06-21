@@ -37,6 +37,9 @@ class Discount(models.Model):
     main_image = models.OneToOneField('DiscountImage', related_name='main_for_discount', on_delete=models.SET_NULL,
                                       null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f'{self.name}'
+
     class Meta:
         verbose_name_plural = _('discounts')
         verbose_name = _('discount')
@@ -57,9 +60,6 @@ class Discount(models.Model):
 
         if self.date_end and self.date_end < self.date_start:
             raise ValidationError({'date_end': _('Date end cannot be before date start')})
-
-    def __str__(self) -> str:
-        return f'{self.name}'
 
     def get_absolute_url(self) -> str:
         return reverse('discount', kwargs={'promo_slug': self.slug})
@@ -89,12 +89,13 @@ class DiscountImage(models.Model):
     small = ImageSpecField(source='image', id='app_shops:thumbnail_200x200')
     middle = ImageSpecField(source='image', id='app_shops:thumbnail_500x500')
     large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800')
-    discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name='images', verbose_name=_('discount'))
+    discount = models.ForeignKey(
+        Discount, on_delete=models.CASCADE, related_name='images', verbose_name=_('discount'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
+
+    def __str__(self) -> str:
+        return f'Image of discount: {self.discount.name}'
 
     class Meta:
         verbose_name_plural = _('discount images')
         verbose_name = _('discount image')
-
-    def __str__(self) -> str:
-        return f'Image of discount: {self.discount.name}'

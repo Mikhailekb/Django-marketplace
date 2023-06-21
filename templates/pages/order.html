@@ -168,6 +168,9 @@
                   {{ form.comment }}
                 </p>
               </div>
+              {% for message in form.errors.not_enough_goods %}
+                <div>{{ message }}</div>
+              {% endfor %}
               <div class="Cart Cart_order">
                 {% for item in cart %}
                   <div class="Cart-product">
@@ -199,11 +202,7 @@
                 <div class="Cart-total">
                   <div class="Cart-block Cart-block_total">
                     <strong class="Cart-title">{% trans 'Total' %}:</strong>
-                    {% if request.LANGUAGE_CODE == 'ru' %}
-                      <span class="Cart-price">{% money_localize cart.get_total_price 'RUB' %}</span>
-                    {% else %}
-                      <span class="Cart-price">{{ cart.get_total_price|dollar_conversion }}</span>
-                    {% endif %}
+                    <span class="Cart-price">{{ cart.get_total_price }}</span>
                   </div>
                   <div class="Cart-block">
                     <button class="btn btn_primary btn_lg" type="submit">{% trans 'Pay' %}</button>

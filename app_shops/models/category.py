@@ -19,13 +19,13 @@ class Category(models.Model):
     recommended_features = models.ManyToManyField('FeatureName', related_name='categories',
                                                   blank=True, verbose_name=_('recommended features'))
 
+    def __str__(self) -> str:
+        return f'{self.name} ({self.parent})' if self.parent else self.name
+
     class Meta:
         verbose_name_plural = _('categories')
         verbose_name = _('category')
         ordering = ['name']
-
-    def __str__(self) -> str:
-        return f'{self.name} ({self.parent})' if self.parent else self.name
 
     def get_absolute_url(self) -> str:
         catalog_url = reverse('catalog')

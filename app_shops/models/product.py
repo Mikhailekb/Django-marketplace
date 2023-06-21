@@ -28,16 +28,18 @@ class TagProduct(models.Model):
     """
     Модель для группировки товаров по тегу
     """
-    codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
+    codename = AutoSlugField(max_length=100, verbose_name=_(
+        'codename'), unique=True, populate_from='name_en')
     name = models.CharField(max_length=100, verbose_name=_('name'))
-    goods = models.ManyToManyField('Product', related_name='tags', verbose_name=_('goods'), blank=True)
+    goods = models.ManyToManyField(
+        'Product', related_name='tags', verbose_name=_('goods'), blank=True)
+
+    def __str__(self) -> str:
+        return self.name
 
     class Meta:
         verbose_name_plural = _('tags')
         verbose_name = _('tag')
-
-    def __str__(self) -> str:
-        return self.name
 
 
 class FeatureName(models.Model):
@@ -73,7 +75,8 @@ class FeatureToProduct(models.Model):
     """
     Модель связывающая характеристики с товаром
     """
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='features', verbose_name=_('product'))
+    product = models.ForeignKey(
+        'Product', on_delete=models.CASCADE, related_name='features', verbose_name=_('product'))
     feature_name = models.ForeignKey('FeatureName', on_delete=models.CASCADE, related_name='to_shops',
                                      verbose_name=_('feature name'))
     values = ChainedManyToManyField(FeatureValue,
@@ -104,18 +107,18 @@ class Product(models.Model):
     main_image = models.OneToOneField('ProductImage', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='main_for_product')
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
         verbose_name_plural = _('products')
         verbose_name = _('product')
 
-    def __str__(self) -> str:
-        return self.name
-
     def get_absolute_url(self) -> str:
         return reverse('product-detail', kwargs={'product_slug': self.slug})
-    
+
     def get_random_related_id(self) -> int:
-         return sample(list(self.in_shops.filter(is_active=True)), 1)[0].id
+        return sample(list(self.in_shops.filter(is_active=True)), 1)[0].id
 
 
 class ProductImage(models.Model):
@@ -129,12 +132,12 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
 
+    def __str__(self) -> str:
+        return f'Image of product: {self.product.name}'
+
     class Meta:
         verbose_name_plural = _('product images')
         verbose_name = _('product image')
-
-    def __str__(self) -> str:
-        return f'Image of product: {self.product.name}'
 
 
 class Review(models.Model):
@@ -147,10 +150,10 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     is_active = models.BooleanField(default=True, verbose_name=_('is active'))
 
-    def short_text(self):
-        return self.text[:30]
-
     def __str__(self):
         return f'{self.profile} - {self.product}: {self.short_text()}'
+
+    def short_text(self):
+        return self.text[:30]
 
     short_text.short_description = 'text_short'

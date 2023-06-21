@@ -13,17 +13,17 @@ class CategoryTranslationOptions(TranslationOptions):
 
 
 @register(Product)
-class CategoryTranslationOptions(TranslationOptions):
+class ProductTranslationOptions(TranslationOptions):
     fields = ('name', 'description_short', 'description_long')
 
 
 @register(Shop)
-class CategoryTranslationOptions(TranslationOptions):
+class ShopTranslationOptions(TranslationOptions):
     fields = ('name', 'description', 'address')
 
 
 @register(TagProduct)
-class CategoryTranslationOptions(TranslationOptions):
+class TagProductTranslationOptions(TranslationOptions):
     fields = ('name',)
 
 
