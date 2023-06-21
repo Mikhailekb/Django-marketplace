@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
 from django.http import HttpRequest, HttpResponse, Http404, JsonResponse
@@ -464,8 +465,11 @@ class OrderView(UserPassesTestMixin, FormView):
 
 def get_delivery_category_info(request):
     delivery_category_id = request.GET.get('delivery_category_id')
+    try:
+        delivery_category = DeliveryCategory.objects.get(id=delivery_category_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({"error": "Delivery category does not exist"})
 
-    delivery_category = DeliveryCategory.objects.filter(id=delivery_category_id).first()
     price = (
         str(delivery_category.price)
         if request.LANGUAGE_CODE == 'ru'
