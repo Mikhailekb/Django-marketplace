@@ -8,7 +8,8 @@
       "name_en": "Regular delivery",
       "is_active": true,
       "price_currency": "RUB",
-      "price": "200.00"
+      "price": "200.00",
+      "codename": "regular-delivery"
     }
   },
   {
@@ -20,7 +21,8 @@
       "name_en": "Express delivery",
       "is_active": true,
       "price_currency": "RUB",
-      "price": "500.00"
+      "price": "500.00",
+      "codename": "express-delivery"
     }
   }
 ]

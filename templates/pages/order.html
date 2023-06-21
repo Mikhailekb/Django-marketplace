@@ -200,8 +200,7 @@
                   </div>
                 {% endfor %}
 
-                {% if not is_free_delivery %}
-                  <div class="Cart-product">
+                  <div class="Cart-product Cart-delivery">
                     <div class="Cart-block Cart-block_row">
                       <div class="Cart-block Cart-block_pict">
                         <div class="Cart-pict">
@@ -220,7 +219,6 @@
                       <div class="Cart-block Cart-block_amount">1 {% trans 'pcs.' %}</div>
                     </div>
                   </div>
-                {% endif %}
                 <input type="hidden" name="is_free_delivery" value="{{ is_free_delivery }}">
                 <div class="Cart-total">
                   <div class="Cart-block Cart-block_total">

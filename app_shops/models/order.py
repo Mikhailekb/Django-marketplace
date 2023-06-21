@@ -95,6 +95,7 @@ class DeliveryCategory(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('name'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     price = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB', verbose_name=_('price'))
+    codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
 
     def __str__(self):
         return self.name

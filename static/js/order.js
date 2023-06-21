@@ -58,6 +58,7 @@ function extractNumberFromString(str) {
 
 const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
 const IS_FREE_DELIVERY = JSON.parse(document.getElementById('is_free_delivery').textContent);
+const totalPriceStr = document.getElementById('total-price').textContent;
 
 function additionValute(str1, str2) {
   const regex = /[^\d.,-]/g;
@@ -77,12 +78,15 @@ function updateDeliveryInfo(deliveryCategory) {
   xhr.onreadystatechange = function () {
     if (this.readyState === 4 && this.status === 200) {
       let data = JSON.parse(this.responseText);
-      let totalPriceStr = document.getElementById('total-price').textContent;
-      if (!IS_FREE_DELIVERY) {
+
+      if (!IS_FREE_DELIVERY || data.codename !== 'regular-delivery') {
+        document.querySelector('.Cart-delivery').style.display = ''
         document.querySelector('.Delivery-title').textContent = data.title;
         let DeliveryPriceStr = document.querySelector('.Delivery-price').textContent = data.price;
-
         document.getElementById('total-price').textContent = additionValute(DeliveryPriceStr, totalPriceStr)
+      } else {
+        document.querySelector('.Cart-delivery').style.display = 'none';
+        document.getElementById('total-price').textContent = totalPriceStr;
       }
     }
   };

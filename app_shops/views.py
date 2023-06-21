@@ -417,20 +417,22 @@ class OrderView(UserPassesTestMixin, FormView):
         email = form.cleaned_data.get('email')
         city = form.cleaned_data.get('city')
         address = form.cleaned_data.get('address')
-        order = Order.objects.create(buyer=self.request.user, delivery_category=delivery_category, name=name,
-                                     phone=phone, email=email, city=city, address=address,
-                                     is_free_delivery=is_free_delivery, comment=comment)
+        order = Order(buyer=self.request.user, delivery_category=delivery_category, name=name,
+                      phone=phone, email=email, city=city, address=address, comment=comment)
 
         cart = Cart(self.request)
         total_price = cart.get_total_price()
-        if not is_free_delivery:
+        if not is_free_delivery or delivery_category.codename != 'regular-delivery':
             total_price += delivery_category.price
+            is_free_delivery = False
 
         goods, error_messages = self._check_count_left_goods(cart, order)
         if error_messages:
             form.errors['not_enough_goods'] = error_messages
             return super().form_invalid(form)
 
+        order.is_free_delivery = is_free_delivery
+        order.save()
         OrderItem.objects.bulk_create(goods)
         payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
         PaymentItem.objects.create(order=order, payment_category=payment_category, total_price=total_price)
@@ -477,7 +479,8 @@ def get_delivery_category_info(request):
     )
     response_data = {
         'title': delivery_category.name,
-        'price': price
+        'price': price,
+        'codename': delivery_category.codename
     }
     return JsonResponse(response_data)
 
