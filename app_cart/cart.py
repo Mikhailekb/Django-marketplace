@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-from _decimal import InvalidOperation
 from django.conf import settings
 from djmoney.money import Money
 
