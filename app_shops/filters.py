@@ -21,8 +21,6 @@ class ProductFilter(filters.FilterSet):
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
         if data:
             data = data.dict()
-            if not data.get('order_by'):
-                data['order_by'] = 'count_sold'
             if price := data.get('price'):
                 data['price'] = f'{price};{request.LANGUAGE_CODE}'
         super().__init__(data, queryset, request=request, prefix=prefix)

@@ -88,7 +88,7 @@ class CatalogView(FilterView):
                       min_price=Min('in_shops__price'),
                       max_price=Max('in_shops__price'),
                       count_sold=Sum('in_shops__count_sold'),
-                      feedback=Count('reviews'))
+                      feedback=Count('reviews')).order_by('count_sold')
         return self.queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
