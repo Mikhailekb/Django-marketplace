@@ -112,7 +112,7 @@ class OrderView(UserPassesTestMixin, FormView):
         return goods, error_messages
 
 
-def get_delivery_category_info(request):
+def get_delivery_category_info(request: HttpRequest) -> JsonResponse:
     delivery_category_id = request.GET.get('delivery_category_id')
     try:
         delivery_category = DeliveryCategory.objects.get(id=delivery_category_id)
