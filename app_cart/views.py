@@ -7,7 +7,7 @@ from .cart import Cart
 
 def cart_add(request, product_id):
     cart = Cart(request)
-    product = get_object_or_404(ProductShop, id=product_id)
+    product = get_object_or_404(ProductShop.objects.with_discount_price(), id=product_id)
     cart.add(product=product)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

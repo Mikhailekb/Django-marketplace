@@ -1,9 +1,10 @@
 from decimal import Decimal
+
+from _decimal import InvalidOperation
 from django.conf import settings
 from djmoney.money import Money
 
 from app_shops.models.shop import ProductShop
-from app_shops.templatetags.custom_filters import dollar_conversion
 
 
 class Cart:
@@ -23,7 +24,11 @@ class Cart:
         """
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(product.price.amount)}
+            if product.discount_price:
+                price = str(round(product.discount_price, 2))
+            else:
+                price = str(product.price.amount)
+            self.cart[product_id] = {'quantity': 0, 'price': price}
         if update_quantity:
             self.cart[product_id]['quantity'] = quantity
         else:
