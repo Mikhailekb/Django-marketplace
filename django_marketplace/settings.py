@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'app_shops',
     'app_users',
     'app_cart',
+    'app_orders',
     'allauth',
     'allauth.account',
 ]
@@ -158,6 +159,10 @@ MEDIA_ROOT = BASE_DIR / 'uploads'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+]
+
+FIXTURE_DIRS = [
+    BASE_DIR / 'fixtures',
 ]
 
 # Default primary key field type

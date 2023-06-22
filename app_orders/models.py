@@ -5,12 +5,15 @@ from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from app_shops.models.shop import ProductShop
+
 
 class Order(models.Model):
     """
     Модель заказа
     """
-    buyer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='orders', verbose_name=_('buyer'))
+    buyer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='orders',
+                              verbose_name=_('buyer'))
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('comment'))
     delivery_category = models.ForeignKey('DeliveryCategory', on_delete=models.PROTECT, related_name='items',
                                           verbose_name=_('delivery category'))
@@ -38,8 +41,8 @@ class OrderItem(models.Model):
     Объект заказа
     """
     order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='items', verbose_name=_('order'))
-    product_shop = models.ForeignKey('ProductShop', on_delete=models.PROTECT, related_name='in_orders',
-                                verbose_name=_('product'))
+    product_shop = models.ForeignKey(ProductShop, on_delete=models.PROTECT, related_name='in_orders',
+                                     verbose_name=_('product'))
     price_on_add_moment = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB',
                                      verbose_name=_('price on add moment'))
     quantity = models.PositiveIntegerField(default=1, verbose_name=_('quantity'))

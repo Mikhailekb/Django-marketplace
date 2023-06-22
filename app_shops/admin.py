@@ -9,7 +9,6 @@ from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
-from .models.order import PaymentCategory, DeliveryCategory, Order, OrderItem, PaymentItem
 from .models.product import ProductImage, FeatureValue, Product, TagProduct, FeatureName, FeatureToProduct, Review
 from .models.shop import ShopImage, ProductShop, Shop
 
@@ -91,40 +90,6 @@ class FeatureToProductInLine(admin.StackedInline):
 class ReviewInLine(admin.StackedInline):
     model = Review
     extra = 1
-
-
-class OrderItemInLine(TabularInlinePaginated):
-    model = OrderItem
-    extra = 0
-    ordering = ('id',)
-    readonly_fields = ('product_shop', 'price_on_add_moment', 'quantity')
-
-    def get_queryset(self, request):
-        try:
-            order_id = request.path.split('/')[4]
-            return OrderItem.objects.filter(order_id=order_id).select_related('product_shop', 'product_shop__product') \
-                .only('order_id', 'product_shop__product__name_ru', 'product_shop__product__name_en',
-                      'price_on_add_moment', 'price_on_add_moment_currency', 'quantity')
-        except KeyError:
-            return super().get_queryset(request)
-
-    @staticmethod
-    def has_add_permission(*args):
-        return False
-
-    @staticmethod
-    def has_delete_permission(*args):
-        return False
-
-
-class PaymentItemInLine(admin.StackedInline):
-    model = PaymentItem
-    readonly_fields = ('is_passed', 'payment_category',
-                       'total_price', 'from_account')
-
-    @staticmethod
-    def has_delete_permission(*args):
-        return False
 
 
 @admin.register(Category)
@@ -251,32 +216,6 @@ class SpecialOfferAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         kwargs['queryset'] = ProductShop.objects.filter(is_active=True, discount__isnull=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-@admin.register(PaymentCategory)
-class PaymentCategoryAdmin(TranslationAdmin):
-    pass
-
-
-@admin.register(DeliveryCategory)
-class DeliveryCategoryAdmin(TranslationAdmin):
-    pass
-
-
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    fields = ('buyer', 'comment', 'delivery_category', 'is_free_delivery', 'name', 'phone',
-              'email', 'city', 'address', 'is_canceled', 'created', 'updated')
-    readonly_fields = ('buyer', 'created', 'updated', 'is_free_delivery')
-    inlines = (PaymentItemInLine, OrderItemInLine)
-
-    @staticmethod
-    def has_delete_permission(*args):
-        return False
-
-    @staticmethod
-    def has_add_permission(*args):
-        return False
 
 
 @admin.register(SmallBanner)

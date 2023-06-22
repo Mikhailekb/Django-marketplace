@@ -1,6 +1,6 @@
 [
   {
-    "model": "app_shops.deliverycategory",
+    "model": "app_orders.deliverycategory",
     "pk": 1,
     "fields": {
       "name": "Обычная доставка",
@@ -13,7 +13,7 @@
     }
   },
   {
-    "model": "app_shops.deliverycategory",
+    "model": "app_orders.deliverycategory",
     "pk": 2,
     "fields": {
       "name": "Экспресс доставка",
