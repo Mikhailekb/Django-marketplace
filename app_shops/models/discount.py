@@ -24,18 +24,19 @@ class Discount(models.Model):
     description_short = models.CharField(max_length=100, verbose_name=_('description short'))
     description_long = models.TextField(verbose_name=_('description long'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
-    shop = models.ForeignKey('Shop', on_delete=models.CASCADE, related_name='discounts')
+    shop = models.ForeignKey('Shop', on_delete=models.CASCADE, related_name='discounts',
+                             verbose_name=_('shop'))
     discount_amount = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True,
                                  default_currency='RUB', verbose_name=_('discount value'))
-    discount_percentage = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name=_('discount percentage'),
-                                                           validators=[MaxValueValidator(99)])
+    discount_percentage = models.PositiveSmallIntegerField(null=True, blank=True,
+        validators=[MaxValueValidator(99)], verbose_name=_('discount percentage'))
     min_cost = MoneyField(max_digits=8, decimal_places=2, null=True, blank=True,
                           default_currency='RUB', verbose_name=_('minimum cost'))
-    date_start = models.DateTimeField(verbose_name=_('date start'), db_index=True)
+    date_start = models.DateTimeField(db_index=True, verbose_name=_('date start'))
     date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
     is_active = models.BooleanField(default=True, verbose_name=_('is active'))
     main_image = models.OneToOneField('DiscountImage', related_name='main_for_discount', on_delete=models.SET_NULL,
-                                      null=True, blank=True)
+                                      null=True, blank=True, verbose_name=_('main image'))
 
     def __str__(self) -> str:
         return f'{self.name}'
@@ -85,7 +86,7 @@ class DiscountImage(models.Model):
     """
     Модель изображения для скидки
     """
-    image = ProcessedImageField(upload_to=get_discount_img_path, options={'quality': 80})
+    image = ProcessedImageField(upload_to=get_discount_img_path, options={'quality': 80}, verbose_name=_('image'))
     small = ImageSpecField(source='image', id='app_shops:thumbnail_200x200')
     middle = ImageSpecField(source='image', id='app_shops:thumbnail_500x500')
     large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800')

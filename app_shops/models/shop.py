@@ -20,7 +20,7 @@ class Shop(models.Model):
     """
     Модель магазина
     """
-    name = models.CharField(max_length=256, verbose_name=_('name'))
+    name = models.CharField(max_length=120, verbose_name=_('name'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
     description = models.TextField(verbose_name=_('description'))
     phone = PhoneNumberField(null=False, blank=False, unique=True, verbose_name=_('phone number'))
@@ -30,7 +30,7 @@ class Shop(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('edited'))
     main_image = models.OneToOneField('ShopImage', on_delete=models.SET_NULL, null=True, blank=True,
-                                      related_name='main_for_shop')
+                                      related_name='main_for_shop', verbose_name=_('main image'))
 
     def __str__(self) -> str:
         return self.name
@@ -72,7 +72,7 @@ class ProductShop(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='with_products')
     count_left = models.IntegerField(default=0, verbose_name=_('left in shop'))
     count_sold = models.IntegerField(default=0, verbose_name=_('sold in shop'))
-    price = MoneyField(max_digits=8, decimal_places=2, verbose_name=_('price'), default_currency='RUB')
+    price = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB', verbose_name=_('price'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     discount = models.ForeignKey(Discount, null=True, blank=True, on_delete=models.SET_NULL,
                                  related_name='product_in_shop')
@@ -99,11 +99,11 @@ class ShopImage(models.Model):
     """
     Модель изображения для магазина
     """
-    image = ProcessedImageField(upload_to=get_shop_img_path, options={'quality': 80})
+    image = ProcessedImageField(upload_to=get_shop_img_path, options={'quality': 80}, verbose_name=_('image'))
     small = ImageSpecField(source='image', id='app_shops:thumbnail_200x200')
     middle = ImageSpecField(source='image', id='app_shops:thumbnail_500x500')
     large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800')
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='images', verbose_name=_('shop'))
     uploaded = models.DateTimeField(auto_now_add=True, verbose_name=_('uploaded'))
 
     def __str__(self) -> str:

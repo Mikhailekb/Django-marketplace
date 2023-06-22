@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'app_orders',
     'allauth',
     'allauth.account',
+    'import_export',
 ]
 
 MIDDLEWARE = [

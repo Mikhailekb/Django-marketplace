@@ -46,7 +46,7 @@ msgstr "Адрес"
 
 #: .\app_orders\forms.py:38
 msgid "Comment"
-msgstr "Комментарий"
+msgstr "Комментарий к заказу"
 
 #: .\app_orders\models.py:16
 msgid "buyer"
@@ -54,7 +54,7 @@ msgstr "покупатель"
 
 #: .\app_orders\models.py:17
 msgid "comment"
-msgstr "комментарий"
+msgstr "Комментарий к заказу"
 
 #: .\app_orders\models.py:19 .\app_orders\models.py:108
 msgid "delivery category"

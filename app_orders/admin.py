@@ -53,8 +53,10 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 class OrderAdmin(admin.ModelAdmin):
     fields = ('buyer', 'comment', 'delivery_category', 'is_free_delivery', 'name', 'phone',
               'email', 'city', 'address', 'is_canceled', 'created', 'updated')
-    readonly_fields = ('buyer', 'created', 'updated', 'is_free_delivery')
+    readonly_fields = ('buyer', 'created', 'updated', 'is_free_delivery', 'delivery_category')
     inlines = (PaymentItemInLine, OrderItemInLine)
+    list_display = ('__str__', 'created')
+    search_fields = ('id', 'phone', 'email', 'address')
 
     @staticmethod
     def has_delete_permission(*args):

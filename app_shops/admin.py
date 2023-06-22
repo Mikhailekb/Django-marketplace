@@ -4,6 +4,7 @@ from django.http import HttpRequest
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_admin_inline_paginator.admin import TabularInlinePaginated
+from import_export.admin import ImportExportMixin
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from .models.banner import Banner, SpecialOffer, SmallBanner
@@ -109,12 +110,12 @@ class CategoryAdmin(TranslationAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(TranslationAdmin):
+class ProductAdmin(ImportExportMixin, TranslationAdmin):
     list_display = ('name', 'category', 'is_active')
     readonly_fields = ('slug',)
     search_fields = ('name', 'description_long')
     inlines = (ProductImageInLine, FeatureToProductInLine, ReviewInLine)
-    change_list_template = 'admin/product_list.html'
+    import_export_change_list_template = 'admin/product_list.html'
     save_on_top = True
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):

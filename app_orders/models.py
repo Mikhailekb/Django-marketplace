@@ -58,7 +58,7 @@ class PaymentCategory(models.Model):
     """
     name = models.CharField(max_length=50, verbose_name=_('name'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
+    codename = AutoSlugField(max_length=100, unique=True, populate_from='name_en', verbose_name=_('codename'))
 
     def __str__(self):
         return self.name
@@ -98,7 +98,7 @@ class DeliveryCategory(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('name'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     price = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB', verbose_name=_('price'))
-    codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
+    codename = AutoSlugField(max_length=100, unique=True, populate_from='name_en', verbose_name=_('codename'))
 
     def __str__(self):
         return self.name
