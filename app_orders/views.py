@@ -111,12 +111,11 @@ class OrderView(UserPassesTestMixin, FormView):
         return goods, error_messages
 
 
-def get_delivery_category_info(request: HttpRequest, delivery_category_id: int) -> JsonResponse:
-    delivery_category = get_object_or_404(DeliveryCategory, id=delivery_category_id)
+def get_delivery_category_info(request: HttpRequest, pk: int) -> JsonResponse:
+    delivery_category = get_object_or_404(DeliveryCategory, pk=pk)
 
     price = (
-        str(delivery_category.price)
-        if request.LANGUAGE_CODE == 'ru'
+        str(delivery_category.price) if request.LANGUAGE_CODE == 'ru'
         else str(convert_money(delivery_category.price, 'USD'))
     )
     response_data = {
