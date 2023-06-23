@@ -18,3 +18,10 @@ class CBRExchangeBackend(BaseExchangeBackend):
             return {'USD': exchange_rate}
         except (requests.exceptions.Timeout, requests.ConnectionError):
             return {'USD': 0.0115}
+
+
+def get_object_or_none(model, *args, **kwargs):
+    try:
+        return model.objects.get(*args, **kwargs)
+    except model.DoesNotExist:
+        return None

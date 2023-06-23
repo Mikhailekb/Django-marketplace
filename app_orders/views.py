@@ -11,6 +11,7 @@ from djmoney.contrib.exchange.models import convert_money
 
 from app_cart.cart import Cart
 from app_shops.models.shop import ProductShop
+from app_shops.services.functions import get_object_or_none
 from django_marketplace.constants import ORDER_AMOUNT_WHICH_DELIVERY_FREE
 from .forms import OrderForm
 from .models import DeliveryCategory, Order, OrderItem, PaymentItem, PaymentCategory
@@ -92,22 +93,28 @@ class OrderView(UserPassesTestMixin, FormView):
         return super().form_valid(form)
 
     @staticmethod
-    def _check_count_left_goods(cart: Cart, order: Order) -> tuple[list, list]:
+    def _check_count_left_goods(cart: Cart, order: Order) -> tuple[list[OrderItem], list]:
         goods = []
         error_messages = []
         for product_shop_id, values in cart.cart.items():
-            if product_shop := ProductShop.objects.filter(id=product_shop_id, is_active=True).get():
-                price = values.get('price')
-                quantity = values.get('quantity')
-                if product_shop.count_left - quantity < 0:
-                    not_valid = True
-                    name = product_shop.product.name
-                    message = _(f"{name}: in stock - {product_shop.count_left}, in cart - {quantity}")
-                    error_messages.append(message)
-                else:
-                    item = OrderItem(order=order, product_shop_id=product_shop_id,
-                                     price_on_add_moment=price, quantity=quantity)
-                    goods.append(item)
+            product_shop = get_object_or_none(ProductShop, id=product_shop_id)
+            if not product_shop:
+                continue
+
+            name = product_shop.product.name
+            if product_shop.is_active is False:
+                message = _(f"{name} is not active product")
+                error_messages.append(message)
+
+            price = values.get('price')
+            quantity = values.get('quantity')
+            if product_shop.count_left - quantity < 0:
+                message = _(f"{name}: in stock - {product_shop.count_left}, in cart - {quantity}")
+                error_messages.append(message)
+            else:
+                item = OrderItem(order=order, product_shop_id=product_shop_id,
+                                 price_on_add_moment=price, quantity=quantity)
+                goods.append(item)
         return goods, error_messages
 
 
