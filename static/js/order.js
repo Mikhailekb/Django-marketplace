@@ -74,7 +74,7 @@ function additionValute(str1, str2) {
 
 function updateDeliveryInfo(deliveryCategory) {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', '/order/delivery_info/?delivery_category_id=' + deliveryCategory, true);
+  xhr.open('GET', '/order/delivery_info/' + deliveryCategory, true);
   xhr.onreadystatechange = function () {
     if (this.readyState === 4 && this.status === 200) {
       let data = JSON.parse(this.responseText);

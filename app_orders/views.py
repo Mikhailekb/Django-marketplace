@@ -1,10 +1,9 @@
 from typing import Any
 
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Prefetch
+from django.db.models import Prefetch, QuerySet
 from django.http import JsonResponse, HttpRequest, HttpResponse, Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView, DetailView
@@ -51,11 +50,11 @@ class OrderView(UserPassesTestMixin, FormView):
         return context
 
     @staticmethod
-    def _get_goods_in_cart(cart):
+    def _get_goods_in_cart(cart: Cart) -> QuerySet[ProductShop]:
         goods_id = cart.cart.keys()
         return ProductShop.objects.filter(id__in=goods_id)
 
-    def form_valid(self, form):
+    def form_valid(self, form: OrderForm):
         comment = form.cleaned_data.get('comment')
         is_free_delivery = form.cleaned_data.get('is_free_delivery', False)
         delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
@@ -93,7 +92,7 @@ class OrderView(UserPassesTestMixin, FormView):
         return super().form_valid(form)
 
     @staticmethod
-    def _check_count_left_goods(cart, order):
+    def _check_count_left_goods(cart: Cart, order: Order) -> tuple[list, list]:
         goods = []
         error_messages = []
         for product_shop_id, values in cart.cart.items():
@@ -112,12 +111,8 @@ class OrderView(UserPassesTestMixin, FormView):
         return goods, error_messages
 
 
-def get_delivery_category_info(request: HttpRequest) -> JsonResponse:
-    delivery_category_id = request.GET.get('delivery_category_id')
-    try:
-        delivery_category = DeliveryCategory.objects.get(id=delivery_category_id)
-    except ObjectDoesNotExist:
-        return JsonResponse({"error": "Delivery category does not exist"})
+def get_delivery_category_info(request: HttpRequest, delivery_category_id: int) -> JsonResponse:
+    delivery_category = get_object_or_404(DeliveryCategory, id=delivery_category_id)
 
     price = (
         str(delivery_category.price)
