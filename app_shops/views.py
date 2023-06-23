@@ -1,33 +1,29 @@
-from decimal import Decimal
 from collections import defaultdict
+from decimal import Decimal
 from random import sample
 from typing import Any, Sequence
 
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, FormView
+from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
 from djmoney.contrib.exchange.models import convert_money
 from djmoney.money import Money
 
-from app_cart.cart import Cart
 from app_cart.forms import CartAddProductForm
 from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
 from .filters import ProductFilter
-from .forms import OrderForm, ReviewForm
+from .forms import ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
-from .models.order import PaymentCategory, DeliveryCategory, Order, PaymentItem, OrderItem
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
 from .models.shop import ProductShop
 
@@ -87,7 +83,7 @@ class CatalogView(FilterView):
                       min_price=Min('in_shops__price'),
                       max_price=Max('in_shops__price'),
                       count_sold=Sum('in_shops__count_sold'),
-                      feedback=Count('reviews'))
+                      feedback=Count('reviews')).order_by('count_sold')
         return self.queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -367,186 +363,3 @@ class ComparisonView(TemplateView):
 
         request.session['comparison_products'] = comparison_products
         return redirect(current_page)
-
-
-class OrderView(UserPassesTestMixin, FormView):
-    """
-    Представление для отображения страницы оформления заказа
-    """
-    form_class = OrderForm
-    template_name = 'pages/order.html'
-
-    def test_func(self) -> bool:
-        user = self.request.user
-        session = self.request.session
-        return user.is_authenticated and session.get('cart')
-
-    def get_initial(self):
-        initial = super().get_initial()
-        user = self.request.user
-        initial['name'] = user.profile.name
-        initial['phone'] = user.profile.phone
-        initial['email'] = user.email
-        return initial
-
-    def form_valid(self, form):
-        comment = form.cleaned_data.get('comment')
-
-        delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
-        name = form.cleaned_data.get('name')
-        phone = form.cleaned_data.get('phone')
-        email = form.cleaned_data.get('email')
-        city = form.cleaned_data.get('city')
-        address = form.cleaned_data.get('address')
-
-        cart = Cart(self.request)
-        order = Order.objects.create(buyer=self.request.user, delivery_category=delivery_category, name=name,
-                                     phone=phone, email=email, city=city, address=address, comment=comment)
-
-        goods, error_messages = self._check_count_left_goods(cart, order)
-
-        if error_messages:
-            form.errors['not_enough_goods'] = error_messages
-            return super().form_invalid(form)
-
-        OrderItem.objects.bulk_create(goods)
-
-        total_price = cart.get_total_price()
-        payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
-        PaymentItem.objects.create(order=order, payment_category=payment_category, total_price=total_price)
-
-        self.request.session['order'] = order.id
-
-        if payment_category.codename == 'bank-card':
-            self.success_url = reverse_lazy('payment')
-        elif payment_category.codename == 'some-other-way':
-            self.success_url = reverse_lazy('home')
-        return super().form_valid(form)
-
-    @staticmethod
-    def _check_count_left_goods(cart, order):
-        goods = []
-        error_messages = []
-        for product_shop_id, values in cart.cart.items():
-            if product_shop := ProductShop.objects.filter(id=product_shop_id, is_active=True).get():
-                price = values.get('price')
-                quantity = values.get('quantity')
-                if product_shop.count_left - quantity < 0:
-                    not_valid = True
-                    name = product_shop.product.name
-                    message = _(f"{name}: in stock - {product_shop.count_left}, in cart - {quantity}")
-                    error_messages.append(message)
-                else:
-                    item = OrderItem(order=order, product_shop_id=product_shop_id,
-                                     price_on_add_moment=price, quantity=quantity)
-                    goods.append(item)
-        return goods, error_messages
-
-
-class PaymentView(UserPassesTestMixin, TemplateView):
-    """
-    Представление страницы оплаты заказа банковской картой
-    """
-    template_name = 'pages/paymentsomeone.html'
-
-    def test_func(self) -> bool:
-        user = self.request.user
-        session = self.request.session
-        return user.is_authenticated and session.get('order')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if order_id := self.request.session.get('order'):
-            context['total_price'] = PaymentItem.objects.get(order_id=order_id).total_price
-        return context
-
-    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        request.session.pop('cart', None)
-
-        account: str = request.POST.get('numero1', None)
-        if len(account) != 9:
-            return redirect(reverse('home'))
-        last_sym = account[-1:]
-
-        order_id = self.request.session.get('order', None)
-        payment = PaymentItem.objects.get(order_id=order_id)
-        payment.from_account = account
-        order: Order = Order.objects.get(id=order_id)
-
-        if last_sym.isdigit() and int(last_sym) % 2 == 0:
-            payment.is_passed = True
-            order.is_paid = True
-
-            products_to_update = []
-            for order_item in order.items.all():
-                quantity = order_item.quantity
-                product_shop = order_item.product_shop
-
-                product_shop.count_left -= quantity
-                product_shop.count_sold += quantity
-
-                products_to_update.append(product_shop)
-            ProductShop.objects.bulk_update(products_to_update, ['count_left', 'count_sold'])
-
-        payment.save()
-        order.save()
-        return redirect(reverse('payment_progress'))
-
-
-class ProgressPaymentView(UserPassesTestMixin, TemplateView):
-    """
-    Представление страницы ожидания ответа от сервиса оплаты
-    """
-    template_name = 'pages/progressPayment.html'
-
-    def test_func(self) -> bool:
-        user = self.request.user
-        session = self.request.session
-        return user.is_authenticated and session.get('order') and session.get('cart') is None
-
-
-class OrderDetailView(UserPassesTestMixin, DetailView):
-    """
-    Представление детальной страницы заказа
-    """
-    template_name = 'pages/oneorder.html'
-    model = Order
-    context_object_name = 'order'
-
-    def test_func(self) -> bool:
-        user = self.request.user
-        self.object = self.get_object()
-        buyer_id = self.object.buyer_id
-
-        return (buyer_id == user.id and self.object.payment_item.from_account) or user.is_staff
-
-    def get_object(self, queryset=None):
-        pk = self.kwargs.get(self.pk_url_kwarg)
-        queryset = Order.objects.filter(pk=pk).select_related('delivery_category', 'payment_item').prefetch_related(
-            Prefetch('items', queryset=OrderItem.objects.select_related(
-                'product_shop', 'product_shop__product', 'product_shop__product__main_image')))
-
-        try:
-            self.object = queryset.get()
-        except queryset.model.DoesNotExist as e:
-            raise Http404(
-                _("No %(verbose_name)s found matching the query")
-                % {'verbose_name': queryset.model._meta.verbose_name}
-            ) from e
-
-        return self.object
-
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = OrderForm
-        context['order'] = self.object
-
-        if self.object.payment_item.is_passed:
-            self.request.session.pop('order', None)
-        else:
-            self.request.session['order'] = self.object.id
-        return context

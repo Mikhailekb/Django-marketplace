@@ -58,7 +58,11 @@
           <div class="Cart-total">
             <div class="Cart-block Cart-block_total">
               <strong class="Cart-title">Итого:</strong>
-              <span class="Cart-price">{{ cart.get_total_price }}</span>
+              {% if request.LANGUAGE_CODE == 'ru' %}
+                <span class="Cart-price">{{ cart.get_total_price }}</span>
+              {% else %}
+                <span class="Cart-price">{{ cart.get_total_price|dollar_conversion }}</span>
+              {% endif %}
             </div>
             <div class="Cart-block">
               <a class="btn btn_success btn_lg" href="{% url 'order' %}">Оформить заказ</a>

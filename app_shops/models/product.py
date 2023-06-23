@@ -28,11 +28,9 @@ class TagProduct(models.Model):
     """
     Модель для группировки товаров по тегу
     """
-    codename = AutoSlugField(max_length=100, verbose_name=_(
-        'codename'), unique=True, populate_from='name_en')
+    codename = AutoSlugField(max_length=100, unique=True, populate_from='name_en', verbose_name=_('codename'))
     name = models.CharField(max_length=100, verbose_name=_('name'))
-    goods = models.ManyToManyField(
-        'Product', related_name='tags', verbose_name=_('goods'), blank=True)
+    goods = models.ManyToManyField('Product', related_name='tags', blank=True, verbose_name=_('goods'))
 
     def __str__(self) -> str:
         return self.name
@@ -60,8 +58,8 @@ class FeatureValue(models.Model):
     """
     Модель значений для имени характеристики
     """
-    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE, verbose_name=_('name'),
-                             related_name='feature_value')
+    name = models.ForeignKey(FeatureName, on_delete=models.CASCADE,
+                             related_name='feature_value', verbose_name=_('name'))
     value = models.CharField(max_length=100, verbose_name=_('value'))
 
     def __str__(self) -> str:
@@ -75,16 +73,16 @@ class FeatureToProduct(models.Model):
     """
     Модель связывающая характеристики с товаром
     """
-    product = models.ForeignKey(
-        'Product', on_delete=models.CASCADE, related_name='features', verbose_name=_('product'))
-    feature_name = models.ForeignKey('FeatureName', on_delete=models.CASCADE, related_name='to_shops',
-                                     verbose_name=_('feature name'))
+    product = models.ForeignKey('Product', on_delete=models.CASCADE,
+                                related_name='features', verbose_name=_('product'))
+    feature_name = models.ForeignKey('FeatureName', on_delete=models.CASCADE,
+                                     related_name='to_shops', verbose_name=_('feature name'))
     values = ChainedManyToManyField(FeatureValue,
-                                    verbose_name=_('values'),
                                     chained_field='feature_name',
                                     chained_model_field='name',
                                     blank=True,
-                                    related_name='to_shops')
+                                    related_name='to_shops',
+                                    verbose_name=_('values'))
 
     class Meta:
         unique_together = ('product', 'feature_name')
@@ -96,16 +94,16 @@ class Product(models.Model):
     """
     name = models.CharField(max_length=120, verbose_name=_('name'))
     slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
-    description_short = models.TextField(verbose_name=_('description short'))
+    description_short = models.TextField(max_length=100, verbose_name=_('description short'))
     description_long = models.TextField(verbose_name=_('description long'))
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products',
-                                 verbose_name=_('products'))
-    sellers = models.ManyToManyField('Shop', through='ProductShop')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE,
+                                 related_name='products', verbose_name=_('products'))
+    sellers = models.ManyToManyField('Shop', through='ProductShop', verbose_name=_('sellers'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
     main_image = models.OneToOneField('ProductImage', on_delete=models.SET_NULL, null=True, blank=True,
-                                      related_name='main_for_product')
+                                      related_name='main_for_product', verbose_name=_('main image'))
 
     def __str__(self) -> str:
         return self.name
@@ -125,7 +123,7 @@ class ProductImage(models.Model):
     """
     Модель изображения для товара
     """
-    image = ProcessedImageField(upload_to=get_good_img_path, options={'quality': 80})
+    image = ProcessedImageField(upload_to=get_good_img_path, options={'quality': 80}, verbose_name=_('image'))
     small = ImageSpecField(source='image', id='app_shops:thumbnail_200x200')
     middle = ImageSpecField(source='image', id='app_shops:thumbnail_500x500')
     large = ImageSpecField(source='image', id='app_shops:thumbnail_800x800')

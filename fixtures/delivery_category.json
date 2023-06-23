@@ -1,0 +1,28 @@
+[
+  {
+    "model": "app_orders.deliverycategory",
+    "pk": 1,
+    "fields": {
+      "name": "Обычная доставка",
+      "name_ru": "Обычная доставка",
+      "name_en": "Regular delivery",
+      "is_active": true,
+      "price_currency": "RUB",
+      "price": "200.00",
+      "codename": "regular-delivery"
+    }
+  },
+  {
+    "model": "app_orders.deliverycategory",
+    "pk": 2,
+    "fields": {
+      "name": "Экспресс доставка",
+      "name_ru": "Экспресс доставка",
+      "name_en": "Express delivery",
+      "is_active": true,
+      "price_currency": "RUB",
+      "price": "500.00",
+      "codename": "express-delivery"
+    }
+  }
+]

@@ -1,6 +1,6 @@
 [
   {
-    "model": "app_shops.paymentcategory",
+    "model": "app_orders.paymentcategory",
     "pk": 1,
     "fields": {
       "name": "Банковская карта",
@@ -11,7 +11,7 @@
     }
   },
   {
-    "model": "app_shops.paymentcategory",
+    "model": "app_orders.paymentcategory",
     "pk": 2,
     "fields": {
       "name": "Какой-то другой способ",
