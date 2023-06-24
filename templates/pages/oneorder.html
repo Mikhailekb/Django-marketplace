@@ -60,7 +60,7 @@
                     </div>
                     <div class="Order-info Order-info_pay">
                       <div class="Order-infoType">{% trans 'Payment' %}:</div>
-                      <div class="Order-infoContent">{{ order.payment_item.payment_category.name }}
+                      <div class="Order-infoContent">{{ order.payment_item.get_payment_category_display }}
                       </div>
                     </div>
                     <div class="Order-info Order-info_status">

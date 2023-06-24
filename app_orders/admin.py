@@ -2,7 +2,7 @@ from django.contrib import admin
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from modeltranslation.admin import TranslationAdmin
 
-from app_orders.models import PaymentItem, OrderItem, PaymentCategory, Order, DeliveryCategory
+from app_orders.models import PaymentItem, OrderItem, Order, DeliveryCategory
 
 
 class OrderItemInLine(TabularInlinePaginated):
@@ -37,11 +37,6 @@ class PaymentItemInLine(admin.StackedInline):
     @staticmethod
     def has_delete_permission(*args):
         return False
-
-
-@admin.register(PaymentCategory)
-class PaymentCategoryAdmin(TranslationAdmin):
-    pass
 
 
 @admin.register(DeliveryCategory)

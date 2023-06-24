@@ -1,13 +1,8 @@
 from modeltranslation.translator import register, TranslationOptions
 
-from .models import DeliveryCategory, PaymentCategory
+from .models import DeliveryCategory
 
 
 @register(DeliveryCategory)
 class DeliveryCategoryTranslationOptions(TranslationOptions):
-    fields = ('name',)
-
-
-@register(PaymentCategory)
-class PaymentCategoryTranslationOptions(TranslationOptions):
     fields = ('name',)
