@@ -6,11 +6,18 @@ const inputs = [
   {inputID: 'address', displayID: 'address_value'}
 ];
 
+function setDataValidate(inputEl) {
+  if (inputEl.id === 'email') {
+    inputEl.setAttribute('data-validate', 'require mail');
+  }
+}
+
 function setInputEvent(input, display) {
   const inputEl = document.getElementById(input);
   const displayEl = document.getElementById(display);
-
   displayEl.textContent = inputEl.value;
+
+  setDataValidate(inputEl);
 
   inputEl.addEventListener('input', () => {
     displayEl.textContent = inputEl.value;
