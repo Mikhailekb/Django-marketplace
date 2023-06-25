@@ -97,7 +97,8 @@ class Cart:
     def validate_goods(self):
         cart_dict_copy = self.cart.copy()
 
-        goods = ProductShop.objects.filter(id__in=cart_dict_copy.keys()).only('is_active')
+        goods = ProductShop.objects.filter(id__in=cart_dict_copy.keys()).select_related('product')\
+            .only('is_active', 'product__is_active')
         for product_shop in goods:
-            if not product_shop or product_shop.is_active is False:
+            if product_shop.is_active is False or product_shop.product.is_active is False:
                 self.remove(product_shop.id)

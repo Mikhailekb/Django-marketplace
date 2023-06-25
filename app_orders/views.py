@@ -14,7 +14,7 @@ from app_shops.models.shop import ProductShop
 from app_shops.services.functions import get_object_or_none
 from django_marketplace.constants import ORDER_AMOUNT_WHICH_DELIVERY_FREE
 from .forms import OrderForm
-from .models import DeliveryCategory, Order, OrderItem, PaymentItem, PaymentCategory
+from .models import DeliveryCategory, Order, OrderItem, PaymentItem
 
 
 class OrderView(UserPassesTestMixin, FormView):
@@ -81,14 +81,14 @@ class OrderView(UserPassesTestMixin, FormView):
         order.is_free_delivery = is_free_delivery
         order.save()
         OrderItem.objects.bulk_create(goods)
-        payment_category: PaymentCategory = form.cleaned_data.get('payment_category')
+        payment_category = form.cleaned_data.get('payment_category')
         PaymentItem.objects.create(order=order, payment_category=payment_category, total_price=total_price)
 
         self.request.session['order'] = order.id
 
-        if payment_category.codename == 'bank-card':
+        if payment_category == '0':
             self.success_url = reverse_lazy('payment')
-        elif payment_category.codename == 'some-other-way':
+        elif payment_category == '1':
             self.success_url = reverse_lazy('home')
         return super().form_valid(form)
 

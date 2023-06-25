@@ -1,3 +1,5 @@
+from typing import NamedTuple
+
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from django.db import models
@@ -52,26 +54,16 @@ class OrderItem(models.Model):
         verbose_name = _('order item')
 
 
-class PaymentCategory(models.Model):
-    """
-    Модель способа оплаты
-    """
-    name = models.CharField(max_length=50, verbose_name=_('name'))
-    is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    codename = AutoSlugField(max_length=100, unique=True, populate_from='name_en', verbose_name=_('codename'))
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = _('payment categories')
-        verbose_name = _('payment category')
-
-
 class PaymentItem(models.Model):
     """
     Экземпляр оплаты
     """
+
+    PAYMENT_CATEGORY = (
+        ('0', _('Bank card')),
+        ('1', _('Some other way')),
+    )
+
     IS_PASSED_CHOICES = (
         (True, _('Passed')),
         (False, _('Payment failed'))
@@ -79,8 +71,7 @@ class PaymentItem(models.Model):
 
     order = models.OneToOneField(
         'Order', on_delete=models.CASCADE, related_name='payment_item', verbose_name=_('order'))
-    payment_category = models.ForeignKey('PaymentCategory', on_delete=models.PROTECT, related_name='items',
-                                         verbose_name=_('category'))
+    payment_category = models.CharField(max_length=15, choices=PAYMENT_CATEGORY, verbose_name=_('category'))
     total_price = MoneyField(max_digits=10, null=True, decimal_places=2,
                              default_currency='RUB', verbose_name=_('total price'))
     from_account = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('from account'))
