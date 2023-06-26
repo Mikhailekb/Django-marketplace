@@ -43,21 +43,24 @@
               <div class="ProductCard-text">
                 <p>{{ product.description_short }}</p>
               </div>
-              <div class="ProductCard-cart">
-                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                  <div class="Amount Amount_product">
-                    <button class="Amount-remove" type="button"></button>
-                    <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                    <button class="Amount-add" type="button"></button>
+
+              <div>
+                <form class="ProductCard-cart" action="{% url 'cart_add' random_product_id %}" method="post">
+                  {% csrf_token %}
+                  <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                    <div class="Amount Amount_product">
+                      <button class="Amount-remove" type="button"></button>
+                      <input  class="Amount-input form-input" name="quantity" type="text" value="1">
+                      <button class="Amount-add" type="button"></button>
+                    </div>
                   </div>
-                </div>
-                <div class="ProductCard-cartElement">
-                  <a class="btn btn_primary"
-                     href="{% url 'cart_add' random_product_id %}">
-                    <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                    <span class="btn-content">{% trans 'Buy' %}</span>
-                  </a>
-                </div>
+                  <div class="ProductCard-cartElement">
+                    <button class="btn btn_primary">
+                      <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
+                      <span class="btn-content">{% trans 'Buy' %}</span>
+                    </button>
+                  </div>
+                </form>
                 <div id="modal_open" class="my_modal">
                   <div class="my_modal-dialog">
                     <div class="my_modal-content">

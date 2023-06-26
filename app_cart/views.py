@@ -6,10 +6,16 @@ from .cart import Cart
 
 
 def cart_add(request, product_shop_id):
+    quantity = request.POST.get('quantity')
+    if isinstance(quantity, str) and quantity.isdigit():
+        quantity = int(quantity)
+        if quantity > 10000:
+            quantity = 10000
+    else:
+        quantity = 1
     cart = Cart(request)
     product_shop = get_object_or_404(ProductShop.objects.with_discount_price(), id=product_shop_id)
-    cart.add(product_shop=product_shop)
-
+    cart.add(product_shop=product_shop, quantity=quantity)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
