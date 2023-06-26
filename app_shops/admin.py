@@ -45,9 +45,9 @@ class ProductShopInLine(TabularInlinePaginated):
     model = ProductShop
     extra = 1
     raw_id_fields = ('product',)
-    fields = ('product', 'count_left', 'count_sold', 'price',
+    fields = ('id', 'product', 'count_left', 'count_sold', 'price',
               'discount_price', 'discount', 'is_active')
-    readonly_fields = ('discount_price',)
+    readonly_fields = ('id', 'discount_price',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'discount':

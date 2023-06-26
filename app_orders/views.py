@@ -86,9 +86,9 @@ class OrderView(UserPassesTestMixin, FormView):
 
         self.request.session['order'] = order.id
 
-        if payment_category == '0':
+        if payment_category == 'bank-card':
             self.success_url = reverse_lazy('payment')
-        elif payment_category == '1':
+        elif payment_category == 'some-other':
             self.success_url = reverse_lazy('home')
         return super().form_valid(form)
 

@@ -36,5 +36,5 @@ class OrderForm(forms.Form):
         attrs={'class': 'form-textarea', 'id': 'comment'}))
     payment_category = forms.ChoiceField(choices=PaymentItem.PAYMENT_CATEGORY,
                                          widget=forms.RadioSelect,
-                                         initial='0')
+                                         initial=PaymentItem.PAYMENT_CATEGORY[0][0])
     is_free_delivery = forms.BooleanField(required=False)

@@ -784,9 +784,3 @@ msgstr "Ожидается оплата"
 #: .\templates\pages\progressPayment.html:25
 msgid "We are waiting for confirmation of payment by the payment system"
 msgstr "Ждем подтверждения платежа платежной системой"
-
-#~ msgid "payment categories"
-#~ msgstr "способы оплаты"
-
-#~ msgid "payment category"
-#~ msgstr "способ оплаты"

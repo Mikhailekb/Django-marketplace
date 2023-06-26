@@ -60,8 +60,8 @@ class PaymentItem(models.Model):
     """
 
     PAYMENT_CATEGORY = (
-        ('0', _('Bank card')),
-        ('1', _('Some other way')),
+        ('bank-card', _('Bank card')),
+        ('some-other', _('Some other way')),
     )
 
     IS_PASSED_CHOICES = (
