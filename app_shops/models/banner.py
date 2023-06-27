@@ -48,6 +48,9 @@ class SpecialOffer(models.Model):
     product_shop = models.ForeignKey('ProductShop', on_delete=models.CASCADE, verbose_name=_('product shop'))
     date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
 
+    def __str__(self):
+        return self.product_shop.product.name
+
     class Meta:
         verbose_name_plural = _('special offer')
         verbose_name = _('special offer')
@@ -58,7 +61,6 @@ class SpecialOffer(models.Model):
             raise ValidationError(_('Only one instance of this model is allowed.'))
 
 
-
 class SmallBanner(models.Model):
     """
     Модель маленького баннера на главной страницы
@@ -67,6 +69,9 @@ class SmallBanner(models.Model):
                                 related_name='child_category', verbose_name=_('product'))
     photo = models.ImageField(upload_to=get_small_banner_img_path, null=True, blank=True,
                               validators=[FileExtensionValidator(['png'])], verbose_name=_('image'))
+
+    def __str__(self):
+        return self.product.name
 
     class Meta:
         verbose_name_plural = _('small banners')

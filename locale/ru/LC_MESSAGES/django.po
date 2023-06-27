@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 15:32+0500\n"
+"POT-Creation-Date: 2023-06-27 14:15+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,7 +108,7 @@ msgstr "отменен"
 msgid "order"
 msgstr "заказ"
 
-#: .\app_orders\models.py:47 .\app_shops\models\banner.py:67
+#: .\app_orders\models.py:47 .\app_shops\models\banner.py:69
 #: .\app_shops\models\product.py:77 .\app_shops\models\product.py:113
 #: .\app_shops\models\product.py:130 .\app_shops\models\product.py:145
 msgid "product"
@@ -197,7 +197,7 @@ msgstr ""
 #: .\app_orders\views.py:112
 #, python-brace-format
 msgid "{name}: in stock - {product_shop.count_left}, in cart - {quantity}"
-msgstr ""
+msgstr "{name}: в наличии - {product_shop.count_left}, в корзине - {quantity}"
 
 #: .\app_orders\views.py:223
 #, python-format
@@ -224,9 +224,9 @@ msgstr "Необходимо ввести текст отзыва"
 msgid "Review"
 msgstr "Отзыв"
 
-#: .\app_shops\models\banner.py:26 .\app_shops\models\banner.py:69
+#: .\app_shops\models\banner.py:26 .\app_shops\models\banner.py:71
 #: .\app_shops\models\discount.py:89 .\app_shops\models\product.py:126
-#: .\app_shops\models\shop.py:103
+#: .\app_shops\models\shop.py:102
 msgid "image"
 msgstr "изображение"
 
@@ -239,32 +239,39 @@ msgid "banner"
 msgstr "баннер"
 
 #: .\app_shops\models\banner.py:48
-#, fuzzy
-#| msgid "products"
 msgid "product shop"
-msgstr "товары"
+msgstr "товар магазина"
 
 #: .\app_shops\models\banner.py:49 .\app_shops\models\discount.py:36
 msgid "date end"
 msgstr "дата конца"
 
-#: .\app_shops\models\banner.py:52 .\app_shops\models\banner.py:53
+#: .\app_shops\models\banner.py:52
+msgid "Special offer"
+msgstr "Специальное предложение"
+
+#: .\app_shops\models\banner.py:55 .\app_shops\models\banner.py:56
 msgid "special offer"
 msgstr "специальное предложение"
 
-#: .\app_shops\models\banner.py:58
+#: .\app_shops\models\banner.py:61
 msgid "Only one instance of this model is allowed."
 msgstr "Допускается только один экземпляр этой модели."
 
-#: .\app_shops\models\banner.py:72
+#: .\app_shops\models\banner.py:74
+#, python-brace-format
+msgid "Banner №{self.pk}"
+msgstr "Баннер №{self.pk}"
+
+#: .\app_shops\models\banner.py:77
 msgid "small banners"
 msgstr "маленькие баннеры"
 
-#: .\app_shops\models\banner.py:73
+#: .\app_shops\models\banner.py:78
 msgid "small banner"
 msgstr "маленький баннер"
 
-#: .\app_shops\models\banner.py:78
+#: .\app_shops\models\banner.py:83
 msgid "The maximum number of items (3 items) has been reached"
 msgstr "Достигнуто максимальное количество элементов (3 элемента)."
 
@@ -293,7 +300,7 @@ msgid "description long"
 msgstr "длинное описание"
 
 #: .\app_shops\models\discount.py:28 .\app_shops\models\shop.py:40
-#: .\app_shops\models\shop.py:107
+#: .\app_shops\models\shop.py:106
 msgid "shop"
 msgstr "магазин"
 
@@ -345,7 +352,7 @@ msgid "Date end cannot be before date start"
 msgstr "Дата конца скидки не может быть раньше даты начала"
 
 #: .\app_shops\models\discount.py:95 .\app_shops\models\product.py:131
-#: .\app_shops\models\shop.py:108
+#: .\app_shops\models\shop.py:107
 msgid "uploaded"
 msgstr "загружено"
 
@@ -459,11 +466,11 @@ msgstr "продано в магазине"
 msgid "The price cannot be less than the minimum specified in the discount"
 msgstr "Цена не может быть меньше минимальной, указанной в скидке"
 
-#: .\app_shops\models\shop.py:114
+#: .\app_shops\models\shop.py:113
 msgid "shop images"
 msgstr "изображения магазина"
 
-#: .\app_shops\models\shop.py:115
+#: .\app_shops\models\shop.py:114
 msgid "shop image"
 msgstr "изображение магазина"
 
@@ -602,7 +609,7 @@ msgstr "Недостаточно данных для сравнения"
 msgid "Characteristic"
 msgstr "Характеристика"
 
-#: .\templates\pages\comparison.html:62 .\templates\pages\product.html:119
+#: .\templates\pages\comparison.html:62 .\templates\pages\product.html:122
 msgid "Value"
 msgstr "значение"
 
@@ -667,13 +674,13 @@ msgid "Order date"
 msgstr "Дата заказа"
 
 #: .\templates\pages\oneorder.html:47 .\templates\pages\order.html:149
-#: .\templates\pages\product.html:153
+#: .\templates\pages\product.html:156
 msgid "Delivery type"
 msgstr "Тип доставки"
 
 #: .\templates\pages\oneorder.html:62 .\templates\pages\order.html:161
 #: .\templates\pages\paymentsomeone.html:9
-#: .\templates\pages\paymentsomeone.html:15 .\templates\pages\product.html:161
+#: .\templates\pages\paymentsomeone.html:15 .\templates\pages\product.html:164
 msgid "Payment"
 msgstr "Оплата"
 
@@ -732,47 +739,47 @@ msgstr "Номер счёта"
 msgid "Generate random score"
 msgstr "Сгенерировать случайный счет"
 
-#: .\templates\pages\product.html:58 .\templates\pages\product.html:146
+#: .\templates\pages\product.html:60 .\templates\pages\product.html:149
 msgid "Buy"
 msgstr "Купить"
 
-#: .\templates\pages\product.html:77
+#: .\templates\pages\product.html:80
 msgid "Tags"
 msgstr "Тэги"
 
-#: .\templates\pages\product.html:94
+#: .\templates\pages\product.html:97
 msgid "Description"
 msgstr "Описание"
 
-#: .\templates\pages\product.html:97
+#: .\templates\pages\product.html:100
 msgid "Sellers"
 msgstr "Продавцы"
 
-#: .\templates\pages\product.html:100
+#: .\templates\pages\product.html:103
 msgid "Features"
 msgstr "Характеристики"
 
-#: .\templates\pages\product.html:103
+#: .\templates\pages\product.html:106
 msgid "Reviews"
 msgstr "Отзывы"
 
-#: .\templates\pages\product.html:117
+#: .\templates\pages\product.html:120
 msgid "Feature"
 msgstr "Характеристика"
 
-#: .\templates\pages\product.html:123
+#: .\templates\pages\product.html:126
 msgid "Device type"
 msgstr "Тип устройства"
 
-#: .\templates\pages\product.html:169
+#: .\templates\pages\product.html:172
 msgid "Price"
 msgstr "Цена"
 
-#: .\templates\pages\product.html:266
+#: .\templates\pages\product.html:269
 msgid "Add review"
 msgstr "Добавить отзыв"
 
-#: .\templates\pages\product.html:276
+#: .\templates\pages\product.html:279
 msgid "Submit review"
 msgstr "Отправить отзыв"
 
