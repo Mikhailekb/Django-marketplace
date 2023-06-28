@@ -239,4 +239,9 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
             self.request.session.pop('order', None)
         else:
             self.request.session['order'] = self.object.id
+            items: QuerySet[OrderItem] = self.object.items.all()
+            if all(item.product_shop.is_active for item in items):
+                context['can_pay'] = True
+            else:
+                self.request.session.pop('order', None)
         return context

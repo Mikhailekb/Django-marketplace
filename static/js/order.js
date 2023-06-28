@@ -1,4 +1,4 @@
-const inputs = [
+const ID_INPUTS_AND_DISPLAY = [
   {inputID: 'name', displayID: 'full_name_value'},
   {inputID: 'phone', displayID: 'phone_value'},
   {inputID: 'email', displayID: 'email_value'},
@@ -16,34 +16,34 @@ function displayEnteredInfo(input, display) {
   });
 }
 
-inputs.forEach(input => displayEnteredInfo(input.inputID, input.displayID));
+ID_INPUTS_AND_DISPLAY.forEach(input => displayEnteredInfo(input.inputID, input.displayID));
 
 
-const deliveryRadios = document.querySelectorAll('input[name="delivery_category"]');
-const deliveryDisplay = document.getElementById('delivery_value');
+const DELIVERY_RADIOS = document.querySelectorAll('input[name="delivery_category"]');
+const DELIVERY_DISPLAY = document.getElementById('delivery_value');
 
-const payRadios = document.querySelectorAll('input[name="payment_category"]');
-const payDisplay = document.getElementById('pay_value');
+const PAY_RADIOS = document.querySelectorAll('input[name="payment_category"]');
+const PAY_DISPLAY = document.getElementById('pay_value');
 
 const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
 const IS_FREE_DELIVERY = JSON.parse(document.getElementById('is_free_delivery').textContent);
 const totalPriceStr = document.getElementById('total-price').textContent;
 
 
-updateDisplay(deliveryRadios, deliveryDisplay);
-updateDisplay(payRadios, payDisplay);
+updateDisplay(DELIVERY_RADIOS, DELIVERY_DISPLAY);
+updateDisplay(PAY_RADIOS, PAY_DISPLAY);
 updateDeliveryInfo();
 
 
-payRadios.forEach(function (radio) {
+PAY_RADIOS.forEach(function (radio) {
   radio.addEventListener('change', function () {
-    updateDisplay(payRadios, payDisplay);
+    updateDisplay(PAY_RADIOS, PAY_DISPLAY);
   });
 });
 
-deliveryRadios.forEach(function (radio) {
+DELIVERY_RADIOS.forEach(function (radio) {
   radio.addEventListener('change', function () {
-    updateDisplay(deliveryRadios, deliveryDisplay);
+    updateDisplay(DELIVERY_RADIOS, DELIVERY_DISPLAY);
     updateDeliveryInfo();
   });
 });
