@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 14:15+0500\n"
+"POT-Creation-Date: 2023-06-28 19:44+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,23 +28,23 @@ msgstr "заказы"
 msgid "Full name"
 msgstr "ФИО"
 
-#: .\app_orders\forms.py:23
+#: .\app_orders\forms.py:26
 msgid "Tel"
 msgstr "Телефон"
 
-#: .\app_orders\forms.py:25
+#: .\app_orders\forms.py:30
 msgid "E-mail"
 msgstr "Электронная почта"
 
-#: .\app_orders\forms.py:31
+#: .\app_orders\forms.py:38
 msgid "City"
 msgstr "Город"
 
-#: .\app_orders\forms.py:33
+#: .\app_orders\forms.py:43
 msgid "Address"
 msgstr "Адрес"
 
-#: .\app_orders\forms.py:35
+#: .\app_orders\forms.py:48
 msgid "Comment"
 msgstr "Комментарий к заказу"
 
@@ -199,10 +199,9 @@ msgstr ""
 msgid "{name}: in stock - {product_shop.count_left}, in cart - {quantity}"
 msgstr "{name}: в наличии - {product_shop.count_left}, в корзине - {quantity}"
 
-#: .\app_orders\views.py:223
-#, python-format
-msgid "No %(verbose_name)s found matching the query"
-msgstr ""
+#: .\app_orders\views.py:222
+msgid "No order found matching the query"
+msgstr "Заказ, соответствующий запросу, не найден"
 
 #: .\app_shops\admin.py:109 .\app_shops\models\category.py:18
 msgid "icon"
@@ -246,10 +245,6 @@ msgstr "товар магазина"
 msgid "date end"
 msgstr "дата конца"
 
-#: .\app_shops\models\banner.py:52
-msgid "Special offer"
-msgstr "Специальное предложение"
-
 #: .\app_shops\models\banner.py:55 .\app_shops\models\banner.py:56
 msgid "special offer"
 msgstr "специальное предложение"
@@ -257,11 +252,6 @@ msgstr "специальное предложение"
 #: .\app_shops\models\banner.py:61
 msgid "Only one instance of this model is allowed."
 msgstr "Допускается только один экземпляр этой модели."
-
-#: .\app_shops\models\banner.py:74
-#, python-brace-format
-msgid "Banner №{self.pk}"
-msgstr "Баннер №{self.pk}"
 
 #: .\app_shops\models\banner.py:77
 msgid "small banners"
