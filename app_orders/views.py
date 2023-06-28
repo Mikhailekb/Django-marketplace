@@ -153,8 +153,8 @@ class PaymentView(UserPassesTestMixin, TemplateView):
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         request.session.pop('cart', None)
 
-        account: str = request.POST.get('numero1', None)
-        if len(account) != 9:
+        account: str = request.POST.get('account_number', None)
+        if not account or len(account) != 9:
             return redirect(reverse('home'))
         last_sym = account[-1:]
 
@@ -218,11 +218,8 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
 
         try:
             self.object = queryset.get()
-        except queryset.model.DoesNotExist as e:
-            raise Http404(
-                _("No %(verbose_name)s found matching the query")
-                % {'verbose_name': queryset.model._meta.verbose_name}
-            ) from e
+        except queryset.model.DoesNotExist:
+            raise Http404(_(f'No order found matching the query'))
 
         return self.object
 
