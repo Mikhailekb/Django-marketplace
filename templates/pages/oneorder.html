@@ -162,7 +162,7 @@
                       {% endif %}
                     </strong>
                   </div>
-                  {% if not order.payment_item.is_passed %}
+                  {% if can_pay %}
                     <div class="Cart-block">
                       <a class="btn btn_primary btn_lg" href="{% url 'payment' %}">{% trans 'Pay' %}</a>
                     </div>
