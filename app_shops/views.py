@@ -2,13 +2,12 @@ from collections import defaultdict
 from decimal import Decimal
 from random import sample
 from typing import Any, Sequence
-
 from django.contrib import messages
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -19,13 +18,14 @@ from djmoney.contrib.exchange.models import convert_money
 from djmoney.money import Money
 
 from app_cart.forms import CartAddProductForm
-from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME
+from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETIME, SHOPS_CACHE_LIFETIME, \
+    PRODUCTS_TOP_CACHE_LIFETIME
 from .filters import ProductFilter
 from .forms import ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
-from .models.shop import ProductShop
+from .models.shop import ProductShop, Shop
 
 
 class HomeView(TemplateView):
@@ -363,3 +363,35 @@ class ComparisonView(TemplateView):
 
         request.session['comparison_products'] = comparison_products
         return redirect(current_page)
+
+
+class ShopDetailView(DetailView):
+    """
+    Представление детальной страницы продавца
+    """
+    template_name = 'pages/shop.html'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        shop = cache.get_or_set(f'shop_{pk}', Shop.objects.filter(pk=pk).select_related('main_image'),
+                                timeout=SHOPS_CACHE_LIFETIME)
+        try:
+            self.object = shop
+        except shop.model.DoesNotExist as error:
+            raise Http404(
+                _("No %(verbose_name)s found matching the query")
+                % {'verbose_name': shop.model._meta.verbose_name}
+            ) from error
+
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        products_top = cache.get_or_set(f'products_top_{pk}', ProductShop.objects.with_discount_price().select_related('product__main_image')
+                                        .filter(shop__pk=pk).order_by('-count_sold')[:10],
+                                        timeout=PRODUCTS_TOP_CACHE_LIFETIME)
+        context['products_top'] = products_top
+        context['shop'] = self.object[0]
+
+        return context

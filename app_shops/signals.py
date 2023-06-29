@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from .models.category import Category
 from .models.discount import Discount
 from .models.product import Product, FeatureToProduct
+from .models.shop import Shop, ProductShop
 
 
 @receiver([post_save, post_delete], sender=Category)
@@ -37,3 +38,17 @@ def add_recommended_features_to_product(**kwargs) -> None:
         if objects:
             with contextlib.suppress(IntegrityError):
                 FeatureToProduct.objects.bulk_create(objects)
+
+
+@receiver([post_save, post_delete], sender=Shop)
+def invalidate_cache_shop(**kwargs) -> None:
+    """Удаление из кэша информации о магазине, в случае изменения таблицы Shop из админки"""
+    pk = kwargs.get('instance').pk
+    cache.delete(f'shop_{pk}')
+
+
+@receiver([post_save, post_delete], sender=ProductShop)
+def invalidate_cache_shop(**kwargs) -> None:
+    """Удаление из кэша информации о товаре, в случае изменения таблицы ProductShop из админки"""
+    pk = kwargs.get('instance').pk
+    cache.delete(f'products_top_{pk}')
