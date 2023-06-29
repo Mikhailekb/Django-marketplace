@@ -1,4 +1,5 @@
 import contextlib
+import os
 
 from django.core.cache import cache
 from django.db import IntegrityError
@@ -37,3 +38,21 @@ def add_recommended_features_to_product(**kwargs) -> None:
         if objects:
             with contextlib.suppress(IntegrityError):
                 FeatureToProduct.objects.bulk_create(objects)
+
+
+@receiver(post_delete)
+def auto_delete_file_on_delete(sender, instance, **kwargs) -> None:
+    """
+    Удаление изображения с сервера, в случае его удаления из админки
+    """
+    if not hasattr(instance, 'image'):
+        return
+
+    image = instance.image
+    if not image:
+        return
+
+    if not os.path.isfile(image.path):
+        return
+
+    os.remove(image.path)

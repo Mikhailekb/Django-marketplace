@@ -205,7 +205,7 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
 
     def test_func(self) -> bool:
         user = self.request.user
-        self.object = self.get_object()
+        self.get_object()
         buyer_id = self.object.buyer_id
 
         return (buyer_id == user.id and self.object.payment_item.from_account) or user.is_staff
@@ -219,7 +219,7 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
         try:
             self.object = queryset.get()
         except queryset.model.DoesNotExist:
-            raise Http404(_(f'No order found matching the query'))
+            raise Http404(_('No order found matching the query'))
 
         return self.object
 
