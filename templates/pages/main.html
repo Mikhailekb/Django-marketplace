@@ -20,8 +20,8 @@
                     </div>
                   </div>
                   <div class="row-block">
-                    {% if banner.photo.url %}
-                      <div class="Slider-img"><img src="{{ banner.photo.url }}" alt="slider.png"/></div>
+                    {% if banner.image.url %}
+                      <div class="Slider-img"><img src="{{ banner.image.url }}" alt="slider.png"/></div>
                     {% endif %}
                   </div>
                 </div>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="BannersHomeBlock-block">
                   <div class="BannersHomeBlock-img">
-                    <img src="{{ item.photo.url }}" alt="{{ item.slug }}"/>
+                    <img src="{{ item.image.url }}" alt="{{ item.slug }}"/>
                   </div>
                 </div>
               </div>

@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "product": 2,
-      "photo": "img/content/small_banners/mikrokompiuter-raspberry-pi-4-model-b/Raspberry_Pi_2_Model_B_v_fIQ8rec.png"
+      "image": "img/content/small_banners/mikrokompiuter-raspberry-pi-4-model-b/Raspberry_Pi_2_Model_B_v_fIQ8rec.png"
     }
   },
   {
@@ -12,7 +12,7 @@
     "pk": 2,
     "fields": {
       "product": 1,
-      "photo": "img/content/small_banners/protsessor-amd-ryzen/1014798.png"
+      "image": "img/content/small_banners/protsessor-amd-ryzen/1014798.png"
     }
   },
   {
@@ -20,7 +20,7 @@
     "pk": 3,
     "fields": {
       "product": 6,
-      "photo": "img/content/small_banners/65-163-sm-televizor-led-tcl-65c835/128579_p_20.png"
+      "image": "img/content/small_banners/65-163-sm-televizor-led-tcl-65c835/128579_p_20.png"
     }
   }
 ]
