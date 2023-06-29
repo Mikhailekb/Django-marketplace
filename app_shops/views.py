@@ -370,13 +370,16 @@ class ShopDetailView(DetailView):
     Представление детальной страницы продавца
     """
     template_name = 'pages/shop.html'
+    slug_url_kwarg = 'store_slug'
+    context_object_name = 'shop'
 
     def get_object(self, queryset=None):
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        shop = cache.get_or_set(f'shop_{pk}', Shop.objects.filter(pk=pk).select_related('main_image'),
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        shop = cache.get_or_set(f'shop_{slug}', Shop.objects.filter(slug=slug).select_related('main_image'),
                                 timeout=SHOPS_CACHE_LIFETIME)
+
         try:
-            self.object = shop
+            self.object = shop.get()
         except shop.model.DoesNotExist as error:
             raise Http404(
                 _("No %(verbose_name)s found matching the query")
@@ -387,11 +390,10 @@ class ShopDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        products_top = cache.get_or_set(f'products_top_{pk}', ProductShop.objects.with_discount_price().select_related('product__main_image')
-                                        .filter(shop__pk=pk).order_by('-count_sold')[:10],
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        products_top = cache.get_or_set(f'products_top_{slug}', ProductShop.objects.with_discount_price().select_related('product__main_image')
+                                        .filter(shop__slug=slug).order_by('-count_sold')[:10],
                                         timeout=PRODUCTS_TOP_CACHE_LIFETIME)
         context['products_top'] = products_top
-        context['shop'] = self.object[0]
 
         return context

@@ -10,5 +10,5 @@ urlpatterns = [
     path('promo/<slug:promo_slug>/', DiscountDetailView.as_view(), name='discount'),
     path('product/<slug:product_slug>/', ProductDetailView.as_view(), name='product-detail'),
     path('catalog/compare/', ComparisonView.as_view(), name='comparison'),
-    path('shop/<int:pk>/', ShopDetailView.as_view(), name='shop_detail')
+    path('store/<slug:store_slug>/', ShopDetailView.as_view(), name='store_detail')
 ]

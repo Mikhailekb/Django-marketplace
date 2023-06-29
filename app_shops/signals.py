@@ -43,12 +43,12 @@ def add_recommended_features_to_product(**kwargs) -> None:
 @receiver([post_save, post_delete], sender=Shop)
 def invalidate_cache_shop(**kwargs) -> None:
     """Удаление из кэша информации о магазине, в случае изменения таблицы Shop из админки"""
-    pk = kwargs.get('instance').pk
-    cache.delete(f'shop_{pk}')
+    slug = kwargs.get('instance').slug
+    cache.delete(f'shop_{slug}')
 
 
 @receiver([post_save, post_delete], sender=ProductShop)
 def invalidate_cache_shop(**kwargs) -> None:
     """Удаление из кэша информации о товаре, в случае изменения таблицы ProductShop из админки"""
-    pk = kwargs.get('instance').pk
-    cache.delete(f'products_top_{pk}')
+    slug = kwargs.get('instance').shop.slug
+    cache.delete(f'products_top_{slug}')
