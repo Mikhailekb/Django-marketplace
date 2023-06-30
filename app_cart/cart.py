@@ -2,7 +2,7 @@ from django.conf import settings
 from djmoney.money import Money
 
 from app_shops.models.shop import ProductShop
-from app_shops.templatetags.custom_filters import dollar_conversion
+from app_shops.services.functions import dollar_conversion
 
 
 class Cart:

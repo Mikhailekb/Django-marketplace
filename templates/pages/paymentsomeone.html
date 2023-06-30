@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load static i18n custom_filters %}
 
+
 {% block page_content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
@@ -21,11 +22,7 @@
     <div class="Section">
       <div class="wrap">
         <div>{% trans 'Amount payable' %}:
-          {% if request.LANGUAGE_CODE == 'ru' %}
-            {{ total_price }}
-          {% else %}
-            {{ total_price|dollar_conversion}}
-          {% endif %}
+          {{ total_price|localize:request.LANGUAGE_CODE }}
         </div>
         <form class="form Payment" method="post">
           {% csrf_token %}
