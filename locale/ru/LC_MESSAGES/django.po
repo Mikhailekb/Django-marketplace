@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-28 19:44+0500\n"
+"POT-Creation-Date: 2023-06-30 13:16+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +60,7 @@ msgstr "Комментарий к заказу"
 msgid "delivery category"
 msgstr "способ доставки"
 
-#: .\app_orders\models.py:22 .\app_orders\models.py:89 .\app_shops\admin.py:207
+#: .\app_orders\models.py:22 .\app_orders\models.py:89 .\app_shops\admin.py:198
 #: .\app_shops\models\category.py:12 .\app_shops\models\product.py:32
 #: .\app_shops\models\product.py:47 .\app_shops\models\product.py:62
 #: .\app_shops\models\product.py:95 .\app_shops\models\shop.py:23
@@ -203,13 +203,15 @@ msgstr "{name}: в наличии - {product_shop.count_left}, в корзине
 msgid "No order found matching the query"
 msgstr "Заказ, соответствующий запросу, не найден"
 
-#: .\app_shops\admin.py:109 .\app_shops\models\category.py:18
+#: .\app_shops\admin.py:107 .\app_shops\models\category.py:18
 msgid "icon"
 msgstr "значок"
 
-#: .\app_shops\admin.py:206
-msgid "photo"
-msgstr "фото"
+#: .\app_shops\admin.py:197 .\app_shops\models\banner.py:26
+#: .\app_shops\models\banner.py:71 .\app_shops\models\discount.py:89
+#: .\app_shops\models\product.py:126 .\app_shops\models\shop.py:102
+msgid "image"
+msgstr "изображение"
 
 #: .\app_shops\apps.py:8
 msgid "marketplace"
@@ -222,12 +224,6 @@ msgstr "Необходимо ввести текст отзыва"
 #: .\app_shops\forms.py:9
 msgid "Review"
 msgstr "Отзыв"
-
-#: .\app_shops\models\banner.py:26 .\app_shops\models\banner.py:71
-#: .\app_shops\models\discount.py:89 .\app_shops\models\product.py:126
-#: .\app_shops\models\shop.py:102
-msgid "image"
-msgstr "изображение"
 
 #: .\app_shops\models\banner.py:32
 msgid "banners"
@@ -505,7 +501,8 @@ msgid "Navigation"
 msgstr "Навигация"
 
 #: .\templates\components\footer.html:16 .\templates\components\header.html:104
-#: .\templates\pages\discount.html:12 .\templates\pages\paymentsomeone.html:12
+#: .\templates\pages\about.html:13 .\templates\pages\discount.html:12
+#: .\templates\pages\paymentsomeone.html:12
 #: .\templates\pages\progressPayment.html:13 .\templates\pages\sale.html:12
 msgid "Home"
 msgstr "Главная"
@@ -523,7 +520,11 @@ msgstr "Сравнение"
 msgid "Sales"
 msgstr "Скидки"
 
-#: .\templates\components\footer.html:33
+#: .\templates\components\footer.html:31 .\templates\pages\about.html:16
+msgid "About Us"
+msgstr "О нас"
+
+#: .\templates\components\footer.html:36
 msgid "Contacts"
 msgstr "Контакты"
 
@@ -554,6 +555,58 @@ msgstr "Все категории"
 #: .\templates\components\header.html:216
 msgid "Search"
 msgstr "Поиск"
+
+#: .\templates\pages\about.html:10
+msgid "About Megano"
+msgstr "О Megano"
+
+#: .\templates\pages\about.html:31
+msgid "Shipping & Returns"
+msgstr "Доставка и возврат"
+
+#: .\templates\pages\about.html:32
+msgid "World wide shipping"
+msgstr "Доставка по всему миру"
+
+#: .\templates\pages\about.html:42
+msgid "Money Back"
+msgstr "Возврат денег"
+
+#: .\templates\pages\about.html:44
+msgid "Guaranted payments"
+msgstr "Гарантированные платежи"
+
+#: .\templates\pages\about.html:54
+msgid "Support Policy"
+msgstr "Политика поддержки"
+
+#: .\templates\pages\about.html:55
+msgid "Fast support team"
+msgstr "Быстрая команда поддержки"
+
+#: .\templates\pages\about.html:65
+msgid "Quality Guarantee"
+msgstr "Гарантия качества"
+
+#: .\templates\pages\about.html:66
+msgid "Best guaranted items"
+msgstr "Лучшие товары с гарантией"
+
+#: .\templates\pages\about.html:72
+msgid "Follow Us"
+msgstr "Подписывайтесь на нас"
+
+#: .\templates\pages\about.html:103
+msgid "Why Choose Megano?"
+msgstr "Почему выбирают Megano?"
+
+#: .\templates\pages\about.html:118
+msgid "Get Started"
+msgstr "перейти"
+
+#: .\templates\pages\about.html:136
+msgid "Megano Store Hystory"
+msgstr "История магазина Megano"
 
 #: .\templates\pages\catalog.html:11 .\templates\pages\catalog.html:59
 msgid "Filter"
