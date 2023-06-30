@@ -475,6 +475,7 @@ class PaymentView(UserPassesTestMixin, TemplateView):
 
         if last_sym.isdigit() and int(last_sym) % 2 == 0:
             payment.is_passed = True
+            payment.order_status = 'p'
             order.is_paid = True
 
             products_to_update = []

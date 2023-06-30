@@ -111,7 +111,7 @@ class OrderItemInLine(TabularInlinePaginated):
 
 class PaymentItemInLine(admin.StackedInline):
     model = PaymentItem
-    readonly_fields = ('is_passed', 'payment_category',
+    readonly_fields = ('is_passed', 'order_status', 'payment_category',
                        'total_price', 'from_account')
 
     @staticmethod

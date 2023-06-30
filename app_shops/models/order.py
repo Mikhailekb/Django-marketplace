@@ -73,6 +73,12 @@ class PaymentItem(models.Model):
         (False, _('Payment failed'))
     )
 
+    ORDER_STATUS = (
+        ('p', _('Paid')),
+        ('np', _('Not paid')),
+        ('d', _('Delivery type'))
+    )
+
     order = models.OneToOneField(
         'Order', on_delete=models.CASCADE, related_name='payment_item', verbose_name=_('order'))
     payment_category = models.ForeignKey('PaymentCategory', on_delete=models.PROTECT, related_name='items',
@@ -81,6 +87,7 @@ class PaymentItem(models.Model):
                              default_currency='RUB', verbose_name=_('total price'))
     from_account = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('from account'))
     is_passed = models.BooleanField(default=False, choices=IS_PASSED_CHOICES, verbose_name=_('is passed'))
+    order_status = models.CharField(default='np', choices=ORDER_STATUS, max_length=2, verbose_name=_('order status'))
 
     class Meta:
         verbose_name_plural = _('payment items')
