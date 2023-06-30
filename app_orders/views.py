@@ -42,7 +42,7 @@ class OrderView(UserPassesTestMixin, FormView):
         cart = Cart(self.request)
         goods = self._get_goods_in_cart(cart)
 
-        total_price = cart.get_total_price()
+        total_price = cart.get_total_price_rub()
         is_free_delivery = (
                 total_price.amount >= ORDER_AMOUNT_WHICH_DELIVERY_FREE
                 and all(goods[0].shop_id == item.shop_id for item in goods)
@@ -68,7 +68,7 @@ class OrderView(UserPassesTestMixin, FormView):
                       phone=phone, email=email, city=city, address=address, comment=comment)
 
         cart = Cart(self.request)
-        total_price = cart.get_total_price()
+        total_price = cart.get_total_price_rub()
         if not is_free_delivery or delivery_category.codename != 'regular-delivery':
             total_price += delivery_category.price
             is_free_delivery = False
