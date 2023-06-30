@@ -1,36 +1,36 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_POST
+
 from app_shops.models.shop import ProductShop
 from .cart import Cart
 
 
-def cart_add(request, product_id):
+def cart_add(request, product_shop_id):
     cart = Cart(request)
-    product = get_object_or_404(ProductShop, id=product_id)
-    cart.add(product=product)
+    product_shop = get_object_or_404(ProductShop.objects.with_discount_price(), id=product_shop_id)
+    cart.add(product_shop=product_shop)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-def cart_change_quantity(request, product_id, type):
+def cart_change_quantity(request, product_shop_id, type):
     cart = Cart(request)
-    product = get_object_or_404(ProductShop, id=product_id)
+    product_shop = get_object_or_404(ProductShop, id=product_shop_id)
     if type == 'plus':
-        cart.add(product=product)
+        cart.add(product_shop=product_shop)
     elif type == 'minus':
-        cart.minus(product=product)
+        cart.minus(product_shop=product_shop)
     return redirect('cart_detail')
 
 
-def cart_remove(request, product_id):
+def cart_remove(request, product_shop_id):
     cart = Cart(request)
-    product = get_object_or_404(ProductShop, id=product_id)
-    cart.remove(product)
+    cart.remove(product_shop_id)
     return redirect('cart_detail')
 
 
 def cart_detail(request):
     cart = Cart(request)
+    cart.validate_goods()
 
     return render(request, 'pages/cart.html', {'cart': cart})

@@ -4,6 +4,7 @@ from django.db.models import Q
 from djmoney.contrib.exchange.models import convert_money
 from djmoney.money import Money
 
+from django_marketplace.constants import ORDER_AMOUNT_WHICH_DELIVERY_FREE
 from .models.product import Product
 
 
@@ -13,19 +14,15 @@ class ProductFilter(filters.FilterSet):
 
     price = filters.CharFilter(method='filter_price')
     name = filters.CharFilter(method='filter_name_or_description')
-    in_stock = filters.BooleanFilter(
-        method='filter_in_stock', widget=forms.CheckboxInput)
+    in_stock = filters.BooleanFilter(method='filter_in_stock', widget=forms.CheckboxInput)
+    free_delivery = filters.BooleanFilter(method='filter_free_delivery', widget=forms.CheckboxInput)
     tag = filters.CharFilter(field_name='tags__codename')
-
-    # Фильтр на бесплатную доставку на данный момент отсутствует
 
     def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
         if data:
             data = data.dict()
-            if not data.get('order_by'):
-                data['order_by'] = 'count_sold'
-            price = data.get('price')
-            data['price'] = f'{price};{request.LANGUAGE_CODE}'
+            if price := data.get('price'):
+                data['price'] = f'{price};{request.LANGUAGE_CODE}'
         super().__init__(data, queryset, request=request, prefix=prefix)
 
     @staticmethod
@@ -47,8 +44,12 @@ class ProductFilter(filters.FilterSet):
 
     @staticmethod
     def filter_in_stock(queryset, name, value):
-        return queryset.filter(in_shops__count_left__gt=0)
+        return queryset.filter(in_shops__count_left__gt=0) if value else queryset
+
+    @staticmethod
+    def filter_free_delivery(queryset, name, value):
+        return queryset.filter(in_shops__min_price__gte=ORDER_AMOUNT_WHICH_DELIVERY_FREE) if value else queryset
 
     class Meta:
         model = Product
-        fields = ['price', 'name', 'in_stock']
+        fields = ['price', 'name', 'in_stock', 'free_delivery']

@@ -60,7 +60,7 @@
                     </div>
                     <div class="Order-info Order-info_pay">
                       <div class="Order-infoType">{% trans 'Payment' %}:</div>
-                      <div class="Order-infoContent">{{ order.payment_item.payment_category.name }}
+                      <div class="Order-infoContent">{{ order.payment_item.get_payment_category_display }}
                       </div>
                     </div>
                     <div class="Order-info Order-info_status">
@@ -94,7 +94,7 @@
                         <div class="Cart-block Cart-block_info">
                           <a class="Cart-title"
                              href="{{ item.product_shop.product.get_absolute_url }}">{{ item.product_shop.product.name }}</a>
-                          <div class="Cart-desc">{{ item.product_shop.product.short_description }}</div>
+                          <div class="Cart-desc">{{ item.product_shop.product.description_short }}</div>
                         </div>
 
                       {% else %}
@@ -107,7 +107,7 @@
                         </div>
                         <div class="Cart-block Cart-block_info">
                           <div class="Cart-title">{{ item.product_shop.product.name }}</div>
-                          <div class="Cart-desc">{{ item.product_shop.product.short_description }}</div>
+                          <div class="Cart-desc">{{ item.product_shop.product.description_short }}</div>
                         </div>
                       {% endif %}
 
@@ -124,6 +124,32 @@
                     </div>
                   </div>
                 {% endfor %}
+
+                {% if not order.is_free_delivery %}
+                  <div class="Cart-product">
+                    <div class="Cart-block Cart-block_row">
+                      <div class="Cart-block Cart-block_pict">
+                        <div class="Cart-pict">
+                          <img class="Cart-img" src="{% static 'img/icons/delivery.png' %}" alt="delivery.png"/>
+                        </div>
+                      </div>
+                      <div class="Cart-block Cart-block_info">
+                        <div class="Cart-title Delivery-title">{{ order.delivery_category.name }}</div>
+                        <div class="Cart-desc"></div>
+                      </div>
+                      <div class="Cart-block Cart-block_price">
+                        {% if request.LANGUAGE_CODE == 'ru' %}
+                          <div class="Cart-price Delivery-price">{{ order.delivery_category.price }}</div>
+                        {% else %}
+                          <div class="Cart-price Delivery-price">{{ order.delivery_category.price|dollar_conversion }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="Cart-block Cart-block_row">
+                      <div class="Cart-block Cart-block_amount">1 {% trans 'pcs.' %}</div>
+                    </div>
+                  </div>
+                {% endif %}
 
                 <div class="Cart-total">
                   <div class="Cart-block Cart-block_total">

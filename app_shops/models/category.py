@@ -10,12 +10,12 @@ class Category(models.Model):
     Модель категории товаров
     """
     name = models.CharField(max_length=100, verbose_name=_('name'))
-    slug = AutoSlugField(max_length=70, verbose_name='URL', unique=True, populate_from='name_en')
+    slug = AutoSlugField(max_length=70, unique=True, populate_from='name_en', verbose_name='URL')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     parent = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='child_category', verbose_name=_('parent category'))
     icon = models.FileField(upload_to='img/icons/departments/', null=True, blank=True,
-                            verbose_name=_('icon'), validators=[FileExtensionValidator(['svg'])])
+                            validators=[FileExtensionValidator(['svg'])], verbose_name=_('icon'))
     recommended_features = models.ManyToManyField('FeatureName', related_name='categories',
                                                   blank=True, verbose_name=_('recommended features'))
 

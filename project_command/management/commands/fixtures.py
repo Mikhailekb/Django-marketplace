@@ -10,14 +10,9 @@ class Command(BaseCommand):
 
     @staticmethod
     def get_fixtures() -> list[str]:
-        shops_fixtures_path = os.path.normpath(
-            os.path.abspath('app_shops/fixtures'))
-        # users_fixtures_path = os.path.normpath(os.path.abspath('app_users/fixtures'))
-        if os.path.exists(shops_fixtures_path):
-            shops_fixtures: List = os.listdir(shops_fixtures_path)
-            # if os.path.exists(users_fixtures_path):
-            #     users_fixtures: List = os.listdir(users_fixtures_path)
-            #     shops_fixtures.extend(users_fixtures)
+        fixtures_path = os.path.normpath(os.path.abspath('fixtures'))
+        if os.path.exists(fixtures_path):
+            shops_fixtures: List = os.listdir(fixtures_path)
             return shops_fixtures
         return []
 

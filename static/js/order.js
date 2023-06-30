@@ -6,11 +6,18 @@ const inputs = [
   {inputID: 'address', displayID: 'address_value'}
 ];
 
+function setDataValidate(inputEl) {
+  if (inputEl.id === 'email') {
+    inputEl.setAttribute('data-validate', 'require mail');
+  }
+}
+
 function setInputEvent(input, display) {
   const inputEl = document.getElementById(input);
   const displayEl = document.getElementById(display);
-
   displayEl.textContent = inputEl.value;
+
+  setDataValidate(inputEl);
 
   inputEl.addEventListener('input', () => {
     displayEl.textContent = inputEl.value;
@@ -47,5 +54,58 @@ deliveryRadios.forEach(function (radio) {
 payRadios.forEach(function (radio) {
   radio.addEventListener('change', function () {
     updateDisplay(payRadios, payDisplay);
+  });
+});
+
+function extractNumberFromString(str) {
+  const regex = /[^\d.,-]/g;
+  const numStr = str.replace(regex, "").replace(",", ".");
+  return parseFloat(numStr);
+}
+
+const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
+const IS_FREE_DELIVERY = JSON.parse(document.getElementById('is_free_delivery').textContent);
+const totalPriceStr = document.getElementById('total-price').textContent;
+
+function additionValute(str1, str2) {
+  const regex = /[^\d.,-]/g;
+  const numStr1 = str1.replace(regex, "");
+  const numStr2 = str2.replace(regex, "");
+  const decimalSeparator = numStr1.indexOf(",") !== -1 ? "," : ".";
+  const num1 = parseFloat(numStr1.replace(",", ".").replace(decimalSeparator, "."));
+  const num2 = parseFloat(numStr2.replace(",", ".").replace(decimalSeparator, "."));
+  const sum = num1 + num2;
+  const formattedSum = sum.toLocaleString(LANGUAGE_CODE, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return str1.includes("$") ? "$" + formattedSum : formattedSum + str1.slice(-1);
+}
+
+function updateDeliveryInfo(deliveryCategory) {
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', '/order/delivery_info/' + deliveryCategory, true);
+  xhr.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      let data = JSON.parse(this.responseText);
+
+      if (!IS_FREE_DELIVERY || data.codename !== 'regular-delivery') {
+        document.querySelector('.Cart-delivery').style.display = ''
+        document.querySelector('.Delivery-title').textContent = data.title;
+        let DeliveryPriceStr = document.querySelector('.Delivery-price').textContent = data.price;
+        document.getElementById('total-price').textContent = additionValute(DeliveryPriceStr, totalPriceStr)
+      } else {
+        document.querySelector('.Cart-delivery').style.display = 'none';
+        document.getElementById('total-price').textContent = totalPriceStr;
+      }
+    }
+  };
+  xhr.send();
+}
+
+let deliveryCategory = document.querySelector('input[name="delivery_category"]:checked').value;
+updateDeliveryInfo(deliveryCategory);
+
+document.querySelectorAll('input[name="delivery_category"]').forEach(function (radio) {
+  radio.addEventListener('change', function () {
+    deliveryCategory = document.querySelector('input[name="delivery_category"]:checked').value;
+    updateDeliveryInfo(deliveryCategory);
   });
 });

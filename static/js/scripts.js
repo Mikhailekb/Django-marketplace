@@ -179,6 +179,13 @@
                                         error = true;
                                     }
                                     break;
+                                case 'mail':
+                                    const emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                                  if (!emailReg.test( $this.val() )) {
+                                      message = 'Адрес должен быть вида name@domain.com.';
+                                      error = true;
+                                  }
+                                  break;
 
                             }
                             if (error) {
@@ -1021,5 +1028,6 @@
 
     });
 
-
+    $("#phone").mask("+7(999)999-99-99");
+    
 })(jQuery);

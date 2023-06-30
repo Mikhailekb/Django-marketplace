@@ -1,3 +1,5 @@
+from typing import NamedTuple
+
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from django.db import models
@@ -5,12 +7,15 @@ from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from app_shops.models.shop import ProductShop
+
 
 class Order(models.Model):
     """
     Модель заказа
     """
-    buyer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='orders', verbose_name=_('buyer'))
+    buyer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='orders',
+                              verbose_name=_('buyer'))
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('comment'))
     delivery_category = models.ForeignKey('DeliveryCategory', on_delete=models.PROTECT, related_name='items',
                                           verbose_name=_('delivery category'))
@@ -19,6 +24,7 @@ class Order(models.Model):
     email = models.EmailField(verbose_name=_('email'))
     city = models.CharField(max_length=100, verbose_name=_('city'))
     address = models.TextField(max_length=256, verbose_name=_('address'))
+    is_free_delivery = models.BooleanField(default=False, verbose_name=_('is free delivery'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
     is_canceled = models.BooleanField(default=False, verbose_name=_('is canceled'))
@@ -37,8 +43,8 @@ class OrderItem(models.Model):
     Объект заказа
     """
     order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='items', verbose_name=_('order'))
-    product_shop = models.ForeignKey('ProductShop', on_delete=models.PROTECT, related_name='in_orders',
-                                verbose_name=_('product'))
+    product_shop = models.ForeignKey(ProductShop, on_delete=models.PROTECT, related_name='in_orders',
+                                     verbose_name=_('product'))
     price_on_add_moment = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB',
                                      verbose_name=_('price on add moment'))
     quantity = models.PositiveIntegerField(default=1, verbose_name=_('quantity'))
@@ -48,26 +54,16 @@ class OrderItem(models.Model):
         verbose_name = _('order item')
 
 
-class PaymentCategory(models.Model):
-    """
-    Модель способа оплаты
-    """
-    name = models.CharField(max_length=50, verbose_name=_('name'))
-    is_active = models.BooleanField(default=False, verbose_name=_('is active'))
-    codename = AutoSlugField(max_length=100, verbose_name=_('codename'), unique=True, populate_from='name_en')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = _('payment categories')
-        verbose_name = _('payment category')
-
-
 class PaymentItem(models.Model):
     """
     Экземпляр оплаты
     """
+
+    PAYMENT_CATEGORY = (
+        ('0', _('Bank card')),
+        ('1', _('Some other way')),
+    )
+
     IS_PASSED_CHOICES = (
         (True, _('Passed')),
         (False, _('Payment failed'))
@@ -81,8 +77,7 @@ class PaymentItem(models.Model):
 
     order = models.OneToOneField(
         'Order', on_delete=models.CASCADE, related_name='payment_item', verbose_name=_('order'))
-    payment_category = models.ForeignKey('PaymentCategory', on_delete=models.PROTECT, related_name='items',
-                                         verbose_name=_('category'))
+    payment_category = models.CharField(max_length=15, choices=PAYMENT_CATEGORY, verbose_name=_('category'))
     total_price = MoneyField(max_digits=10, null=True, decimal_places=2,
                              default_currency='RUB', verbose_name=_('total price'))
     from_account = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('from account'))
@@ -100,6 +95,8 @@ class DeliveryCategory(models.Model):
     """
     name = models.CharField(max_length=50, verbose_name=_('name'))
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
+    price = MoneyField(max_digits=8, decimal_places=2, default_currency='RUB', verbose_name=_('price'))
+    codename = AutoSlugField(max_length=100, unique=True, populate_from='name_en', verbose_name=_('codename'))
 
     def __str__(self):
         return self.name
