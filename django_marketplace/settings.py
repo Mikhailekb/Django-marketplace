@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'app_orders',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount'
     'import_export',
 ]
 
@@ -163,10 +162,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-FIXTURE_DIRS = [
-    BASE_DIR / 'fixtures',
-]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -187,20 +182,13 @@ CACHES = {
 USER_AGENTS_CACHE = 'default'
 
 AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_FORMS = {
-    "login": "app_users.forms.AuthForm",
-    "signup": "app_users.forms.RegisterForm"
-}
-
-LOGIN_URL = '/profile/accounts/login'
+LOGIN_URL = '/profile/login'
 
 LOGIN_REDIRECT_URL = '/'
-
-SITE_ID = 1
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
@@ -208,11 +196,9 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}

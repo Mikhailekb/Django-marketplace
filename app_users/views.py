@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView, DetailView, UpdateView, ListView
 from django.core.mail import send_mail
 from .models import Profile
-from app_shops.models.order import Order
+from app_orders.models import Order
 
 
 class ResetPassStage1(LoginRequiredMixin, FormView):
