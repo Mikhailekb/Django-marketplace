@@ -2,6 +2,7 @@ from django.conf import settings
 from djmoney.money import Money
 
 from app_shops.models.shop import ProductShop
+from app_shops.services.functions import dollar_conversion
 
 
 class Cart:
@@ -22,9 +23,9 @@ class Cart:
         product_shop_id = str(product_shop.id)
         if product_shop_id not in self.cart:
             if product_shop.discount_price:
-                price = str(round(product_shop.discount_price, 2))
+                price = float(round(product_shop.discount_price, 2))
             else:
-                price = str(product_shop.price.amount)
+                price = float(product_shop.price.amount)
             self.cart[product_shop_id] = {'quantity': 0, 'price': price}
         if update_quantity:
             self.cart[product_shop_id]['quantity'] = quantity
@@ -83,12 +84,22 @@ class Cart:
         """
         return sum(item['quantity'] for item in self.cart.values())
 
-    def get_total_price(self):
+    def get_total_price_rub(self):
         """
         Подсчет стоимости товаров в корзине.
         """
         sum_cart = sum(Money(item['price'], 'RUB').amount * item['quantity'] for item in self.cart.values())
         return Money(sum_cart, 'RUB')
+
+    def get_total_price(self):
+        """
+        Подсчет стоимости товаров в корзине.
+        """
+        total_price_rub = self.get_total_price_rub()
+        if self.request.LANGUAGE_CODE == 'ru':
+            return total_price_rub
+        else:
+            return dollar_conversion(total_price_rub)
 
     def clear(self):
         """Удаление корзины из сессии"""

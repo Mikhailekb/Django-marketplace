@@ -352,3 +352,7 @@ class ComparisonView(TemplateView):
 
         request.session['comparison_products'] = comparison_products
         return redirect(current_page)
+
+
+class AboutUsView(TemplateView):
+    template_name = 'pages/about.html'

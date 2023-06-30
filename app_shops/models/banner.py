@@ -22,7 +22,7 @@ class Banner(models.Model):
     product = models.OneToOneField('Product', on_delete=models.CASCADE, related_name='banner')
     is_active = models.BooleanField(default=False, verbose_name=_('is active'))
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
-    photo = models.ImageField(upload_to=get_banner_img_path, null=True, blank=True,
+    image = models.ImageField(upload_to=get_banner_img_path, null=True, blank=True,
                               validators=[FileExtensionValidator(['png'])], verbose_name=_('image'))
 
     def __str__(self):
@@ -34,7 +34,7 @@ class Banner(models.Model):
         ordering = ('created',)
 
     def clean(self):
-        w, h = get_image_dimensions(self.photo)
+        w, h = get_image_dimensions(self.image)
         if w < 250:
             raise ValidationError(f'The image is {w} pixel wide. It\'s supposed to be >= 250px')
         if h < 250:
@@ -48,6 +48,9 @@ class SpecialOffer(models.Model):
     product_shop = models.ForeignKey('ProductShop', on_delete=models.CASCADE, verbose_name=_('product shop'))
     date_end = models.DateTimeField(null=True, blank=True, verbose_name=_('date end'))
 
+    def __str__(self):
+        return self.product_shop.product.name
+
     class Meta:
         verbose_name_plural = _('special offer')
         verbose_name = _('special offer')
@@ -58,15 +61,17 @@ class SpecialOffer(models.Model):
             raise ValidationError(_('Only one instance of this model is allowed.'))
 
 
-
 class SmallBanner(models.Model):
     """
     Модель маленького баннера на главной страницы
     """
     product = models.ForeignKey('Product', null=True, on_delete=models.CASCADE,
                                 related_name='child_category', verbose_name=_('product'))
-    photo = models.ImageField(upload_to=get_small_banner_img_path, null=True, blank=True,
+    image = models.ImageField(upload_to=get_small_banner_img_path, null=True, blank=True,
                               validators=[FileExtensionValidator(['png'])], verbose_name=_('image'))
+
+    def __str__(self):
+        return self.product.name
 
     class Meta:
         verbose_name_plural = _('small banners')

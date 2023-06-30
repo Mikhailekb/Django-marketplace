@@ -42,7 +42,7 @@ class OrderView(UserPassesTestMixin, FormView):
         cart = Cart(self.request)
         goods = self._get_goods_in_cart(cart)
 
-        total_price = cart.get_total_price()
+        total_price = cart.get_total_price_rub()
         is_free_delivery = (
                 total_price.amount >= ORDER_AMOUNT_WHICH_DELIVERY_FREE
                 and all(goods[0].shop_id == item.shop_id for item in goods)
@@ -68,7 +68,7 @@ class OrderView(UserPassesTestMixin, FormView):
                       phone=phone, email=email, city=city, address=address, comment=comment)
 
         cart = Cart(self.request)
-        total_price = cart.get_total_price()
+        total_price = cart.get_total_price_rub()
         if not is_free_delivery or delivery_category.codename != 'regular-delivery':
             total_price += delivery_category.price
             is_free_delivery = False
@@ -86,9 +86,9 @@ class OrderView(UserPassesTestMixin, FormView):
 
         self.request.session['order'] = order.id
 
-        if payment_category == '0':
+        if payment_category == 'bank-card':
             self.success_url = reverse_lazy('payment')
-        elif payment_category == '1':
+        elif payment_category == 'some-other':
             self.success_url = reverse_lazy('home')
         return super().form_valid(form)
 
@@ -153,8 +153,8 @@ class PaymentView(UserPassesTestMixin, TemplateView):
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         request.session.pop('cart', None)
 
-        account: str = request.POST.get('numero1', None)
-        if len(account) != 9:
+        account: str = request.POST.get('account_number', None)
+        if not account or len(account) != 9:
             return redirect(reverse('home'))
         last_sym = account[-1:]
 
@@ -205,7 +205,7 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
 
     def test_func(self) -> bool:
         user = self.request.user
-        self.object = self.get_object()
+        self.get_object()
         buyer_id = self.object.buyer_id
 
         return (buyer_id == user.id and self.object.payment_item.from_account) or user.is_staff
@@ -218,11 +218,8 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
 
         try:
             self.object = queryset.get()
-        except queryset.model.DoesNotExist as e:
-            raise Http404(
-                _("No %(verbose_name)s found matching the query")
-                % {'verbose_name': queryset.model._meta.verbose_name}
-            ) from e
+        except queryset.model.DoesNotExist:
+            raise Http404(_('No order found matching the query'))
 
         return self.object
 
@@ -238,5 +235,10 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
         if self.object.payment_item.is_passed:
             self.request.session.pop('order', None)
         else:
-            self.request.session['order'] = self.object.id
+            items: QuerySet[OrderItem] = self.object.items.all()
+            if all(item.product_shop.is_active for item in items):
+                context['can_pay'] = True
+                self.request.session['order'] = self.object.id
+            else:
+                self.request.session.pop('order', None)
         return context
