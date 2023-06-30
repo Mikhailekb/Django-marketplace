@@ -1,7 +1,12 @@
+from decimal import Decimal
+
 from djmoney.contrib.exchange.backends.base import BaseExchangeBackend
 from django.db.models import Case, When, F
 from django.db.models.fields import DecimalField
 import requests
+from djmoney.contrib.exchange.backends.base import BaseExchangeBackend
+from djmoney.contrib.exchange.models import convert_money
+from djmoney.money import Money
 
 
 class CBRExchangeBackend(BaseExchangeBackend):
@@ -64,3 +69,11 @@ def get_object_or_none(model, *args, **kwargs):
         return model.objects.get(*args, **kwargs)
     except model.DoesNotExist:
         return None
+
+
+def dollar_conversion(value) -> Money | None:
+    """Конвертация рублей в доллары"""
+    if isinstance(value, Money):
+        return convert_money(value, 'USD')
+    elif isinstance(value, (Decimal, float, int)) or (isinstance(value, str) and value.isdigit()):
+        return convert_money(Money(value, 'RUB'), 'USD')

@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% load i18n static djmoney custom_filters %}
+{% load i18n static custom_filters %}
+
 
 {% block page_content %}
   <div class="Middle Middle_top">
@@ -31,11 +32,7 @@
                 <div class="ProductCard-info">
                   <div class="ProductCard-cost">
                     <div class="ProductCard-price">
-                      {% if request.LANGUAGE_CODE == 'en' %}
-                        {{ product.avg_price|dollar_conversion }}
-                      {% else %}
-                        {% money_localize product.avg_price 'RUB' %}
-                      {% endif %}
+                      {{ price|localize:request.LANGUAGE_CODE }}
                     </div>
                   </div>
                 </div>
@@ -50,7 +47,7 @@
                   <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                     <div class="Amount Amount_product">
                       <button class="Amount-remove" type="button"></button>
-                      <input  class="Amount-input form-input" name="quantity" type="text" value="1">
+                      <input class="Amount-input form-input" name="quantity" type="text" value="1">
                       <button class="Amount-add" type="button"></button>
                     </div>
                   </div>
@@ -172,24 +169,13 @@
                                   {% trans 'Price' %}:
                                 </div>
                                 <div class="Order-infoContent">
-                                  {% if request.LANGUAGE_CODE == 'ru' %}
-                                    {% if price.price_new %}
-                                      <span class="Card-priceOld"
-                                            style="font-size: 18px">{% money_localize price.price_old 'RUB' %}</span>
-                                      <span class="Card-price"
-                                            style="color: #000; font-weight: 400; font-size: 18px">{% money_localize price.price_new 'RUB' %}</span>
-                                    {% else %}
-                                      <span class="Order-price">{% money_localize price.price_old 'RUB' %}</span>
-                                    {% endif %}
+                                  {% if price.price_new %}
+                                    <span class="Card-priceOld"
+                                          style="font-size: 18px">{{ price.price_old|localize:request.LANGUAGE_CODE }}</span>
+                                    <span class="Card-price"
+                                          style="color: #000; font-weight: 400; font-size: 18px">{{ price.price_new|localize:request.LANGUAGE_CODE }}</span>
                                   {% else %}
-                                    {% if price.price_new %}
-                                      <span class="Card-priceOld"
-                                            style="font-size: 18px">{{ price.price_old|dollar_conversion }}</span>
-                                      <span class="Card-price"
-                                            style="color: #000; font-weight: 400; font-size: 18px">{{ price.price_new|dollar_conversion }}</span>
-                                    {% else %}
-                                      <span class="Order-price">{{ price.price_old|dollar_conversion }}</span>
-                                    {% endif %}
+                                    <span class="Order-price">{{ price.price_old|localize:request.LANGUAGE_CODE }}</span>
                                   {% endif %}
                                 </div>
                               </div>

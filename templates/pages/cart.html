@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static djmoney custom_filters %}
+{% load static custom_filters %}
 
 
 {% block page_content %}
@@ -24,11 +24,7 @@
                       </div>
                     </div>
                     <div class="Cart-block Cart-block_price">
-                      {% if request.LANGUAGE_CODE == 'ru' %}
-                        <div class="Cart-price">{% money_localize item.price 'RUB' %}</div>
-                      {% else %}
-                        <div class="Cart-price">{{ item.price|dollar_conversion }}</div>
-                      {% endif %}
+                      <div class="Cart-price">{{ item.price|localize:request.LANGUAGE_CODE }}</div>
                     </div>
                   </div>
                   <div class="Cart-block Cart-block_row">

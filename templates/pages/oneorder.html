@@ -70,10 +70,8 @@
                     </div>
                     {% if not order.payment_item.is_passed %}
                       <div class="Order-info Order-info_error">
-                        <div class="Order-infoType">Оплата не прошла:
-                        </div>
-                        <div class="Order-infoContent">Оплата не выполнена
-                        </div>
+                        <div class="Order-infoType">{% trans 'Payment failed' %}:</div>
+                        <div class="Order-infoContent">{% trans 'Payment not received' %}</div>
                       </div>
                     {% endif %}
                   </div>
@@ -112,11 +110,7 @@
                       {% endif %}
 
                       <div class="Cart-block Cart-block_price">
-                        {% if request.LANGUAGE_CODE == 'ru' %}
-                          <div class="Cart-price">{{ item.price_on_add_moment }}</div>
-                        {% else %}
-                          <div class="Cart-price">{{ item.price_on_add_moment|dollar_conversion }}</div>
-                        {% endif %}
+                        <div class="Cart-price">{{ item.price_on_add_moment|localize:request.LANGUAGE_CODE }}</div>
                       </div>
                     </div>
                     <div class="Cart-block Cart-block_row">
@@ -138,11 +132,7 @@
                         <div class="Cart-desc"></div>
                       </div>
                       <div class="Cart-block Cart-block_price">
-                        {% if request.LANGUAGE_CODE == 'ru' %}
-                          <div class="Cart-price Delivery-price">{{ order.delivery_category.price }}</div>
-                        {% else %}
-                          <div class="Cart-price Delivery-price">{{ order.delivery_category.price|dollar_conversion }}</div>
-                        {% endif %}
+                        <div class="Cart-price Delivery-price">{{ order.delivery_category.price|localize:request.LANGUAGE_CODE }}</div>
                       </div>
                     </div>
                     <div class="Cart-block Cart-block_row">
@@ -155,11 +145,7 @@
                   <div class="Cart-block Cart-block_total">
                     <strong class="Cart-title">
                       {% trans 'Total' %}:
-                      {% if request.LANGUAGE_CODE == 'ru' %}
-                        <span class="Cart-price">{{ order.payment_item.total_price }}</span>
-                      {% else %}
-                        <span class="Cart-price">{{ order.payment_item.total_price|dollar_conversion }}</span>
-                      {% endif %}
+                      <span class="Cart-price">{{ order.payment_item.total_price|localize:request.LANGUAGE_CODE }}</span>
                     </strong>
                   </div>
                   {% if can_pay %}

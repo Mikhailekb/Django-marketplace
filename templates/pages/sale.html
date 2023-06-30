@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load static i18n %}
 
+
 {% block page_content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
@@ -36,9 +37,6 @@
                 <span class="Card-date-month">{{ item.month_end }}</span>
               </div>
               {% endif %}
-{#              {% if card_pin %}#}
-{#                <div class="Card-pin"></div>#}
-{#              {% endif %}#}
               <div class="Card-content">
                 <strong class="Card-title">
                   <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
