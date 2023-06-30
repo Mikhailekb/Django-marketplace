@@ -32,9 +32,9 @@
                   <div class="ProductCard-cost">
                     <div class="ProductCard-price">
                       {% if request.LANGUAGE_CODE == 'en' %}
-                        {{ price|dollar_conversion }}
+                        {{ product.avg_price|dollar_conversion }}
                       {% else %}
-                        {% money_localize price 'RUB' %}
+                        {% money_localize product.avg_price 'RUB' %}
                       {% endif %}
                     </div>
                   </div>
