@@ -8,9 +8,7 @@ from .cart import Cart
 def cart_add(request, product_shop_id):
     quantity = request.POST.get('quantity')
     if isinstance(quantity, str) and quantity.isdigit():
-        quantity = int(quantity)
-        if quantity > 10000:
-            quantity = 10000
+        quantity = min(int(quantity), 10000)
     else:
         quantity = 1
     cart = Cart(request)

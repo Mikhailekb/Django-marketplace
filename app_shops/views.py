@@ -354,6 +354,10 @@ class ComparisonView(TemplateView):
         return redirect(current_page)
 
 
+class AboutUsView(TemplateView):
+    template_name = 'pages/about.html'
+
+
 class ShopDetailView(DetailView):
     """
     Представление детальной страницы продавца
