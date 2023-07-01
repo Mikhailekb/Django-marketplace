@@ -1,9 +1,8 @@
 from decimal import Decimal
 
-from djmoney.contrib.exchange.backends.base import BaseExchangeBackend
+import requests
 from django.db.models import Case, When, F
 from django.db.models.fields import DecimalField
-import requests
 from djmoney.contrib.exchange.backends.base import BaseExchangeBackend
 from djmoney.contrib.exchange.models import convert_money
 from djmoney.money import Money

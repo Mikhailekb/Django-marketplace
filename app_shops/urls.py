@@ -1,6 +1,8 @@
 from django.urls import path
 
 from .views import HomeView, CatalogView, ClearCache, SaleView, DiscountDetailView, ProductDetailView, ComparisonView, \
+    AboutUsView
+from .views import HomeView, CatalogView, ClearCache, SaleView, DiscountDetailView, ProductDetailView, ComparisonView, \
     AboutUsView, ShopDetailView
 
 urlpatterns = [
