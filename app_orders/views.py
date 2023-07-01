@@ -87,8 +87,10 @@ class OrderView(UserPassesTestMixin, FormView):
         self.request.session['order'] = order.id
 
         if payment_category == 'bank-card':
-            self.success_url = reverse_lazy('payment')
-        elif payment_category == 'some-other':
+            self.success_url = reverse_lazy('payment-bank-card')
+        elif payment_category == 'some-one':
+            self.success_url = reverse_lazy('payment-some-one')
+        else:
             self.success_url = reverse_lazy('home')
         return super().form_valid(form)
 
@@ -137,7 +139,7 @@ class PaymentView(UserPassesTestMixin, TemplateView):
     """
     Представление страницы оплаты заказа банковской картой
     """
-    template_name = 'pages/paymentsomeone.html'
+    template_name = 'pages/payment.html'
 
     def test_func(self) -> bool:
         user = self.request.user
@@ -181,6 +183,10 @@ class PaymentView(UserPassesTestMixin, TemplateView):
         payment.save()
         order.save()
         return redirect(reverse('payment_progress'))
+
+
+class PaymentSomeOneView(PaymentView):
+    template_name = 'pages/paymentsomeone.html'
 
 
 class ProgressPaymentView(UserPassesTestMixin, TemplateView):
@@ -238,6 +244,8 @@ class OrderDetailView(UserPassesTestMixin, DetailView):
             items: QuerySet[OrderItem] = self.object.items.all()
             if all(item.product_shop.is_active for item in items):
                 context['can_pay'] = True
+                payment_page = f'payment-{self.object.payment_item.payment_category}'
+                context['payment_page'] = payment_page
                 self.request.session['order'] = self.object.id
             else:
                 self.request.session.pop('order', None)

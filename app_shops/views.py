@@ -1,6 +1,5 @@
 from collections import defaultdict
 from decimal import Decimal
-from random import sample
 from typing import Any, Sequence
 from django.contrib import messages
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -37,7 +36,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        goods = Product.objects.select_related('category', 'main_image') \
+        goods = Product.objects.select_related('category', 'main_image').filter(in_shops__is_active=True) \
             .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop'))) \
             .annotate(Sum('in_shops__count_sold')).order_by('-in_shops__count_sold__sum')[:8]\
             .annotate(avg_price=Avg(price_exp))
@@ -229,7 +228,8 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product: Product = context['product']
-        discounts_query = ProductShop.objects.with_discount_price().select_related('shop').filter(product=product)
+        discounts_query = ProductShop.objects.with_discount_price().select_related('shop') \
+            .filter(product=product, is_active=True)
         reviews_count = product.reviews.count()
         shop_prices = get_prices(discounts_query)
         cart_product_form = CartAddProductForm()
@@ -238,8 +238,7 @@ class ProductDetailView(DetailView):
         context['sellers'] = shop_prices
         context['reviews_count'] = reviews_count
         context['cart_product_form'] = cart_product_form
-        context['random_product_id'] = sample(list(product.in_shops.filter(is_active=True)), 1)[0].id
-
+        context['random_product_id'] = product.get_random_related_id()
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
