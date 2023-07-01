@@ -1,3 +1,4 @@
+import contextlib
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.http import HttpRequest
@@ -45,19 +46,16 @@ class ProductShopInLine(TabularInlinePaginated):
     model = ProductShop
     extra = 1
     raw_id_fields = ('product',)
-    fields = ('product', 'count_left', 'count_sold', 'price',
+    fields = ('id', 'product', 'count_left', 'count_sold', 'price',
               'discount_price', 'discount', 'is_active')
-    readonly_fields = ('discount_price',)
+    readonly_fields = ('id', 'discount_price',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'discount':
-            try:
+            with contextlib.suppress(KeyError):
                 shop_id = request.path.split('/')[4]
                 if shop_id.isdigit():
                     kwargs['queryset'] = Discount.objects.filter(shop_id=shop_id, is_active=True).only('name')
-            except KeyError:
-                pass
-
         elif db_field.name == 'product':
             kwargs['queryset'] = Product.objects.filter(is_active=True).only('name')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -120,13 +118,10 @@ class ProductAdmin(ImportExportMixin, TranslationAdmin):
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == 'main_image':
-            try:
+            with contextlib.suppress(KeyError):
                 product_id = request.path.split('/')[4]
                 if product_id.isdigit():
                     kwargs['queryset'] = ProductImage.objects.filter(product_id=product_id)
-            except KeyError:
-                pass
-
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -139,12 +134,10 @@ class ShopAdmin(TranslationAdmin):
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == 'main_image':
-            try:
+            with contextlib.suppress(KeyError):
                 shop_id = request.path.split('/')[4]
                 if shop_id.isdigit():
                     kwargs['queryset'] = ShopImage.objects.filter(shop_id=shop_id)
-            except KeyError:
-                pass
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -166,12 +159,10 @@ class DiscountAdmin(TranslationAdmin):
 
     def formfield_for_foreignkey(self, db_field, request: HttpRequest, **kwargs):
         if db_field.name == 'main_image':
-            try:
+            with contextlib.suppress(KeyError):
                 discount_id = request.path.split('/')[4]
                 if discount_id.isdigit():
                     kwargs['queryset'] = DiscountImage.objects.filter(discount_id=discount_id)
-            except KeyError:
-                pass
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     @staticmethod
@@ -198,12 +189,12 @@ class BannerAdmin(admin.ModelAdmin):
     list_select_related = ('product',)
 
     def get_img(self, obj):
-        return mark_safe(f'<img style="width: 150px; height: 150px; object-fit: contain;" src={obj.photo.url}>')
+        return mark_safe(f'<img style="width: 150px; height: 150px; object-fit: contain;" src={obj.image.url}>')
 
     def get_foreing_name(self, obj):
         return obj.product.name
 
-    get_img.short_description = _('photo')
+    get_img.short_description = _('image')
     get_foreing_name.short_description = _('name')
 
 

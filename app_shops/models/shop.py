@@ -95,7 +95,6 @@ class ProductShop(models.Model):
                 )
 
 
-
 class ShopImage(models.Model):
     """
     Модель изображения для магазина
