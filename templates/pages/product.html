@@ -22,7 +22,6 @@
                       <img src="{{ img.small.url }}" alt="{{ img }}">
                     </a>
                   {% endif %}
-                {% empty %}
                 {% endfor %}
               </div>
             </div>
@@ -40,38 +39,41 @@
               <div class="ProductCard-text">
                 <p>{{ product.description_short }}</p>
               </div>
-
-              <div>
-                <form class="ProductCard-cart" action="{% url 'cart_add' random_product_id %}" method="post">
-                  {% csrf_token %}
-                  <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                    <div class="Amount Amount_product">
-                      <button class="Amount-remove" type="button"></button>
-                      <input class="Amount-input form-input" name="quantity" type="text" value="1">
-                      <button class="Amount-add" type="button"></button>
-                    </div>
-                  </div>
-                  <div class="ProductCard-cartElement">
-                    <button class="btn btn_primary">
-                      <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                      <span class="btn-content">{% trans 'Buy' %}</span>
-                    </button>
-                  </div>
-                </form>
-                <div id="modal_open" class="my_modal">
-                  <div class="my_modal-dialog">
-                    <div class="my_modal-content">
-                      <div class="my_modal-header">
-                        <p class="my_modal-title">Поздравляем!</p>
-                        <a href="#" title="Закрыть модальное окно" class="close">×</a>
+              {% if random_product_id %}
+                <div>
+                  <form class="ProductCard-cart" action="{% url 'cart_add' random_product_id %}" method="post">
+                    {% csrf_token %}
+                    <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                      <div class="Amount Amount_product">
+                        <button class="Amount-remove" type="button"></button>
+                        <input class="Amount-input form-input" name="quantity" type="text" value="1">
+                        <button class="Amount-add" type="button"></button>
                       </div>
-                      <div class="my_modal-body">
-                        <p>Товар успешно добавлен в корзину!</p>
+                    </div>
+                    <div class="ProductCard-cartElement">
+                      <button class="btn btn_primary">
+                        <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
+                        <span class="btn-content">{% trans 'Buy' %}</span>
+                      </button>
+                    </div>
+                  </form>
+                  <div id="modal_open" class="my_modal">
+                    <div class="my_modal-dialog">
+                      <div class="my_modal-content">
+                        <div class="my_modal-header">
+                          <p class="my_modal-title">Поздравляем!</p>
+                          <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                        </div>
+                        <div class="my_modal-body">
+                          <p>Товар успешно добавлен в корзину!</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              {% else %}
+                <div class="ProductCard-text">{% trans 'Product is not for sale' %}</div>
+              {% endif %}
               <div class="ProductCard-footer">
                 <div class="ProductCard-tags">
                   <strong class="ProductCard-tagsTitle">{% trans 'Tags' %}:</strong>

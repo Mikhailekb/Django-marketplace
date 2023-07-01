@@ -1,5 +1,8 @@
+import random
+
 from autoslug import AutoSlugField
 from django.db import models
+from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField, ImageSpecField
@@ -115,8 +118,9 @@ class Product(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('product-detail', kwargs={'product_slug': self.slug})
 
-    def get_random_related_id(self) -> int:
-        return sample(list(self.in_shops.filter(is_active=True)), 1)[0].id
+    def get_random_related_id(self) -> int | None:
+        if product_in_shops := self.in_shops.filter(is_active=True).values_list('id', flat=True):
+            return random.choice(product_in_shops)
 
 
 class ProductImage(models.Model):
