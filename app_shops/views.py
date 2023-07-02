@@ -36,15 +36,22 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        goods = Product.objects.select_related('category', 'main_image').filter(in_shops__is_active=True) \
-            .prefetch_related(Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop'))) \
-            .annotate(Sum('in_shops__count_sold')).order_by('-in_shops__count_sold__sum')[:8]\
-            .annotate(avg_price=Avg(price_exp))
+        goods = Product.objects \
+                    .filter(is_active=True, in_shops__is_active=True) \
+                    .select_related('category', 'main_image') \
+                    .annotate(sum_count_sold=Sum('in_shops__count_sold'),
+                              avg_price=Avg(price_exp),
+                              in_shops_id=ArrayAgg('in_shops')) \
+                    .order_by('-sum_count_sold')[:8]
 
-        banners = Banner.objects.filter(is_active=True)[:3].select_related('product')
+        banners = Banner.objects \
+                      .filter(is_active=True) \
+                      .select_related('product')[:3]
 
-        small_banners = SmallBanner.objects.all()[:3].select_related('product').annotate(
-            price_from=Min(price_exp_banners))
+        small_banners = SmallBanner.objects \
+                            .select_related('product') \
+                            .annotate(price_from=Min(price_exp_banners))[:3]
+
         if product_with_timer := SpecialOffer.objects.all().first():
             context['product_with_timer'] = ProductShop.objects.with_discount_price() \
                 .get(id=product_with_timer.product_shop_id)
@@ -84,7 +91,8 @@ class CatalogView(FilterView):
                       min_price=Min(price_exp),
                       max_price=Max(price_exp),
                       count_sold=Sum('in_shops__count_sold'),
-                      feedback=Count('reviews')).order_by('count_sold')
+                      feedback=Count('reviews'),
+                      in_shops_id=ArrayAgg('in_shops')).order_by('count_sold')
 
         return self.queryset
 
@@ -166,7 +174,7 @@ class DiscountDetailView(DetailView):
         obj: Discount = kwargs.get('object')
         goods = ProductShop.objects \
             .with_discount_price() \
-            .filter(discount=obj) \
+            .filter(discount=obj, is_active=True) \
             .select_related('product__main_image', 'product__category') \
             .order_by('product__name')
         if date_end := obj.date_end:
@@ -216,12 +224,13 @@ class ProductDetailView(DetailView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.select_related('category', 'main_image'). \
-            prefetch_related('images', 'tags',
-                             Prefetch('features', queryset=FeatureToProduct.objects.select_related('feature_name')
-                                      .prefetch_related('values')),
-                             Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')),
-                             Prefetch('reviews', queryset=Review.objects.select_related('profile'))).annotate(avg_price=Avg(price_exp))
+        queryset = queryset.select_related('category', 'main_image') \
+            .prefetch_related('images', 'tags',
+                              Prefetch('features', queryset=FeatureToProduct.objects.select_related('feature_name')
+                                       .prefetch_related('values')),
+                              Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')),
+                              Prefetch('reviews', queryset=Review.objects.select_related('profile'))) \
+            .annotate(avg_price=Avg(price_exp))
 
         return queryset
 

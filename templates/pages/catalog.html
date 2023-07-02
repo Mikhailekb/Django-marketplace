@@ -107,7 +107,7 @@
                         </button>
                       </form>
 
-                      <form class="Card-btn comparison" action="{% url 'cart_add' item.get_random_related_id %}"
+                      <form class="Card-btn comparison" action="{% url 'cart_add' item|random_related_id %}"
                             method="post">
                         {% csrf_token %}
                         <button class="btn-reset btn-comparison" type="submit">
