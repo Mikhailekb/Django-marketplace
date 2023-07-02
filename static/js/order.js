@@ -1,4 +1,4 @@
-const inputs = [
+const ID_INPUTS_AND_DISPLAY = [
   {inputID: 'name', displayID: 'full_name_value'},
   {inputID: 'phone', displayID: 'phone_value'},
   {inputID: 'email', displayID: 'email_value'},
@@ -6,32 +6,47 @@ const inputs = [
   {inputID: 'address', displayID: 'address_value'}
 ];
 
-function setDataValidate(inputEl) {
-  if (inputEl.id === 'email') {
-    inputEl.setAttribute('data-validate', 'require mail');
-  }
-}
-
-function setInputEvent(input, display) {
+function displayEnteredInfo(input, display) {
   const inputEl = document.getElementById(input);
   const displayEl = document.getElementById(display);
   displayEl.textContent = inputEl.value;
-
-  setDataValidate(inputEl);
 
   inputEl.addEventListener('input', () => {
     displayEl.textContent = inputEl.value;
   });
 }
 
-inputs.forEach(input => setInputEvent(input.inputID, input.displayID));
+ID_INPUTS_AND_DISPLAY.forEach(input => displayEnteredInfo(input.inputID, input.displayID));
 
 
-const deliveryRadios = document.querySelectorAll('input[name="delivery_category"]');
-const deliveryDisplay = document.getElementById('delivery_value');
+const DELIVERY_RADIOS = document.querySelectorAll('input[name="delivery_category"]');
+const DELIVERY_DISPLAY = document.getElementById('delivery_value');
 
-const payRadios = document.querySelectorAll('input[name="payment_category"]');
-const payDisplay = document.getElementById('pay_value');
+const PAY_RADIOS = document.querySelectorAll('input[name="payment_category"]');
+const PAY_DISPLAY = document.getElementById('pay_value');
+
+const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
+const IS_FREE_DELIVERY = JSON.parse(document.getElementById('is_free_delivery').textContent);
+const totalPriceStr = document.getElementById('total-price').textContent;
+
+
+updateDisplay(DELIVERY_RADIOS, DELIVERY_DISPLAY);
+updateDisplay(PAY_RADIOS, PAY_DISPLAY);
+updateDeliveryInfo();
+
+
+PAY_RADIOS.forEach(function (radio) {
+  radio.addEventListener('change', function () {
+    updateDisplay(PAY_RADIOS, PAY_DISPLAY);
+  });
+});
+
+DELIVERY_RADIOS.forEach(function (radio) {
+  radio.addEventListener('change', function () {
+    updateDisplay(DELIVERY_RADIOS, DELIVERY_DISPLAY);
+    updateDeliveryInfo();
+  });
+});
 
 function updateDisplay(radios, display) {
   radios.forEach(function (radio) {
@@ -41,31 +56,6 @@ function updateDisplay(radios, display) {
     }
   });
 }
-
-updateDisplay(deliveryRadios, deliveryDisplay);
-updateDisplay(payRadios, payDisplay);
-
-deliveryRadios.forEach(function (radio) {
-  radio.addEventListener('change', function () {
-    updateDisplay(deliveryRadios, deliveryDisplay);
-  });
-});
-
-payRadios.forEach(function (radio) {
-  radio.addEventListener('change', function () {
-    updateDisplay(payRadios, payDisplay);
-  });
-});
-
-function extractNumberFromString(str) {
-  const regex = /[^\d.,-]/g;
-  const numStr = str.replace(regex, "").replace(",", ".");
-  return parseFloat(numStr);
-}
-
-const LANGUAGE_CODE = JSON.parse(document.getElementById('language-code').textContent);
-const IS_FREE_DELIVERY = JSON.parse(document.getElementById('is_free_delivery').textContent);
-const totalPriceStr = document.getElementById('total-price').textContent;
 
 function additionValute(str1, str2) {
   const regex = /[^\d.,-]/g;
@@ -79,7 +69,8 @@ function additionValute(str1, str2) {
   return str1.includes("$") ? "$" + formattedSum : formattedSum + str1.slice(-1);
 }
 
-function updateDeliveryInfo(deliveryCategory) {
+function updateDeliveryInfo() {
+  let deliveryCategory = document.querySelector('input[name="delivery_category"]:checked').value;
   let xhr = new XMLHttpRequest();
   xhr.open('GET', '/order/delivery_info/' + deliveryCategory, true);
   xhr.onreadystatechange = function () {
@@ -89,8 +80,10 @@ function updateDeliveryInfo(deliveryCategory) {
       if (!IS_FREE_DELIVERY || data.codename !== 'regular-delivery') {
         document.querySelector('.Cart-delivery').style.display = ''
         document.querySelector('.Delivery-title').textContent = data.title;
+
         let DeliveryPriceStr = document.querySelector('.Delivery-price').textContent = data.price;
         document.getElementById('total-price').textContent = additionValute(DeliveryPriceStr, totalPriceStr)
+
       } else {
         document.querySelector('.Cart-delivery').style.display = 'none';
         document.getElementById('total-price').textContent = totalPriceStr;
@@ -99,13 +92,3 @@ function updateDeliveryInfo(deliveryCategory) {
   };
   xhr.send();
 }
-
-let deliveryCategory = document.querySelector('input[name="delivery_category"]:checked').value;
-updateDeliveryInfo(deliveryCategory);
-
-document.querySelectorAll('input[name="delivery_category"]').forEach(function (radio) {
-  radio.addEventListener('change', function () {
-    deliveryCategory = document.querySelector('input[name="delivery_category"]:checked').value;
-    updateDeliveryInfo(deliveryCategory);
-  });
-});

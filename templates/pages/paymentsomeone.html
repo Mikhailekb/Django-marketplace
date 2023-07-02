@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load static i18n custom_filters %}
 
+
 {% block page_content %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
@@ -21,18 +22,14 @@
     <div class="Section">
       <div class="wrap">
         <div>{% trans 'Amount payable' %}:
-          {% if request.LANGUAGE_CODE == 'ru' %}
-            {{ total_price }}
-          {% else %}
-            {{ total_price|dollar_conversion}}
-          {% endif %}
+          {{ total_price|localize:request.LANGUAGE_CODE }}
         </div>
         <form class="form Payment" method="post">
           {% csrf_token %}
           <div class="Payment-card">
             <div class="form-group">
               <label class="form-label">{% trans 'Account number' %}
-                <input class="form-input Payment-bill" id="numero1" name="numero1" type="text" placeholder="9999 9999"
+                <input class="form-input Payment-bill" id="numero1" name="account_number" type="text" placeholder="9999 9999"
                        data-mask="9999 9999" data-validate="require"/>
 {#                       data-mask="9999 9999" data-validate="require pay"/>#}
               </label>
@@ -42,7 +39,7 @@
             </div>
           </div>
           <div class="Payment-pay">
-            <button type="submit" class="btn btn_primary" href="#">{% trans 'Pay' %}</button>
+            <button type="submit" class="btn btn_primary">{% trans 'Pay' %}</button>
           </div>
         </form>
       </div>

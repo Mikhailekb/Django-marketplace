@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% load static i18n djmoney custom_filters %}
+{% load static i18n custom_filters %}
+
 
 {% block page_content %}
   <div class="Middle">
@@ -89,11 +90,7 @@
                 </div>
                 <div class="ProductCard-info">
                   <div class="ProductCard-cost">
-                    {% if request.LANGUAGE_CODE == 'ru' %}
-                      <div class="ProductCard-price">{% money_localize item.avg_price 'RUB' %}</div>
-                    {% else %}
-                      <div class="ProductCard-price">{{ item.avg_price|dollar_conversion }}</div>
-                    {% endif %}
+                    <span class="ProductCard-price">{{ item.avg_price|localize:request.LANGUAGE_CODE }}</span>
                   </div>
                 </div>
                 <div class="ProductCard-cart">

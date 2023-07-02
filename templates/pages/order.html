@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% load static i18n djmoney custom_filters %}
+{% load static i18n custom_filters %}
+
 
 {% block page_content %}
   <div class="Middle Middle_top">
@@ -13,7 +14,7 @@
             <div class="Section-columnContent">
               <div class="NavigateProfile">
 
-                <form action="" method="post">
+                <form method="post">
                   {% csrf_token %}
                   <ul class="menu menu_vt Order-navigate">
                     <li class="menu-item_ACTIVE menu-item">
@@ -34,7 +35,7 @@
             </div>
           </div>
         </div>
-        <form class="form" action="#" method="post">
+        <form class="form" method="post">
           {% csrf_token %}
           <div class="Order-block Order-block_OPEN" id="step1">
             <header class="Section-header Section-header_sm">
@@ -187,11 +188,7 @@
                         <div class="Cart-desc">{{ item.product.product.description_short }}</div>
                       </div>
                       <div class="Cart-block Cart-block_price">
-                        {% if request.LANGUAGE_CODE == 'ru' %}
-                          <div class="Cart-price">{% money_localize item.price 'RUB' %}</div>
-                        {% else %}
-                          <div class="Cart-price">{{ item.price|dollar_conversion }}</div>
-                        {% endif %}
+                        <div class="Cart-price">{{ item.price|localize:request.LANGUAGE_CODE }}</div>
                       </div>
                     </div>
                     <div class="Cart-block Cart-block_row">
@@ -200,34 +197,30 @@
                   </div>
                 {% endfor %}
 
-                  <div class="Cart-product Cart-delivery">
-                    <div class="Cart-block Cart-block_row">
-                      <div class="Cart-block Cart-block_pict">
-                        <div class="Cart-pict">
-                          <img class="Cart-img" src="{% static 'img/icons/delivery.png' %}" alt="delivery.png"/>
-                        </div>
-                      </div>
-                      <div class="Cart-block Cart-block_info">
-                        <div class="Cart-title Delivery-title"></div>
-                        <div class="Cart-desc"></div>
-                      </div>
-                      <div class="Cart-block Cart-block_price">
-                        <div class="Cart-price Delivery-price"></div>
+                <div class="Cart-product Cart-delivery">
+                  <div class="Cart-block Cart-block_row">
+                    <div class="Cart-block Cart-block_pict">
+                      <div class="Cart-pict">
+                        <img class="Cart-img" src="{% static 'img/icons/delivery.png' %}" alt="delivery.png"/>
                       </div>
                     </div>
-                    <div class="Cart-block Cart-block_row">
-                      <div class="Cart-block Cart-block_amount">1 {% trans 'pcs.' %}</div>
+                    <div class="Cart-block Cart-block_info">
+                      <div class="Cart-title Delivery-title"></div>
+                      <div class="Cart-desc"></div>
+                    </div>
+                    <div class="Cart-block Cart-block_price">
+                      <div class="Cart-price Delivery-price"></div>
                     </div>
                   </div>
+                  <div class="Cart-block Cart-block_row">
+                    <div class="Cart-block Cart-block_amount">1 {% trans 'pcs.' %}</div>
+                  </div>
+                </div>
                 <input type="hidden" name="is_free_delivery" value="{{ is_free_delivery }}">
                 <div class="Cart-total">
                   <div class="Cart-block Cart-block_total">
                     <strong class="Cart-title">{% trans 'Total' %}:</strong>
-                    {% if request.LANGUAGE_CODE == 'ru' %}
-                      <span class="Cart-price" id="total-price">{{ cart.get_total_price }}</span>
-                    {% else %}
-                      <span class="Cart-price" id="total-price">{{ cart.get_total_price|dollar_conversion }}</span>
-                    {% endif %}
+                    <span class="Cart-price" id="total-price">{{ cart.get_total_price }}</span>
                   </div>
                   <div class="Cart-block">
                     <button class="btn btn_primary btn_lg" type="submit">{% trans 'Pay' %}</button>

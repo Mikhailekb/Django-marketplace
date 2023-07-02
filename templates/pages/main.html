@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% load static i18n djmoney custom_filters %}
+{% load static i18n custom_filters %}
+
 
 {% block page_content %}
   {% if banners %}
@@ -20,8 +21,8 @@
                     </div>
                   </div>
                   <div class="row-block">
-                    {% if banner.photo.url %}
-                      <div class="Slider-img"><img src="{{ banner.photo.url }}" alt="slider.png"/></div>
+                    {% if banner.image.url %}
+                      <div class="Slider-img"><img src="{{ banner.image.url }}" alt="slider.png"/></div>
                     {% endif %}
                   </div>
                 </div>
@@ -49,16 +50,12 @@
                 <div class="BannersHomeBlock-block">
                   <strong class="BannersHomeBlock-title small-banner-title">{{ item.product.name }}</strong>
                   <div class="BannersHomeBlock-content">{% trans 'from' %}
-                    {% if request.LANGUAGE_CODE == 'ru' %}
-                      <span class="BannersHomeBlock-price">{% money_localize item.price_from 'RUB' %}</span>
-                    {% else %}
-                      <span class="BannersHomeBlock-price">{{ item.price_from|dollar_conversion }}</span>
-                    {% endif %}
+                    <span class="BannersHomeBlock-price">{{ item.price_from|localize:request.LANGUAGE_CODE }}</span>
                   </div>
                 </div>
                 <div class="BannersHomeBlock-block">
                   <div class="BannersHomeBlock-img">
-                    <img src="{{ item.photo.url }}" alt="{{ item.slug }}"/>
+                    <img src="{{ item.image.url }}" alt="{{ item.slug }}"/>
                   </div>
                 </div>
               </div>
@@ -89,13 +86,8 @@
                 </strong>
                 <div class="Card-description">
                   <div class="Card-cost">
-                    {% if request.LANGUAGE_CODE == 'ru' %}
-                      <span class="Card-priceOld">{{ product_with_timer.price }}</span>
-                      <span class="Card-price">{% money_localize product_with_timer.discount_price 'RUB' %}</span>
-                    {% else %}
-                      <span class="Card-priceOld">{{ product_with_timer.price|dollar_conversion }}</span>
-                      <span class="Card-price">{{ product_with_timer.discount_price|dollar_conversion }}</span>
-                    {% endif %}
+                    <span class="Card-priceOld">{{ product_with_timer.price|localize:request.LANGUAGE_CODE }}</span>
+                    <span class="Card-price">{{ product_with_timer.discount_price|localize:request.LANGUAGE_CODE }}</span>
                   </div>
                   <div class="Card-category">{{ product_with_timer.product.category }}</div>
                 </div>
@@ -148,11 +140,7 @@
                 </strong>
                 <div class="Card-description">
                   <div class="Card-cost">
-                    {% if request.LANGUAGE_CODE == 'ru' %}
-                      <span class="Card-price">{% money_localize item.avg_price 'RUB' %}</span>
-                    {% else %}
-                      <span class="Card-price">{{ item.avg_price|dollar_conversion }}</span>
-                    {% endif %}
+                    <span class="Card-price">{{ item.avg_price|localize:request.LANGUAGE_CODE }}</span>
                   </div>
                   <div class="Card-category">{{ item.category.name }}</div>
                   <div class="Card-hover">
@@ -163,7 +151,8 @@
                       </button>
                     </form>
 
-                    <form class="Card-btn comparison" action="{% url 'cart_add' item.get_random_related_id %}" method="post">
+                    <form class="Card-btn comparison" action="{% url 'cart_add' item.get_random_related_id %}"
+                          method="post">
                       {% csrf_token %}
                       <button class="btn-reset btn-comparison" type="submit">
                         <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>

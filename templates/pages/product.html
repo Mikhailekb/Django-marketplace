@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
-{% load i18n static djmoney custom_filters %}
+{% load i18n static custom_filters %}
+
 
 {% block page_content %}
   <div class="Middle Middle_top">
@@ -21,7 +22,6 @@
                       <img src="{{ img.small.url }}" alt="{{ img }}">
                     </a>
                   {% endif %}
-                {% empty %}
                 {% endfor %}
               </div>
             </div>
@@ -31,11 +31,7 @@
                 <div class="ProductCard-info">
                   <div class="ProductCard-cost">
                     <div class="ProductCard-price">
-                      {% if request.LANGUAGE_CODE == 'en' %}
-                        {{ product.avg_price|dollar_conversion }}
-                      {% else %}
-                        {% money_localize product.avg_price 'RUB' %}
-                      {% endif %}
+                      {{ product.avg_price|localize:request.LANGUAGE_CODE }}
                     </div>
                   </div>
                 </div>
@@ -43,35 +39,41 @@
               <div class="ProductCard-text">
                 <p>{{ product.description_short }}</p>
               </div>
-              <div class="ProductCard-cart">
-                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                  <div class="Amount Amount_product">
-                    <button class="Amount-remove" type="button"></button>
-                    <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                    <button class="Amount-add" type="button"></button>
-                  </div>
-                </div>
-                <div class="ProductCard-cartElement">
-                  <a class="btn btn_primary"
-                     href="{% url 'cart_add' random_product_id %}">
-                    <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                    <span class="btn-content">{% trans 'Buy' %}</span>
-                  </a>
-                </div>
-                <div id="modal_open" class="my_modal">
-                  <div class="my_modal-dialog">
-                    <div class="my_modal-content">
-                      <div class="my_modal-header">
-                        <p class="my_modal-title">Поздравляем!</p>
-                        <a href="#" title="Закрыть модальное окно" class="close">×</a>
+              {% if random_product_id %}
+                <div>
+                  <form class="ProductCard-cart" action="{% url 'cart_add' random_product_id %}" method="post">
+                    {% csrf_token %}
+                    <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                      <div class="Amount Amount_product">
+                        <button class="Amount-remove" type="button"></button>
+                        <input class="Amount-input form-input" name="quantity" type="text" value="1">
+                        <button class="Amount-add" type="button"></button>
                       </div>
-                      <div class="my_modal-body">
-                        <p>Товар успешно добавлен в корзину!</p>
+                    </div>
+                    <div class="ProductCard-cartElement">
+                      <button class="btn btn_primary">
+                        <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
+                        <span class="btn-content">{% trans 'Buy' %}</span>
+                      </button>
+                    </div>
+                  </form>
+                  <div id="modal_open" class="my_modal">
+                    <div class="my_modal-dialog">
+                      <div class="my_modal-content">
+                        <div class="my_modal-header">
+                          <p class="my_modal-title">Поздравляем!</p>
+                          <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                        </div>
+                        <div class="my_modal-body">
+                          <p>Товар успешно добавлен в корзину!</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              {% else %}
+                <div class="ProductCard-text">{% trans 'Product is not for sale' %}</div>
+              {% endif %}
               <div class="ProductCard-footer">
                 <div class="ProductCard-tags">
                   <strong class="ProductCard-tagsTitle">{% trans 'Tags' %}:</strong>
@@ -169,24 +171,13 @@
                                   {% trans 'Price' %}:
                                 </div>
                                 <div class="Order-infoContent">
-                                  {% if request.LANGUAGE_CODE == 'ru' %}
-                                    {% if price.price_new %}
-                                      <span class="Card-priceOld"
-                                            style="font-size: 18px">{% money_localize price.price_old 'RUB' %}</span>
-                                      <span class="Card-price"
-                                            style="color: #000; font-weight: 400; font-size: 18px">{% money_localize price.price_new 'RUB' %}</span>
-                                    {% else %}
-                                      <span class="Order-price">{% money_localize price.price_old 'RUB' %}</span>
-                                    {% endif %}
+                                  {% if price.price_new %}
+                                    <span class="Card-priceOld"
+                                          style="font-size: 18px">{{ price.price_old|localize:request.LANGUAGE_CODE }}</span>
+                                    <span class="Card-price"
+                                          style="color: #000; font-weight: 400; font-size: 18px">{{ price.price_new|localize:request.LANGUAGE_CODE }}</span>
                                   {% else %}
-                                    {% if price.price_new %}
-                                      <span class="Card-priceOld"
-                                            style="font-size: 18px">{{ price.price_old|dollar_conversion }}</span>
-                                      <span class="Card-price"
-                                            style="color: #000; font-weight: 400; font-size: 18px">{{ price.price_new|dollar_conversion }}</span>
-                                    {% else %}
-                                      <span class="Order-price">{{ price.price_old|dollar_conversion }}</span>
-                                    {% endif %}
+                                    <span class="Order-price">{{ price.price_old|localize:request.LANGUAGE_CODE }}</span>
                                   {% endif %}
                                 </div>
                               </div>
