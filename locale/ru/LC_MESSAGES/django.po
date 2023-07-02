@@ -576,14 +576,6 @@ msgstr "Возврат денег"
 msgid "Guaranted payments"
 msgstr "Гарантированные платежи"
 
-#: .\templates\pages\about.html:54
-msgid "Support Policy"
-msgstr "Политика поддержки"
-
-#: .\templates\pages\about.html:55
-msgid "Fast support team"
-msgstr "Быстрая команда поддержки"
-
 #: .\templates\pages\about.html:65
 msgid "Quality Guarantee"
 msgstr "Гарантия качества"
@@ -843,26 +835,6 @@ msgstr "О"
 msgid "home"
 msgstr "Главная страница"
 
-#: templates/pages/shop.html:14
-msgid "About Us"
-msgstr "О нас"
-
-#: templates/pages/shop.html:28
-msgid "Shipping & Returns"
-msgstr "Доставка и возврат"
-
-#: templates/pages/shop.html:30
-msgid "World wide shipping"
-msgstr "Доставка по всему миру"
-
-#: templates/pages/shop.html:40
-msgid "Money Back"
-msgstr "Возврат денег"
-
-#: templates/pages/shop.html:42
-msgid "Guaranted payments"
-msgstr "Гарантированные платежи"
-
 #: templates/pages/shop.html:52
 msgid "Support Policy"
 msgstr "Служба поддержки"
@@ -871,14 +843,6 @@ msgstr "Служба поддержки"
 msgid "Fast support team"
 msgstr "Команда быстрой поддержки"
 
-#: templates/pages/shop.html:64
-msgid "Quality Guarantee"
-msgstr "Гарантия качества"
-
-#: templates/pages/shop.html:66
-msgid "Best guaranted items"
-msgstr "Лучшие товары с гарантией"
-
 #: templates/pages/shop.html:75
 msgid "Phone:"
 msgstr "Телефон:телефон"
@@ -886,10 +850,6 @@ msgstr "Телефон:телефон"
 #: templates/pages/shop.html:93
 msgid "Email:"
 msgstr "Электронная почта:"
-
-#: templates/pages/shop.html:99
-msgid "Follow Us"
-msgstr "Подписывайтесь на нас"
 
 #: templates/pages/shop.html:127
 msgid "Store Hystory"
