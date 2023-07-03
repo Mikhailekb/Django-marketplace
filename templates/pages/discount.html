@@ -88,8 +88,7 @@
                     </button>
                   </form>
 
-                  <form class="Card-btn comparison" action="{% url 'cart_add' item.product.get_random_related_id %}"
-                        method="post">
+                  <form class="Card-btn comparison" action="{% url 'cart_add' item.id %}" method="post">
                     {% csrf_token %}
                     <button class="btn-reset btn-comparison" type="submit">
                       <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
