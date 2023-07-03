@@ -1,0 +1,29 @@
+[
+  {
+    "model": "app_shops.shopimage",
+    "pk": 1,
+    "fields": {
+      "image": "img/content/shops/magazin-1/megano_moscow.png",
+      "shop": 1,
+      "uploaded": "2023-06-02T11:42:44.555Z"
+    }
+  },
+  {
+    "model": "app_shops.shopimage",
+    "pk": 2,
+    "fields": {
+      "image": "img/content/shops/magazin-2/megano_rostov.png",
+      "shop": 2,
+      "uploaded": "2023-06-02T11:43:00.948Z"
+    }
+  },
+  {
+    "model": "app_shops.shopimage",
+    "pk": 3,
+    "fields": {
+      "image": "img/content/shops/magazin-3/megano_DV.png",
+      "shop": 3,
+      "uploaded": "2023-06-02T11:43:16.428Z"
+    }
+  }
+]

@@ -576,14 +576,6 @@ msgstr "Возврат денег"
 msgid "Guaranted payments"
 msgstr "Гарантированные платежи"
 
-#: .\templates\pages\about.html:54
-msgid "Support Policy"
-msgstr "Политика поддержки"
-
-#: .\templates\pages\about.html:55
-msgid "Fast support team"
-msgstr "Быстрая команда поддержки"
-
 #: .\templates\pages\about.html:65
 msgid "Quality Guarantee"
 msgstr "Гарантия качества"
@@ -834,3 +826,41 @@ msgstr "Ожидается оплата"
 #: .\templates\pages\progressPayment.html:25
 msgid "We are waiting for confirmation of payment by the payment system"
 msgstr "Ждем подтверждения платежа платежной системой"
+
+#: templates/pages/shop.html:9
+msgid "About"
+msgstr "О"
+
+#: templates/pages/shop.html:12
+msgid "home"
+msgstr "Главная страница"
+
+#: templates/pages/shop.html:52
+msgid "Support Policy"
+msgstr "Служба поддержки"
+
+#: templates/pages/shop.html:54
+msgid "Fast support team"
+msgstr "Команда быстрой поддержки"
+
+#: templates/pages/shop.html:75
+msgid "Phone:"
+msgstr "Телефон:телефон"
+
+#: templates/pages/shop.html:93
+msgid "Email:"
+msgstr "Электронная почта:"
+
+#: templates/pages/shop.html:127
+msgid "Store Hystory"
+msgstr "История магазина"
+
+#: templates/pages/shop.html:134
+msgid "Popular Products"
+msgstr "Популярные товары"
+
+#~ msgid "payment categories"
+#~ msgstr "способы оплаты"
+
+#~ msgid "payment category"
+#~ msgstr "способ оплаты"
