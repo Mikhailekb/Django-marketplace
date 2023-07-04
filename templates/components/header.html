@@ -78,8 +78,8 @@
 
                 {% if not request.user.is_authenticated %}
                   <div class="row-block">
-                    <a class="ControlPanel-title" href="{% url 'login' %}">{% trans 'Login' %}</a>
-                    <a class="ControlPanel-title" href="{% url 'registration' %}">{% trans 'Registration' %}</a>
+                    <a class="ControlPanel-title" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+                    <a class="ControlPanel-title" href="{% url 'account_signup' %}">{% trans 'Registration' %}</a>
                   </div>
                 {% endif %}
               </div>
@@ -123,7 +123,7 @@
                       <img class="CartBlock-img" src="/static/img/icons/loon-icon.svg" alt="loon-icon.svg">
                     </button>
                     <div class="dropdown-content">
-                      <a class="dropdown-content-a" href="#">{% trans 'Personal account' %}</a>
+                      <a class="dropdown-content-a" href="{% url 'account' %}">{% trans 'Personal account' %}</a>
                       {% if request.user.is_staff %}
                         <a class="dropdown-content-a" href="{% url 'admin:index' %}">{% trans 'Administrative section' %}</a>
                       {% endif %}

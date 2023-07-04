@@ -1,50 +1,34 @@
+from allauth.account.forms import LoginForm
+from allauth.account.forms import SignupForm
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 
 from app_users.models import Profile
 
 
-class RegisterForm(forms.ModelForm):
+class RegisterForm(SignupForm):
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs['placeholder'] = "Имя"
+        self.fields["email"].widget.attrs['placeholder'] = "E-mail"
+        self.fields["password1"].widget.attrs['placeholder'] = "Пароль"
+
+
+class AuthForm(LoginForm):
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password',)
+        fields = ['login', 'password']
 
-        widgets = {
-            'username': forms.TextInput(
-                attrs={'class': "user-input", 'name': "name", 'id': "name", 'placeholder': "Имя"}
-            ),
-            'email': forms.EmailInput(
-                attrs={'class': "user-input", 'name': "login", 'id': "email",
-                       'placeholder': "E-mail"
-                }
-            ),
-            'password': forms.PasswordInput(
-                attrs={'name': "pass", 'id': "pass", 'placeholder': "Пароль"}
-            )
-        }
+    def login(self, *args, **kwargs):
+        return super(AuthForm, self).login(*args, **kwargs)
 
-    def clean_email(self):
-        email = self.cleaned_data['email']
-
-        if User.objects.filter(email=self.cleaned_data['email']).exists():
-            raise ValidationError("Данный email уже существует!")
-        return email
-
-
-class AuthForm(AuthenticationForm):
-    class Meta:
-        fields = ['username', 'password']
-
-    username = forms.EmailField(widget=forms.EmailInput(attrs={'class': "user-input", "name":"name", "id": "name", "placeholder": "Email", 'autofocus': True}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"name": "pass", "id": "name", "placeholder": "*********"}))
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if len(username) < 8:
+    def clean_login(self):
+        login = self.cleaned_data['login']
+        if len(login) < 8:
             return ValidationError("Некорректная длина поля")
-        return username
+        return login
 
 
 class ResetPassStage1Form(forms.Form):
@@ -67,7 +51,7 @@ class ResetPassStage2Form(forms.Form):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone', 'avatar', 'name', 'slug']
+        fields = ['phone', 'avatar', 'name']
 
     def clean_name(self):
         name = self.cleaned_data.get("name")

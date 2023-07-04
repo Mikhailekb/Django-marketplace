@@ -16,18 +16,18 @@
       <form method="post">
         {% csrf_token %}
         <div>
-          {{ form.username }}
         </div>
+        {{ form.login }}
+        {{ form.password }}
+        {{ form.errors }}
         <div>
-          {{ form.password }}
         </div>
         <div>
           <input type="submit" value="Войти"/>
         </div>
         <a class="forgot-label" href="{% url 'reset_1' %}">Забыли пароль?</a>
-        <a class="registr" href="{% url 'registration' %}">Регистрация</a>
+        <a class="register" href="{% url 'account_signup' %}">Регистрация</a>
       </form>
     </div>
-
   </div>
 {% endblock %}

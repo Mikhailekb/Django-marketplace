@@ -1,8 +1,6 @@
-import re
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.text import slugify
 from imagekit.models import ProcessedImageField
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
@@ -14,7 +12,7 @@ def validate_name(value):
         raise ValidationError("Введите полное ФИО")
 
     for elem in value.split():
-        if not re.match("""^[а-яА-ЯёЁ][а-яё0-9 !?:;"'.,]+$""", elem):
+        if not elem.isalpha():
             raise ValidationError("В строке присутствуют недопустимые символы")
 
 
@@ -30,19 +28,14 @@ def file_size(value):
 
 @cleanup.select
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = PhoneNumberField(unique=True, null=True, blank=True, verbose_name=_('phone'))
-    avatar = ProcessedImageField(upload_to=get_avatar_path, options={'quality': 80}, validators=[file_size], null=True, blank=True)
-    name = models.CharField(default='', max_length=100, blank=True, validators=[validate_name], verbose_name=_('name'))
-    slug = models.SlugField(unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_("user"))
+    phone = PhoneNumberField(unique=True, null=True, verbose_name=_('phone'))
+    avatar = ProcessedImageField(upload_to=get_avatar_path, options={'quality': 80}, validators=[file_size], null=True, blank=True, verbose_name=_("photo"))
+    name = models.CharField(default='', max_length=100, validators=[validate_name], verbose_name=_('name'))
 
     class Meta:
         verbose_name = _("Profile")
         verbose_name_plural = _("Profiles")
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.user.username)
-        super(Profile, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
