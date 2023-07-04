@@ -25,7 +25,7 @@ from .filters import ProductFilter
 from .forms import ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
-from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
+from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review, ViewHistory
 from .services.functions import get_prices, price_exp, price_exp_banners
 from .models.shop import ProductShop, Shop
 
@@ -244,6 +244,7 @@ class ProductDetailView(DetailView):
         reviews_count = product.reviews.count()
         shop_prices = get_prices(discounts_query)
         cart_product_form = CartAddProductForm()
+        self._add_product_to_viewed(product)
 
         context['review_form'] = ReviewForm
         context['sellers'] = shop_prices
@@ -263,6 +264,18 @@ class ProductDetailView(DetailView):
             review = Review(product=product, profile=profile, text=form.cleaned_data.get('text'))
             review.save()
         return redirect('product-detail', product_slug=product.slug)
+
+    def _add_product_to_viewed(self, product):
+        if self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            history = ViewHistory.objects.filter(profile=profile).order_by('-date_viewed')
+            history_list = list(history)
+
+            while len(history_list) >= 20:
+                product_to_delete = history_list.pop(-1)
+                ViewHistory.objects.filter(id=product_to_delete.id).delete()
+
+            ViewHistory(profile=profile, product=product).save()
 
 
 class ComparisonView(TemplateView):

@@ -159,3 +159,15 @@ class Review(models.Model):
         return self.text[:30]
 
     short_text.short_description = 'text_short'
+
+
+class ViewHistory(models.Model):
+    """
+    Модель истории просмотров
+    """
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='history', verbose_name=_('profile'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='history', verbose_name=_('user'))
+    date_viewed = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.id} - {self.date_viewed}'
