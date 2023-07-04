@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-
 from app_users.models import Profile
 
 
@@ -16,21 +15,25 @@ class SignupViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(User.objects.all().count(), 1)
         self.assertEqual(Profile.objects.all().count(), 1)
+        self.assertRedirects(response, reverse('home'))
 
     def test_wrong_username(self):
         response = self.client.post(reverse('account_signup'), {'username': '', 'email': 'test@gmail.com', 'password1': 'test7359'})
-        self.assertNotEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.all().count(), 1)
+        self.assertFalse(response.context_data['form'].is_valid())
 
     def test_wrong_email(self):
         response = self.client.post(reverse('account_signup'), {'username': 'test', 'email': 'test', 'password1': 'test7359'})
-        self.assertNotEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.all().count(), 1)
+        self.assertFalse(response.context_data['form'].is_valid())
 
     def test_wrong_password(self):
         response = self.client.post(reverse('account_signup'), {'username': 'test', 'email': 'test@gmail.com', 'password1': ''})
-        self.assertNotEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         self.assertNotEqual(User.objects.all().count(), 1)
+        self.assertFalse(response.context_data['form'].is_valid())
 
 
 

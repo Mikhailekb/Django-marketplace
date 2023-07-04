@@ -1,13 +1,13 @@
+from __future__ import annotations
+
 import random
 
 from autoslug import AutoSlugField
 from django.db import models
-from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ProcessedImageField, ImageSpecField
 from smart_selects.db_fields import ChainedManyToManyField
-from random import sample
 
 from app_users.models import Profile
 

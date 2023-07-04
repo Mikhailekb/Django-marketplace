@@ -1,7 +1,6 @@
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
 from .forms import ResetPassStage1Form, ResetPassStage2Form, UserEditForm
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DetailView, UpdateView, ListView
