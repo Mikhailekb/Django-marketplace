@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from .models.category import Category
 from .models.discount import Discount
 from .models.product import Product, FeatureToProduct
+from .models.shop import Shop, ProductShop
 
 
 @receiver([post_save, post_delete], sender=Category)
@@ -56,3 +57,16 @@ def auto_delete_file_on_delete(sender, instance, **kwargs) -> None:
         return
 
     os.remove(image.path)
+
+@receiver([post_save, post_delete], sender=Shop)
+def invalidate_cache_shop(**kwargs) -> None:
+    """Удаление из кэша информации о магазине, в случае изменения таблицы Shop из админки"""
+    slug = kwargs.get('instance').slug
+    cache.delete(f'shop_{slug}')
+
+
+@receiver([post_save, post_delete], sender=ProductShop)
+def invalidate_cache_shop(**kwargs) -> None:
+    """Удаление из кэша информации о товаре, в случае изменения таблицы ProductShop из админки"""
+    slug = kwargs.get('instance').shop.slug
+    cache.delete(f'products_top_{slug}')

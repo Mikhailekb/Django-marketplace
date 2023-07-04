@@ -1,1 +1,68 @@
-[{"model": "app_shops.shop", "pk": 1, "fields": {"name": "Магазин 1", "name_ru": "Магазин 1", "name_en": null, "slug": "magazin-1", "description": "qwerty", "description_ru": "qwerty", "description_en": "", "phone": "+12125552368", "mail": "qwe@ma.il", "address": "qwerty", "address_ru": "qwerty", "address_en": null, "is_active": true, "created": "2023-05-02T11:22:37.456Z", "updated": "2023-05-22T15:02:27.719Z", "main_image": null}}, {"model": "app_shops.shop", "pk": 2, "fields": {"name": "Магазин 2", "name_ru": "Магазин 2", "name_en": null, "slug": "magazin-2", "description": "qwerty", "description_ru": "qwerty", "description_en": "", "phone": "+79646666666", "mail": "aspdaspd@ma.ry", "address": "qwerty", "address_ru": "qwerty", "address_en": null, "is_active": true, "created": "2023-05-06T08:12:53.754Z", "updated": "2023-05-06T11:19:47.094Z", "main_image": null}}, {"model": "app_shops.shop", "pk": 3, "fields": {"name": "Магазин 3", "name_ru": "Магазин 3", "name_en": null, "slug": "magazin-3", "description": "qwerty", "description_ru": "qwerty", "description_en": "", "phone": "+12125552362", "mail": "qwe@ma.ilq", "address": "qwertty", "address_ru": "qwertty", "address_en": null, "is_active": true, "created": "2023-05-06T08:18:01.866Z", "updated": "2023-05-06T11:19:53.873Z", "main_image": null}}]
+[
+  {
+    "model": "app_shops.shop",
+    "pk": 1,
+    "fields": {
+      "name": "MEGANO MOSCOW",
+      "name_ru": "MEGANO MOSCOW",
+      "name_en": "MEGANO MOSCOW",
+      "slug": "magazin-1",
+      "description": "Магазин «MEGANO MOSCOW» находится в городе Москва где представляет широкий ассортимент качественных товаров бытовой техники и электроники, ведущих мировых брендов. Стратегическое партнерство с такими ведущими международными производителями: Apple, IconBit, LG, Panasonic, Pioneer, Samsung, Philips, Sony, Toshiba, Canon, BORK позволяет клиентам «MEGANO MOSCOW» в числе первых узнавать о впечатляющих инновациях и получать эксклюзивные новинки.\nТоварный ассортимент магазина превышает 20 тысяч наименований различной техники: аудио/видео и цифрового направлений, мелкой и крупной бытовой электроники, товаров для развлечения, а также аксессуаров.",
+      "description_ru": "Магазин «MEGANO MOSCOW» находится в городе Москва где представляет широкий ассортимент качественных товаров бытовой техники и электроники, ведущих мировых брендов. Стратегическое партнерство с такими ведущими международными производителями: Apple, IconBit, LG, Panasonic, Pioneer, Samsung, Philips, Sony, Toshiba, Canon, BORK позволяет клиентам «MEGANO MOSCOW» в числе первых узнавать о впечатляющих инновациях и получать эксклюзивные новинки.\nТоварный ассортимент магазина превышает 20 тысяч наименований различной техники: аудио/видео и цифрового направлений, мелкой и крупной бытовой электроники, товаров для развлечения, а также аксессуаров.",
+      "description_en": "The «MEGANO MOSCOW» store is located in the city of Moscow, where it presents a wide range of high-quality household appliances and electronics products of the world's leading brands. Strategic partnership with such leading international manufacturers: Apple, IconBit, LG, Panasonic, Pioneer, Samsung, Philips, Sony, Toshiba, Canon, BORK allows «MEGANO MOSCOW» customers to be among the first to learn about impressive innovations and receive exclusive new items. The product range of the store exceeds 20 thousand items of various equipment: audio / video and digital areas, small and large consumer electronics, entertainment products, as well as accessories.",
+      "phone": "+7(945) 444-33-10",
+      "mail": "MeganoMoscow333@gmail.com",
+      "address": "г. Москва, ул Ленина 14а, ТЦ «Moscow City»",
+      "address_ru": "г. Москва, ул Ленина 14а, ТЦ «Moscow City»",
+      "address_en": "Moscow, Lenina st. 14a, Shopping Center «Moscow City»",
+      "is_active": true,
+      "created": "2023-05-02T11:22:37.456Z",
+      "updated": "2023-05-22T15:02:27.719Z",
+      "main_image": 1
+    }
+  },
+  {
+    "model": "app_shops.shop",
+    "pk": 2,
+    "fields": {
+      "name": "MEGANO ROSTOV",
+      "name_ru": "MEGANO ROSTOV",
+      "name_en": "MEGANO ROSTOV",
+      "slug": "magazin-2",
+      "description": "Магазин «MEGANO ROSTOV»— один из крупнейших в сети магазинов «MEGANO» по объёмам продаж электроники и бытовой техники в России. Он предлагает своим покупателям несколько десятков тысяч наименований аудио/видео и цифровой техники, мелкой и крупной бытовой техники, медиатоваров, а также аксессуаров. Помимо эффективного формата розничной и онлайн торговли, компания предлагает клиентам высококлассную сервисную поддержку под брендом «Meg Service». Эксперты «Meg Credit» помогут быстро заполнить анкету и получить одобрение сразу от нескольких банков-партнёров.",
+      "description_ru": "Магазин «MEGANO ROSTOV»— один из крупнейших в сети магазинов «MEGANO» по объёмам продаж электроники и бытовой техники в России. Он предлагает своим покупателям несколько десятков тысяч наименований аудио/видео и цифровой техники, мелкой и крупной бытовой техники, медиатоваров, а также аксессуаров. Помимо эффективного формата розничной и онлайн торговли, компания предлагает клиентам высококлассную сервисную поддержку под брендом «Meg Service». Эксперты «Meg Credit» помогут быстро заполнить анкету и получить одобрение сразу от нескольких банков-партнёров.",
+      "description_en": "The «MEGANO ROSTOV» store is one of the largest stores in the «MEGANO» chain in terms of sales of electronics and home appliances in Russia. It offers its customers several tens of thousands of items of audio / video and digital equipment, small and large household appliances, media products, and accessories. In addition to an effective retail and online trading format, the company offers its customers high-quality service support under the «Meg Service» brand. «Meg Credit» experts will help you quickly fill out the application form and get approval from several partner banks at once.",
+      "phone": "+7(863) 120-30-50",
+      "mail": "MeganoRostov61reg@gmail.com",
+      "address": "г. Ростов-на-Дону, ул Мира 15/1, ТЦ «Галерея»",
+      "address_ru": "г. Ростов-на-Дону, ул Мира 15/1, ТЦ «Галерея»",
+      "address_en": "Rostov-on-Don, Mira st. 15/1, Shopping Center «Gallery»",
+      "is_active": true,
+      "created": "2023-05-06T08:12:53.754Z",
+      "updated": "2023-05-06T11:19:47.094Z",
+      "main_image": 2
+    }
+  },
+  {
+    "model": "app_shops.shop",
+    "pk": 3,
+    "fields": {
+      "name": "MEGANO DV",
+      "name_ru": "MEGANO DV",
+      "name_en": "MEGANO DV",
+      "slug": "magazin-3",
+      "description": "Магазин «MEGANO DV» — наш крупнейшин магазин на Дальнем Востоке, находящийся в городе Хабаровск. Наша команда уже 10 лет предлагает только самые качественные товары, способные сделать жизнь комфортнее и технологичнее. Мы внимательно собираем данные о брендах, тщательно проверяем качество и сертификацию всей техники, находим наиболее передовые и практичные товары. Наша цель — достичь выдающихся результатов и бескомпромиссного качества, уделяя внимание каждой детали. Мы хотим, чтобы вы получали удовольствие от покупки на всех этапах — от оформления заказа до доставки товара к вам домой.",
+      "description_ru": "Магазин «MEGANO DV» — наш крупнейшин магазин на Дальнем Востоке, находящийся в городе Хабаровск. Наша команда уже 10 лет предлагает только самые качественные товары, способные сделать жизнь комфортнее и технологичнее. Мы внимательно собираем данные о брендах, тщательно проверяем качество и сертификацию всей техники, находим наиболее передовые и практичные товары. Наша цель — достичь выдающихся результатов и бескомпромиссного качества, уделяя внимание каждой детали. Мы хотим, чтобы вы получали удовольствие от покупки на всех этапах — от оформления заказа до доставки товара к вам домой.",
+      "description_en": "The «MEGANO DV»  store is our largest store in the Far East, located in the city of Khabarovsk. For 10 years, our team has been offering only the highest quality products that can make life more comfortable and technologically advanced. We carefully collect brand data, carefully check the quality and certification of all equipment, and find the most advanced and practical products. Our goal is to achieve outstanding results and uncompromising quality by paying attention to every detail. We want you to enjoy shopping at all stages - from placing an order to delivering goods to your home.",
+      "phone": "+7(924) 175-75-75",
+      "mail": "MeganoKhabarovskDV@gmail.com",
+      "address": "г. Хабаровск, ул Пушкина 20, ТЦ «East Land»",
+      "address_ru": "г. Хабаровск, ул Пушкина 20, ТЦ «East Land»",
+      "address_en": "Khabarovsk, Pushkin street 20, Shopping Center  «East Land»",
+      "is_active": true,
+      "created": "2023-05-06T08:18:01.866Z",
+      "updated": "2023-05-06T11:19:53.873Z",
+      "main_image": 3
+    }
+  }
+]
