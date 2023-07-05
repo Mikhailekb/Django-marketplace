@@ -1,6 +1,5 @@
 from collections import defaultdict
 from decimal import Decimal
-from random import sample
 from typing import Any, Sequence
 
 from django.contrib import messages
@@ -276,7 +275,7 @@ class ProductDetailView(DetailView):
 
     @staticmethod
     def _delete_product_from_history(product, profile):
-        history = ViewHistory.objects.select_related('product', 'profile')\
+        history = ViewHistory.objects.select_related('product', 'profile') \
             .filter(profile=profile).order_by('-date_viewed')
         product_in_history = [obj.product for obj in history]
         if product in product_in_history:

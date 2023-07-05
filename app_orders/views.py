@@ -155,7 +155,7 @@ class PaymentView(UserPassesTestMixin, TemplateView):
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         request.session.pop('cart', None)
 
-        account: str = request.POST.get('account_number', None)
+        account: str = request.POST.get('account_number')
         if not account or len(account) != 9:
             return redirect(reverse('home'))
         last_sym = account[-1:]
