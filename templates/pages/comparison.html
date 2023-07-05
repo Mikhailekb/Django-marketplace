@@ -6,9 +6,9 @@
   <div class="Middle">
     <div class="wrap">
       <header class="Section-header comparison-header">
-        {% if comparison_list.count %}
+        {% if count_item %}
           <div>
-            <strong class="Section-title">{% trans 'Number of goods' %}: {{ comparison_list.count }}</strong>
+            <strong class="Section-title">{% trans 'Number of goods' %}: {{ count_item }}</strong>
             <form class="btn-content" action="{% url 'comparison' %}" method="post">
               {% csrf_token %}
               <button class="btn btn_primary" type="submit" name="delete_all" value="{{ comparison_list }}">
@@ -19,7 +19,7 @@
         {% else %}
           <strong class="Section-title">{% trans 'Number of goods' %}: 0</strong>
         {% endif %}
-        {% if comparison_list.count > 1 and one_category %}
+        {% if count_item > 1 and one_category %}
           <form class="comparison-form" method="get">
             <div class="form-group">
               <button class="btn btn_primary" type="submit" name="is_difference" value="{{ is_difference_value }}">
@@ -38,7 +38,7 @@
       </header>
 
       <div class="Product">
-        {% if comparison_list.count == 1 or comparison_list is None %}
+        {% if count_item == 1 or comparison_list is None %}
           <h2 class="ProductCard-comparison-title">{% trans 'Not enough data to compare' %}</h2>
         {% else %}
           <div class="ProductCard">
@@ -48,9 +48,9 @@
                   <h2 class="ProductCard-comparison-title">{{ item.name }}
                   </h2>
                   <div class="ProductCard-look">
-                    <div class="ProductCard-photo compare-photo">
+                    <a href="{{ item.get_absolute_url }}" class="ProductCard-photo compare-photo">
                       <img src="{{ item.main_image.middle.url }}" alt="{{ item.slug }}"/>
-                    </div>
+                    </a>
                   </div>
                   <div class="Tabs Tabs_default">
                     <div class="Tabs-wrap">
@@ -59,8 +59,8 @@
                           {% if one_category %}
                             <table>
                               <tr>
-                                <th>{% trans 'Characteristic' %}</th>
-                                <th>{% trans 'Value' %}</th>
+                                <th>{% trans 'Characteristic'|capfirst %}</th>
+                                <th>{% trans 'Value'|capfirst %}</th>
                               </tr>
                               <tr>
                                 <td><b>{% trans 'Common parameters' %}</b></td>
@@ -80,7 +80,7 @@
                           <form class="btn-content" action="{% url 'comparison' %}" method="post">
                             {% csrf_token %}
                             <button class="btn btn_primary" type="submit" name="delete_product" value="{{ item.id }}">
-                              {% trans 'Delete' %}
+                              {% trans 'delete' %}
                             </button>
                           </form>
                         </div>
@@ -95,10 +95,13 @@
                 </div>
                 <div class="ProductCard-cart">
                   <div class="ProductCard-cartElement">
-                    <a class="btn btn_primary" href="#">
-                      <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                      <span class="btn-content">{% trans 'Add to Cart' %}</span>
-                    </a>
+                    <form class="btn btn_primary" action="{% url 'cart_add' item|random_related_id %}" method="post">
+                      {% csrf_token %}
+                      <button class="btn-reset btn-comparison" type="submit">
+                        <img class="btn-icon" src="{% static 'img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
+                        <span class="btn-content">{% trans 'Add to Cart' %}</span>
+                      </button>
+                    </form>
                   </div>
                 </div>
               </div>

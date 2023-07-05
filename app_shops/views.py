@@ -1,11 +1,11 @@
 from collections import defaultdict
 from decimal import Decimal
-from random import sample
 from typing import Any, Sequence
 
 from django.contrib import messages
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
 from django.http import HttpRequest, HttpResponse, Http404
@@ -26,8 +26,8 @@ from .forms import ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review, ViewHistory
-from .services.functions import get_prices, price_exp, price_exp_banners
 from .models.shop import ProductShop, Shop
+from .services.functions import get_prices, price_exp, price_exp_banners
 
 
 class HomeView(TemplateView):
@@ -129,9 +129,11 @@ class CatalogView(FilterView):
             price_from, price_to, language_code = price.split(';')
         elif self.request.LANGUAGE_CODE == 'ru':
             price_from, price_to = min_price, max_price
-        else:
+        elif min_price:
             price_from = convert_money(Money(min_price, 'RUB'), 'USD').amount
             price_to = convert_money(Money(max_price, 'RUB'), 'USD').amount
+        else:
+            price_from, price_to = 0, 0
 
         return min_price, max_price, price_from, price_to
 
@@ -273,7 +275,7 @@ class ProductDetailView(DetailView):
 
     @staticmethod
     def _delete_product_from_history(product, profile):
-        history = ViewHistory.objects.select_related('product', 'profile')\
+        history = ViewHistory.objects.select_related('product', 'profile') \
             .filter(profile=profile).order_by('-date_viewed')
         product_in_history = [obj.product for obj in history]
         if product in product_in_history:
@@ -295,7 +297,8 @@ class ComparisonView(TemplateView):
             'comparison_products', default=[])[:3]
         if comparison_products and isinstance(comparison_products, list) and len(comparison_products) <= self.MAX_VALUE:
             goods: QuerySet[Product] = Product.objects.filter(id__in=comparison_products) \
-                .annotate(avg_price=Avg(price_exp)) \
+                .annotate(avg_price=Avg(price_exp),
+                          in_shops_id=ArrayAgg('in_shops')) \
                 .select_related('category', 'main_image')
 
             if len({item.category_id for item in goods}) == 1:
@@ -309,6 +312,7 @@ class ComparisonView(TemplateView):
                              .filter(feature_name_id__in=allowable_feature_names)))
 
                 context['comparison_list'] = comparison_list
+                context['count_item'] = comparison_list.count()
                 context['one_category'] = True
             else:
                 context['comparison_list'] = goods
@@ -397,26 +401,28 @@ class ShopDetailView(DetailView):
     context_object_name = 'shop'
 
     def get_object(self, queryset=None):
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
-        shop = cache.get_or_set(f'shop_{slug}', Shop.objects.filter(slug=slug).select_related('main_image'),
-                                timeout=SHOPS_CACHE_LIFETIME)
+        slug = self.kwargs.get(self.slug_url_kwarg)
 
         try:
-            self.object = shop.get()
-        except shop.model.DoesNotExist as error:
-            raise Http404(
-                _("No %(verbose_name)s found matching the query")
-                % {'verbose_name': shop.model._meta.verbose_name}
-            ) from error
+            shop = cache.get(f'shop_{slug}')
+            if not shop:
+                shop = Shop.objects.select_related('main_image').get(slug=slug)
+                cache.set(f'shop_{slug}', shop, timeout=SHOPS_CACHE_LIFETIME)
+        except ObjectDoesNotExist as e:
+            raise Http404(_('No shop found matching the query')) from e
 
-        return self.object
+        return shop
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
-        products_top = cache.get_or_set(f'products_top_{slug}', ProductShop.objects.with_discount_price().select_related('product__main_image')
-                                        .filter(shop__slug=slug).order_by('-count_sold')[:10],
+        slug = self.kwargs.get(self.slug_url_kwarg)
+        products_top = cache.get_or_set(f'products_top_{slug}',
+                                        ProductShop.objects
+                                        .with_discount_price()
+                                        .filter(shop__slug=slug)
+                                        .select_related('product__category', 'product__main_image')
+                                        .order_by('-count_sold')[:10],
                                         timeout=PRODUCTS_TOP_CACHE_LIFETIME)
-        context['products_top'] = products_top
+        context['goods'] = products_top
 
         return context

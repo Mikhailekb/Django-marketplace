@@ -65,7 +65,7 @@
                     </div>
                     <div class="Order-info Order-info_status">
                       <div class="Order-infoType">{% trans 'Status' %}:</div>
-                      <div class="Order-infoContent">{{ order.payment_item.get_is_passed_display }}
+                      <div class="Order-infoContent">{{ order.get_status_display }}
                       </div>
                     </div>
                     {% if not order.payment_item.is_passed %}

@@ -26,7 +26,8 @@ def localize(value, lang) -> Money | None:
 
 @register.filter
 def dollar_conversion_range(value, lang):
-    return int(localize(value, lang).amount)
+    if value:
+        return int(localize(value, lang).amount)
 
 
 @register.filter

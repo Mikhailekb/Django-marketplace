@@ -155,7 +155,7 @@ class PaymentView(UserPassesTestMixin, TemplateView):
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         request.session.pop('cart', None)
 
-        account: str = request.POST.get('account_number', None)
+        account: str = request.POST.get('account_number')
         if not account or len(account) != 9:
             return redirect(reverse('home'))
         last_sym = account[-1:]
@@ -167,8 +167,7 @@ class PaymentView(UserPassesTestMixin, TemplateView):
 
         if last_sym.isdigit() and int(last_sym) % 2 == 0:
             payment.is_passed = True
-            order.is_paid = True
-            order.order_status = 'p'
+            order.status = 'p'
 
             products_to_update = []
             for order_item in order.items.all():

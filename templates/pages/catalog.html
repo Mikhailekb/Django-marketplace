@@ -22,7 +22,9 @@
                     <input class="range-line" id="price" name="price" type="text" data-type="double"
                            data-min="{{ min_price|dollar_conversion_range:request.LANGUAGE_CODE }}"
                            data-max="{{ max_price|dollar_conversion_range:request.LANGUAGE_CODE }}"
-                           data-from="{{ price_from }}" data-to="{{ price_to }}"/>
+                           data-from="{{ price_from }}"
+                           data-to="{{ price_to }}"/>
+
                     <div class="range-price">{% trans 'Price:' %}
                       <div class="rangePrice"></div>
                     </div>

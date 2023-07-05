@@ -1,8 +1,7 @@
-from typing import NamedTuple
-
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -14,6 +13,13 @@ class Order(models.Model):
     """
     Модель заказа
     """
+
+    ORDER_STATUS = (
+        ('p', _('Paid')),
+        ('np', _('Not paid')),
+        ('d', _('Delivery type'))
+    )
+
     buyer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='orders',
                               verbose_name=_('buyer'))
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('comment'))
@@ -28,6 +34,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('created'))
     updated = models.DateTimeField(auto_now=True, verbose_name=_('updated'))
     is_canceled = models.BooleanField(default=False, verbose_name=_('is canceled'))
+    status = models.CharField(default='np', choices=ORDER_STATUS, max_length=2, verbose_name=_('order status'))
 
     def __str__(self):
         order = _('order')
@@ -36,6 +43,9 @@ class Order(models.Model):
     class Meta:
         verbose_name_plural = _('orders')
         verbose_name = _('order')
+
+    def get_absolute_url(self) -> str:
+        return reverse('order_detail', kwargs={'pk': self.pk})
 
 
 class OrderItem(models.Model):
@@ -69,12 +79,6 @@ class PaymentItem(models.Model):
         (False, _('Payment failed'))
     )
 
-    ORDER_STATUS = (
-        ('p', _('Paid')),
-        ('np', _('Not paid')),
-        ('d', _('Delivery type'))
-    )
-
     order = models.OneToOneField(
         'Order', on_delete=models.CASCADE, related_name='payment_item', verbose_name=_('order'))
     payment_category = models.CharField(max_length=15, choices=PAYMENT_CATEGORY, verbose_name=_('category'))
@@ -82,7 +86,6 @@ class PaymentItem(models.Model):
                              default_currency='RUB', verbose_name=_('total price'))
     from_account = models.CharField(max_length=50, null=True, blank=True, verbose_name=_('from account'))
     is_passed = models.BooleanField(default=False, choices=IS_PASSED_CHOICES, verbose_name=_('is passed'))
-    order_status = models.CharField(default='np', choices=ORDER_STATUS, max_length=2, verbose_name=_('order status'))
 
     class Meta:
         verbose_name_plural = _('payment items')

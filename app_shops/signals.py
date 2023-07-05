@@ -2,6 +2,7 @@ import contextlib
 import os
 
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -58,6 +59,7 @@ def auto_delete_file_on_delete(sender, instance, **kwargs) -> None:
 
     os.remove(image.path)
 
+
 @receiver([post_save, post_delete], sender=Shop)
 def invalidate_cache_shop(**kwargs) -> None:
     """Удаление из кэша информации о магазине, в случае изменения таблицы Shop из админки"""
@@ -68,5 +70,10 @@ def invalidate_cache_shop(**kwargs) -> None:
 @receiver([post_save, post_delete], sender=ProductShop)
 def invalidate_cache_shop(**kwargs) -> None:
     """Удаление из кэша информации о товаре, в случае изменения таблицы ProductShop из админки"""
-    slug = kwargs.get('instance').shop.slug
-    cache.delete(f'products_top_{slug}')
+    instance = kwargs.get('instance')
+    try:
+        slug = instance.shop.slug
+        cache.delete(f'products_top_{slug}')
+    except ObjectDoesNotExist:
+        pass
+

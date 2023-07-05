@@ -9,17 +9,19 @@
       <div class="Section-column">
         <div class="Section-columnSection">
           <header class="Section-header">
-            <strong class="Section-title">Навигация
-            </strong>
+            <strong class="Section-title">{% trans 'Navigation' %}</strong>
           </header>
           <div class="Section-columnContent">
             <div class="NavigateProfile">
               <ul class="menu menu_vt">
-                <li class="menu-item"><a class="menu-link" href="{% url 'account' %}">Личный кабинет</a>
+                <li class="menu-item">
+                  <a class="menu-link" href="{% url 'account' %}">{% trans 'Personal account' %}</a>
                 </li>
-                <li class="menu-item_ACTIVE menu-item"><a class="menu-link" href="{% url 'edit' %}">Профиль</a>
+                <li class="menu-item_ACTIVE menu-item">
+                  <a class="menu-link" href="{% url 'edit' %}">{% trans 'Profile' %}</a>
                 </li>
-                <li class="menu-item"><a class="menu-link" href="{% url 'orders' %}">История заказов</a>
+                <li class="menu-item">
+                  <a class="menu-link" href="{% url 'orders' %}">{% trans 'Orders history' %}</a>
                 </li>
               </ul>
             </div>
@@ -33,10 +35,11 @@
             <div class="row">
               <div class="row-block">
                 <div class="form-group">
-                  <label class="form-label" for="avatar">Аватар
+                  <label class="form-label" for="avatar">{% trans 'Avatar' %}
                   </label>
                   <div class="Profile-avatar Profile-avatar_noimg" style="position: relative">
-                    <label class="Profile-fileLabel" for="avatar"><img src="{% static 'img/icons/upload.png' %}" alt="#.png"/>Загрузить фото</label>
+                    <label class="Profile-fileLabel" for="avatar">
+                      <img src="{% static 'img/icons/upload.png' %}" alt="#.png"/>{% trans 'Upload a photo' %}</label>
                     <input class="Profile-file form-input" id="avatar" name="avatar" type="file"
                            data-validate="onlyImgAvatar" style="height: 100%"/>
                     {% with default_image='/static/img/icons/profile.png' %}
@@ -45,44 +48,38 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="name">ФИО
-                  </label>
+                  <label class="form-label" for="name">{% trans 'Full name' %}</label>
                   {{ form.name }}
                   {{ form.name.errors }}
                 </div>
               </div>
               <div class="row-block">
                 <div class="form-group">
-                  <label class="form-label" for="phone">Телефон
-                  </label>
+                  <label class="form-label" for="phone">{% trans 'Tel' %}</label>
                   {{ form.phone }}
                   {{ form.phone.errors }}
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="mail">E-mail
-                  </label>
+                  <label class="form-label" for="mail">{% trans 'E-mail' %}</label>
                   {{ user_form.email }}
                   {{ error_form.email.errors }}
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="password">Пароль
-                  </label>
+                  <label class="form-label" for="password">{% trans 'Password' %}</label>
                   {{ user_form.password1 }}
                   {{ error_form.password1.errors }}
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="passwordReply">Подтверждение пароля
-                  </label>
+                  <label class="form-label" for="passwordReply">{% trans 'Password confirmation' %}</label>
                   {{ user_form.password2 }}
                   {{ error_form.password2.errors }}
                 </div>
                 <div class="form-group">
                   <div class="Profile-btn">
-                    <button class="btn btn_success" type="submit">Сохранить
-                    </button>
+                    <button class="btn btn_success" type="submit">{% trans 'Save' %}</button>
                   </div>
                   {% if success_profile %}
-                    <div class="Profile-success" style="display: block" id="success">Профиль успешно сохранен</div>
+                    <div class="Profile-success" style="display: block" id="success">{% trans 'Profile saved successfully' %}</div>
                   {% else %}
                     <div class="Profile-success" style="display: none" id="success">Профиль успешно сохранен</div>
                   {% endif %}

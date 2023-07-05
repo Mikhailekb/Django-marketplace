@@ -20,7 +20,7 @@
       "min_cost_currency": "RUB",
       "min_cost": null,
       "date_start": "2023-05-21T16:16:29Z",
-      "date_end": "2023-05-29T16:31:30Z",
+      "date_end": "2023-07-29T16:31:30Z",
       "is_active": true,
       "main_image": 4
     }
@@ -46,7 +46,7 @@
       "min_cost_currency": "RUB",
       "min_cost": "200.00",
       "date_start": "2023-05-29T09:54:42Z",
-      "date_end": "2023-05-29T16:31:30Z",
+      "date_end": "2023-07-29T16:31:30Z",
       "is_active": true,
       "main_image": 3
     }
@@ -72,7 +72,7 @@
       "min_cost_currency": "RUB",
       "min_cost": "123.00",
       "date_start": "2023-05-23T16:16:29Z",
-      "date_end": "2023-05-29T16:31:30Z",
+      "date_end": "2023-07-29T16:31:30Z",
       "is_active": true,
       "main_image": 2
     }
