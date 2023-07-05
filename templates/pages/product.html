@@ -78,11 +78,8 @@
                 <div class="ProductCard-tags">
                   <strong class="ProductCard-tagsTitle">{% trans 'Tags' %}:</strong>
                   {% for tag in product.tags.all %}
-                    {% if forloop.last %}
-                      <a href="#">{{ tag.name }}</a>
-                    {% else %}
-                      <a href="#">{{ tag.name }}, </a>
-                    {% endif %}
+                    <a href="{% url 'catalog' %}?tag={{ tag.codename }}">{{ tag.name }}</a>
+                    {% if not forloop.last %},{% endif %}
                   {% empty %}
                     <p>No tags</p>
                   {% endfor %}
@@ -138,7 +135,7 @@
                         <div class="Order-personal">
                           <div class="row">
                             <div class="row-block">
-                              <a class="Order-title" href="#">
+                              <a class="Order-title" href="{% url 'store_detail' product_shop.shop.slug %}">
                                 {{ product_shop.shop.name }}
                               </a>
                               <div class="ProductCard-cartElement" style="margin-top: 10px;">

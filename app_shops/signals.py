@@ -65,8 +65,11 @@ def invalidate_cache_shop(**kwargs) -> None:
     cache.delete(f'shop_{slug}')
 
 
-@receiver([post_save, post_delete], sender=ProductShop)
-def invalidate_cache_shop(**kwargs) -> None:
-    """Удаление из кэша информации о товаре, в случае изменения таблицы ProductShop из админки"""
-    slug = kwargs.get('instance').shop.slug
-    cache.delete(f'products_top_{slug}')
+# @receiver([post_save, post_delete], sender=ProductShop)
+# def invalidate_cache_shop(**kwargs) -> None:
+#     """Удаление из кэша информации о товаре, в случае изменения таблицы ProductShop из админки"""
+#     instance = kwargs.get('instance')
+#     if hasattr(instance, 'shop'):
+#         print(instance)
+#         slug = instance.shop.slug
+#         cache.delete(f'products_top_{slug}')

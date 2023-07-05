@@ -46,9 +46,9 @@ class DeliveryCategoryAdmin(TranslationAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    fields = ('buyer', 'comment', 'delivery_category', 'is_free_delivery', 'name', 'phone',
+    fields = ('buyer', 'status', 'comment', 'delivery_category', 'is_free_delivery', 'name', 'phone',
               'email', 'city', 'address', 'is_canceled', 'created', 'updated')
-    readonly_fields = ('buyer', 'created', 'updated', 'is_free_delivery', 'delivery_category')
+    readonly_fields = ('buyer', 'created', 'updated', 'is_free_delivery', 'delivery_category', 'status',)
     inlines = (PaymentItemInLine, OrderItemInLine)
     list_display = ('__str__', 'created')
     search_fields = ('id', 'phone', 'email', 'address')

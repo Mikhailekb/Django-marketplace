@@ -48,7 +48,7 @@ class ProductFilter(filters.FilterSet):
 
     @staticmethod
     def filter_free_delivery(queryset, name, value):
-        return queryset.filter(in_shops__min_price__gte=ORDER_AMOUNT_WHICH_DELIVERY_FREE) if value else queryset
+        return queryset.filter(min_price__gte=ORDER_AMOUNT_WHICH_DELIVERY_FREE) if value else queryset
 
     class Meta:
         model = Product

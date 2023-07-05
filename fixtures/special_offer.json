@@ -1,1 +1,10 @@
-[{"model": "app_shops.specialoffer", "pk": 3, "fields": {"product_shop": 4, "date_end": "2023-06-10T11:41:52Z"}}]
+[
+  {
+    "model": "app_shops.specialoffer",
+    "pk": 3,
+    "fields": {
+      "product_shop": 4,
+      "date_end": "2023-07-25T11:41:52Z"
+    }
+  }
+]
