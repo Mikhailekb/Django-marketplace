@@ -1,5 +1,6 @@
 from collections import defaultdict
 from decimal import Decimal
+from random import sample
 from typing import Any, Sequence
 
 from django.contrib import messages
@@ -25,7 +26,7 @@ from .filters import ProductFilter
 from .forms import ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.discount import Discount
-from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review
+from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review, ViewHistory
 from .models.shop import ProductShop, Shop
 from .services.functions import get_prices, price_exp, price_exp_banners
 
@@ -246,6 +247,7 @@ class ProductDetailView(DetailView):
         reviews_count = product.reviews.count()
         shop_prices = get_prices(discounts_query)
         cart_product_form = CartAddProductForm()
+        self._add_product_to_viewed(product)
 
         context['review_form'] = ReviewForm
         context['sellers'] = shop_prices
@@ -265,6 +267,25 @@ class ProductDetailView(DetailView):
             review = Review(product=product, profile=profile, text=form.cleaned_data.get('text'))
             review.save()
         return redirect('product-detail', product_slug=product.slug)
+
+    def _add_product_to_viewed(self, product):
+        if self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            self._delete_product_from_history(product, profile)
+            ViewHistory(profile=profile, product=product).save()
+
+    @staticmethod
+    def _delete_product_from_history(product, profile):
+        history = ViewHistory.objects.select_related('product', 'profile')\
+            .filter(profile=profile).order_by('-date_viewed')
+        product_in_history = [obj.product for obj in history]
+        if product in product_in_history:
+            ViewHistory.objects.filter(profile=profile, product=product).delete()
+
+        history_list = list(history)
+        while len(history_list) >= 20:
+            record_to_delete = history_list.pop(-1)
+            ViewHistory.objects.filter(id=record_to_delete.id).delete()
 
 
 class ComparisonView(TemplateView):
