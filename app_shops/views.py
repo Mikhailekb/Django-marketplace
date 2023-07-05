@@ -268,14 +268,21 @@ class ProductDetailView(DetailView):
     def _add_product_to_viewed(self, product):
         if self.request.user.is_authenticated:
             profile = self.request.user.profile
-            history = ViewHistory.objects.filter(profile=profile).order_by('-date_viewed')
-            history_list = list(history)
-
-            while len(history_list) >= 20:
-                product_to_delete = history_list.pop(-1)
-                ViewHistory.objects.filter(id=product_to_delete.id).delete()
-
+            self._delete_product_from_history(product, profile)
             ViewHistory(profile=profile, product=product).save()
+
+    @staticmethod
+    def _delete_product_from_history(product, profile):
+        history = ViewHistory.objects.select_related('product', 'profile')\
+            .filter(profile=profile).order_by('-date_viewed')
+        product_in_history = [obj.product for obj in history]
+        if product in product_in_history:
+            ViewHistory.objects.filter(profile=profile, product=product).delete()
+
+        history_list = list(history)
+        while len(history_list) >= 20:
+            record_to_delete = history_list.pop(-1)
+            ViewHistory.objects.filter(id=record_to_delete.id).delete()
 
 
 class ComparisonView(TemplateView):
