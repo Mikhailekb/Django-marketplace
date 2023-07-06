@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Union
 
 import requests
 from django.db.models import Case, When, F
 from django.db.models.fields import DecimalField
+from django.utils.translation import gettext_lazy as _
 from djmoney.contrib.exchange.backends.base import BaseExchangeBackend
 from djmoney.contrib.exchange.models import convert_money
 from djmoney.money import Money
@@ -73,9 +73,12 @@ def get_object_or_none(model, *args, **kwargs):
         return None
 
 
-def dollar_conversion(value) -> Union[Money, None]:
+def dollar_conversion(value) -> Money:
     """Конвертация рублей в доллары"""
     if isinstance(value, Money):
         return convert_money(value, 'USD')
     elif isinstance(value, (Decimal, float, int)) or (isinstance(value, str) and value.isdigit()):
         return convert_money(Money(value, 'RUB'), 'USD')
+    else:
+        value_type = type(value)
+        raise ValueError(_(f'Number expected, received {value_type}'))
