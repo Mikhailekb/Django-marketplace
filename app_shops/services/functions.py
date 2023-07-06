@@ -4,7 +4,6 @@ from decimal import Decimal
 from typing import Union
 
 import requests
-from django.contrib.auth.mixins import AccessMixin
 from django.db.models import Case, When, F
 from django.db.models.fields import DecimalField
 from djmoney.contrib.exchange.backends.base import BaseExchangeBackend
@@ -74,7 +73,7 @@ def get_object_or_none(model, *args, **kwargs):
         return None
 
 
-def dollar_conversion(value) -> Money | None:
+def dollar_conversion(value) -> Union[Money, None]:
     """Конвертация рублей в доллары"""
     if isinstance(value, Money):
         return convert_money(value, 'USD')
