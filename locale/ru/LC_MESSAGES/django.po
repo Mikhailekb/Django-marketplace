@@ -927,7 +927,7 @@ msgstr "О"
 
 #: .\templates\pages\shop.html:73
 msgid "Phone:"
-msgstr "Телефон:телефон"
+msgstr "Телефон:"
 
 #: .\templates\pages\shop.html:95
 msgid "Email:"

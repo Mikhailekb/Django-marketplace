@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+from typing import Union
 
 from autoslug import AutoSlugField
 from django.db import models
@@ -118,7 +119,7 @@ class Product(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('product-detail', kwargs={'product_slug': self.slug})
 
-    def get_random_related_id(self) -> int | None:
+    def get_random_related_id(self) -> Union[int, None]:
         if product_in_shops := self.in_shops.filter(is_active=True).values_list('id', flat=True):
             return random.choice(product_in_shops)
 

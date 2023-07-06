@@ -5,12 +5,12 @@ from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
 
 
-def get_banner_img_path(instance, name):
+def get_banner_img_path(instance, name) -> str:
     """Возвращает путь для хранения изображений банера"""
     return f'img/content/banners/{instance.product.slug}/{name}'
 
 
-def get_small_banner_img_path(instance, name):
+def get_small_banner_img_path(instance, name) -> str:
     """Возвращает путь для хранения изображений маленького банера"""
     return f'img/content/small_banners/{instance.product.slug}/{name}'
 

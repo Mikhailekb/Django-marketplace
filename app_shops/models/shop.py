@@ -11,7 +11,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from app_shops.models.discount import Discount
 
 
-def get_shop_img_path(instance, name):
+def get_shop_img_path(instance, name) -> str:
     """Возвращает путь для хранения изображений данного магазина"""
     return f'img/content/shops/{instance.shop.slug}/{name}'
 
