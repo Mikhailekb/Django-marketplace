@@ -19,6 +19,7 @@ address = 'qwerty'
 phone = '+79999999999'
 phone2 = '+79999999998'
 
+
 class CustomTestCase(TestCase):
 
     @classmethod
@@ -30,21 +31,22 @@ class CustomTestCase(TestCase):
         category = Category.objects.create(name=name, slug=name, is_active=True)
 
         cls.product: Product = Product.objects.create(name=product_name, description_short=text, description_long=text,
-                                                  category=category, slug=name, is_active=True)
+                                                      category=category, slug=name, is_active=True)
 
         cls.product_shop = ProductShop.objects.create(product=cls.product, shop=shop, count_left=100, count_sold=100,
                                                       price=Money(100, 'RUB'), is_active=True)
 
-        cls.delivery = delivery = DeliveryCategory.objects.create(name=name, is_active=True, price=Money(200, 'RUB'), codename=name)
+        cls.delivery = delivery = DeliveryCategory.objects.create(name=name, is_active=True, price=Money(200, 'RUB'),
+                                                                  codename=name)
 
         cls.order_data = {'name': name,
-                      'phone': phone,
-                      'email': email,
-                      'city': address,
-                      'address': address,
-                      'delivery_category': delivery.pk,
-                      'payment_category': 'bank-card',
-                      }
+                          'phone': phone,
+                          'email': email,
+                          'city': address,
+                          'address': address,
+                          'delivery_category': delivery.pk,
+                          'payment_category': 'bank-card',
+                          }
 
 
 class TestOrderView(CustomTestCase):
