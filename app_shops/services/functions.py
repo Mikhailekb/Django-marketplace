@@ -73,7 +73,7 @@ def get_object_or_none(model, *args, **kwargs):
         return None
 
 
-def dollar_conversion(value) -> Money:
+def conversion_to_dollar(value) -> Money:
     """Конвертация рублей в доллары"""
     if isinstance(value, Money):
         return convert_money(value, 'USD')

@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import random
-from typing import Union
-
 from autoslug import AutoSlugField
 from django.db import models
 from django.urls import reverse
