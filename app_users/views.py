@@ -1,22 +1,19 @@
-from allauth.account.views import RedirectAuthenticatedUserMixin
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
+from .forms import ResetPassStage1Form, ResetPassStage2Form, UserEditForm
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DetailView, UpdateView, ListView
-
-from app_orders.models import Order
-from .forms import ResetPassStage1Form, ResetPassStage2Form, UserEditForm
+from django.core.mail import send_mail
 from .models import Profile
+from app_orders.models import Order
 
 
-class ResetPassStage1(RedirectAuthenticatedUserMixin, FormView):
+class ResetPassStage1(LoginRequiredMixin, FormView):
     """Представление для восстановления пароля. Ввод Email"""
     template_name = 'pages/e-mail.html'
     form_class = ResetPassStage1Form
-    success_url = reverse_lazy('reset_2')
-    redirect_field_name = "next"
+    success_url = reverse_lazy('reset_1')
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -33,12 +30,11 @@ class ResetPassStage1(RedirectAuthenticatedUserMixin, FormView):
         return response
 
 
-class ResetPassStage2(RedirectAuthenticatedUserMixin, FormView):
+class ResetPassStage2(FormView):
     """Представление для восстановления пароля. Ввод нового пароля"""
     form_class = ResetPassStage2Form
     template_name = 'pages/password.html'
     success_url = reverse_lazy('home')
-    redirect_field_name = "next"
 
     def form_valid(self, form):
         user = User.objects.get(username=self.request.user.username)
@@ -88,7 +84,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data(errors=user_form, **kwargs))
 
 
-class AccountView(LoginRequiredMixin, DetailView):
+class AccountView(DetailView):
     """Представление для отображения детальной информации о пользователе"""
     template_name = 'pages/account.html'
     model = Profile
@@ -115,3 +111,7 @@ class OrderListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Order.objects.filter(buyer__username=self.request.user)[:20]
+
+
+
+
