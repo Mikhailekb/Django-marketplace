@@ -81,7 +81,7 @@
                     <a href="{% url 'catalog' %}?tag={{ tag.codename }}">{{ tag.name }}</a>
                     {% if not forloop.last %},{% endif %}
                   {% empty %}
-                    <p>No tags</p>
+                    <p>{% trans 'No tags' %}</p>
                   {% endfor %}
                 </div>
               </div>
@@ -152,7 +152,7 @@
                                   {% trans 'Delivery type' %}:
                                 </div>
                                 <div class="Order-infoContent">
-                                  Ordinary delivery
+                                  {% trans 'Ordinary delivery' %}
                                 </div>
                               </div>
                               <div class="Order-info Order-info_pay">
@@ -160,7 +160,7 @@
                                   {% trans 'Payment' %}:
                                 </div>
                                 <div class="Order-infoContent">
-                                  Card online
+                                  {% trans 'Card online' %}
                                 </div>
                               </div>
                               <div class="Order-info">
@@ -203,7 +203,7 @@
                       {% endif %}
                     {% endfor %}
                   {% empty %}
-                    <p>No features</p>
+                    <p>{% trans 'No features' %}</p>
                   {% endfor %}
                 </div>
               </div>
@@ -233,13 +233,25 @@
                   {% for review in product.reviews.all|dictsortreversed:"created" %}
                     <div class="Comment">
                       <div class="Comment-column Comment-column_pict">
-                        <div class="Comment-avatar">
-                        </div>
+                        {% with default_image='/static/img/icons/user_icon.svg' %}
+                          {% if review.profile.avatar %}
+                            <div class="Comment-avatar" style="background: #0063d1
+                                      url({{ review.profile.avatar.url|default:default_image }}) center center no-repeat;
+                                      background-size: cover">
+                            </div>
+                          {% else %}
+                            <div class="Comment-avatar"></div>
+                          {% endif %}
+                        {% endwith %}
                       </div>
                       <div class="Comment-column">
                         <header class="Comment-header">
                           <div>
-                            <strong class="Comment-title">{{ review.user.name }} {{ review.user.surname }}</strong>
+                            {% if review.profile.name %}
+                                <strong class="Comment-title">{{ review.profile.name }}</strong>
+                            {% else %}
+                                <strong class="Comment-title">{{ review.profile.user.username }}</strong>
+                            {% endif %}
                             <span class="Comment-date">{{ review.created }}</span>
                           </div>
                         </header>
