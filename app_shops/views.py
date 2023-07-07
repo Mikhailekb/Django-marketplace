@@ -259,7 +259,7 @@ class ProductDetailView(DetailView):
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         product = self.get_object()
         if not request.user.is_authenticated:
-            return redirect('login')
+            return redirect('/profile/accounts/login')
 
         profile = request.user.profile
         form = ReviewForm(request.POST)
