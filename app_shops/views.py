@@ -28,6 +28,7 @@ from .models.discount import Discount
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review, ViewHistory
 from .models.shop import ProductShop, Shop
 from .services.functions import get_prices, price_exp, price_exp_banners
+from .templatetags.custom_filters import random_related_id
 
 
 class HomeView(TemplateView):
@@ -234,7 +235,7 @@ class ProductDetailView(DetailView):
                                        .prefetch_related('values')),
                               Prefetch('in_shops', queryset=ProductShop.objects.select_related('shop')),
                               Prefetch('reviews', queryset=Review.objects.select_related('profile'))) \
-            .annotate(avg_price=Avg(price_exp))
+            .annotate(avg_price=Avg(price_exp), in_shops_id=ArrayAgg('in_shops'))
 
         return queryset
 
@@ -252,7 +253,7 @@ class ProductDetailView(DetailView):
         context['sellers'] = shop_prices
         context['reviews_count'] = reviews_count
         context['cart_product_form'] = cart_product_form
-        context['random_product_id'] = product.get_random_related_id()
+        context['random_product_id'] = random_related_id(product)
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:

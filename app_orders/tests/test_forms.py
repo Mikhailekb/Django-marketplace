@@ -35,7 +35,7 @@ class TestOrderForm(CustomTestCase):
 
             response = self.client.post(reverse('order'), data=order_data_copy)
             response_text = response.context['form'].errors[field]
-            with self.subTest("Запрос был успешен без указания обязательного поля", i=field):
+            with self.subTest("Запрос был успешен без указания обязательного поля", field=field):
                 self.assertIn('This field is required.', response_text)
 
     def test_email_validator(self):

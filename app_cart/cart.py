@@ -2,7 +2,7 @@ from django.conf import settings
 from djmoney.money import Money
 
 from app_shops.models.shop import ProductShop
-from app_shops.services.functions import dollar_conversion
+from app_shops.services.functions import conversion_to_dollar
 
 
 class Cart:
@@ -99,7 +99,7 @@ class Cart:
         if self.request.LANGUAGE_CODE == 'ru':
             return total_price_rub
         else:
-            return dollar_conversion(total_price_rub)
+            return conversion_to_dollar(total_price_rub)
 
     def clear(self):
         """Удаление корзины из сессии"""

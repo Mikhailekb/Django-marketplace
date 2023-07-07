@@ -8,6 +8,7 @@ from .models.discount import Discount
 
 @shared_task(name='discount_invalidate')
 def discount_invalidate():
+    """Аннулирование скидок, у которых истек строк действия"""
     current_time = timezone.now()
     discounts = Discount.objects.filter(date_end__lte=current_time, is_active=True)
     discounts.update(is_active=False)
