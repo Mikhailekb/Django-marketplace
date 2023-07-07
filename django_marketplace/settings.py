@@ -198,7 +198,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache', 'LOCATION': CACHE_ROOT},
 }
 
-
 USER_AGENTS_CACHE = 'default'
 
 AUTHENTICATION_BACKENDS = [
@@ -211,7 +210,7 @@ ACCOUNT_FORMS = {
     "signup": "app_users.forms.RegisterForm"
 }
 
-LOGIN_URL = '/profile/accounts/login'
+LOGIN_URL = '/profile/accounts/login/'
 
 LOGIN_REDIRECT_URL = '/'
 

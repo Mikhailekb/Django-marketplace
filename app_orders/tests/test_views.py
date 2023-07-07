@@ -58,8 +58,7 @@ class TestOrderView(CustomTestCase):
     def test_order_no_auth(self):
         self.client.logout()
         response = self.client.get(reverse('order'))
-        self.assertEqual(response.status_code, 302)
-        self.assertURLEqual(response.url, '/profile/accounts/login?next=/order/checkout/')
+        self.assertRedirects(response, reverse('account_login') + '?next=/order/checkout/')
 
     def test_order_without_cart_in_session(self):
         session = self.client.session
@@ -96,8 +95,7 @@ class TestPaymentView(CustomTestCase):
     def test_payment_no_auth(self):
         self.client.logout()
         response = self.client.get(reverse('payment-bank-card'))
-        self.assertEqual(response.status_code, 302)
-        self.assertURLEqual(response.url, '/profile/accounts/login?next=/order/payment/bank-card/')
+        self.assertRedirects(response, reverse('account_login') + '?next=/order/payment/bank-card/')
 
     def test_payment_without_order_in_session(self):
         session = self.client.session
@@ -129,8 +127,7 @@ class TestProgressPaymentView(CustomTestCase):
     def test_progress_payment_no_auth(self):
         self.client.logout()
         response = self.client.get(reverse('payment_progress'))
-        self.assertEqual(response.status_code, 302)
-        self.assertURLEqual(response.url, '/profile/accounts/login?next=/order/payment/progress/')
+        self.assertRedirects(response, reverse('account_login') + '?next=/order/payment/progress/')
 
     def test_payment_without_order_in_session(self):
         session = self.client.session
@@ -152,8 +149,7 @@ class TestOrderDetailView(CustomTestCase):
     def test_order_detail_no_auth(self):
         self.client.logout()
         response = self.client.get(reverse('order_detail', args=[self.order.id]))
-        self.assertEqual(response.status_code, 302)
-        self.assertURLEqual(response.url, f'/profile/accounts/login?next=/order/{self.order.id}/')
+        self.assertRedirects(response, reverse('account_login') + f'?next=/order/{self.order.id}/')
 
     def test_order_detail_other_user_access(self):
         self.client.logout()
