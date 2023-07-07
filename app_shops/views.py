@@ -3,7 +3,6 @@ from decimal import Decimal
 from typing import Any, Sequence
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
