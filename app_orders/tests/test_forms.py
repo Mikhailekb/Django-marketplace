@@ -25,8 +25,7 @@ class TestOrderForm(CustomTestCase):
     def test_with_correct_data(self):
         """Проверка работы, если данные в форме корректные"""
         response = self.client.post(reverse('order'), data=self.order_data)
-        self.assertEqual(response.status_code, 302)
-        self.assertURLEqual(response.url, '/order/payment/bank-card/')
+        self.assertRedirects(response, reverse('payment-bank-card'))
 
     def test_without_one_required_field(self):
         """Проверка работы, если в форме не указано одно обязательное поле"""
