@@ -15,9 +15,9 @@ register = template.Library()
 
 
 @register.filter
-def localize(value, lang) -> Money:
+def localize(value, language_code) -> Money:
     """Возвращает валюту, в зависимости от полученного языка"""
-    if lang != 'ru':
+    if language_code != 'ru':
         return conversion_to_dollar(value)
 
     if isinstance(value, Money):
@@ -30,9 +30,9 @@ def localize(value, lang) -> Money:
 
 
 @register.filter
-def dollar_conversion_range(value, lang) -> Union[int, None]:
+def dollar_conversion_range(value, language_code) -> Union[int, None]:
     if value:
-        return int(localize(value, lang).amount)
+        return int(localize(value, language_code).amount)
 
 
 @register.filter

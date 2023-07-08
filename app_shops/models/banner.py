@@ -66,7 +66,7 @@ class SmallBanner(models.Model):
     Модель маленького баннера на главной страницы
     """
     product = models.ForeignKey('Product', null=True, on_delete=models.CASCADE,
-                                related_name='child_category', verbose_name=_('product'))
+                                related_name='in_small_banner', verbose_name=_('product'))
     image = models.ImageField(upload_to=get_small_banner_img_path, null=True, blank=True,
                               validators=[FileExtensionValidator(['png'])], verbose_name=_('image'))
 
@@ -81,3 +81,23 @@ class SmallBanner(models.Model):
         # Может быть только 3 экземпляра
         if SmallBanner.objects.count() >= 3 and not self.pk:
             raise ValidationError(_('The maximum number of items (3 items) has been reached'))
+
+
+class SliderBanner(models.Model):
+    """
+    Модель маленького баннера на главной страницы
+    """
+    product = models.ForeignKey('Product', on_delete=models.CASCADE,
+                                related_name='in_slider_banner', verbose_name=_('product'))
+
+    def __str__(self):
+        return self.product.name
+
+    class Meta:
+        verbose_name_plural = _('slider banners')
+        verbose_name = _('slider banner')
+
+    def clean(self):
+        # Может быть только 10 экземпляров
+        if SliderBanner.objects.count() >= 10 and not self.pk:
+            raise ValidationError(_('The maximum number of items (10 items) has been reached'))

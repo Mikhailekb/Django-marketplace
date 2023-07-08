@@ -15,16 +15,6 @@ def get_good_img_path(instance, name) -> str:
     return f'img/content/products/{instance.product.slug}/{name}'
 
 
-class SortProduct(models.TextChoices):
-    """
-    Модель параметров сортировки товаров
-    """
-    count_sold = _('Popularity')
-    avg_price = _('Cost')
-    created = _('Novelty')
-    feedback = _('Feedback')
-
-
 class TagProduct(models.Model):
     """
     Модель для группировки товаров по тегу

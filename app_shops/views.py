@@ -2,7 +2,7 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import Any, Sequence
 
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,8 +11,8 @@ from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
 from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
 from djmoney.contrib.exchange.models import convert_money
@@ -23,9 +23,9 @@ from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETI
     PRODUCTS_TOP_CACHE_LIFETIME
 from .filters import ProductFilter
 from .forms import ReviewForm
-from .models.banner import Banner, SpecialOffer, SmallBanner
+from .models.banner import Banner, SpecialOffer, SmallBanner, SliderBanner
 from .models.discount import Discount
-from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review, ViewHistory
+from .models.product import Product, TagProduct, FeatureToProduct, Review, ViewHistory
 from .models.shop import ProductShop, Shop
 from .services.functions import get_prices, price_exp, price_exp_banners
 from .templatetags.custom_filters import random_related_id
@@ -60,9 +60,14 @@ class HomeView(TemplateView):
                 .get(id=product_with_timer.product_shop_id)
             context['date_end'] = product_with_timer.date_end.strftime('%d.%m.%Y %H:%M')
 
+        slider_items = SliderBanner.objects.select_related('product', 'product__category', 'product__main_image') \
+            .annotate(avg_price=Avg(price_exp_banners),
+                      in_shops_id=ArrayAgg('product__in_shops'))
+
         context['top_goods'] = goods
         context['banners'] = banners
         context['small_banners'] = small_banners
+        context['slider_items'] = slider_items
 
         return context
 
@@ -74,6 +79,9 @@ class CatalogView(FilterView):
     template_name = 'pages/catalog.html'
     context_object_name = 'goods'
     filterset_class = ProductFilter
+
+    PRODUCT_SORTED = (('count_sold', _('Popularity')), ('avg_price', _('Cost')),
+                      ('created', _('Novelty')), ('feedback', _('Feedback')))
 
     def get_paginate_by(self, queryset):
         self.paginate_by = 8
@@ -108,7 +116,7 @@ class CatalogView(FilterView):
 
         min_price, max_price, price_from, price_to = self._get_price_range()
 
-        context['sort'] = SortProduct
+        context['sort'] = self.PRODUCT_SORTED
         context['tags'] = tags
         context['order_by'] = self.ordering
         context['category'] = category
@@ -198,26 +206,6 @@ class DiscountDetailView(DetailView):
         return context
 
 
-class ClearCache(View):
-    def post(self, request: HttpRequest) -> HttpResponse:
-        if not request.user.is_staff:
-            raise PermissionError
-
-        if 'product_cache' in request.POST:
-            cache.delete('tags')
-            messages.success(self.request, _('Cache cleared successfully'))
-        elif 'categories_cache' in request.POST:
-            cache.delete('categories')
-            messages.success(self.request, _('Cache cleared successfully'))
-        elif 'all_cache' in request.POST:
-            cache.clear()
-            messages.success(self.request, _('Cache cleared successfully'))
-        else:
-            messages.warning(self.request, _('Error. Cache not cleared'))
-
-        return redirect(request.META.get('HTTP_REFERER'))
-
-
 class ProductDetailView(DetailView):
     """
     Представление детальной страницы товара
@@ -256,11 +244,9 @@ class ProductDetailView(DetailView):
         context['random_product_id'] = random_related_id(product)
         return context
 
+    @method_decorator(login_required)
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         product = self.get_object()
-        if not request.user.is_authenticated:
-            return redirect('/profile/accounts/login')
-
         profile = request.user.profile
         form = ReviewForm(request.POST)
         if form.is_valid():
