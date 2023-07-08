@@ -2,7 +2,6 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import Any, Sequence
 
-from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -14,7 +13,6 @@ from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
 from djmoney.contrib.exchange.models import convert_money
@@ -198,26 +196,6 @@ class DiscountDetailView(DetailView):
         page_obj = paginator.get_page(page_number)
         context['page_obj'] = page_obj
         return context
-
-
-class ClearCache(View):
-    def post(self, request: HttpRequest) -> HttpResponse:
-        if not request.user.is_staff:
-            raise PermissionError
-
-        if 'product_cache' in request.POST:
-            cache.delete('tags')
-            messages.success(self.request, _('Cache cleared successfully'))
-        elif 'categories_cache' in request.POST:
-            cache.delete('categories')
-            messages.success(self.request, _('Cache cleared successfully'))
-        elif 'all_cache' in request.POST:
-            cache.clear()
-            messages.success(self.request, _('Cache cleared successfully'))
-        else:
-            messages.warning(self.request, _('Error. Cache not cleared'))
-
-        return redirect(request.META.get('HTTP_REFERER'))
 
 
 class ProductDetailView(DetailView):

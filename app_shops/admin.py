@@ -1,12 +1,16 @@
 import contextlib
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
+from django.urls import path
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from import_export.admin import ImportExportMixin
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
+from django.core.cache import cache
+from django.contrib import messages
 
 from .models.banner import Banner, SpecialOffer, SmallBanner
 from .models.category import Category
@@ -123,6 +127,29 @@ class ProductAdmin(ImportExportMixin, TranslationAdmin):
                 if product_id.isdigit():
                     kwargs['queryset'] = ProductImage.objects.filter(product_id=product_id)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('clear_cache/', self.clear_cache, name='clear_cache'),
+        ]
+        return custom_urls + urls
+
+    @staticmethod
+    def clear_cache(request: HttpRequest) -> HttpResponse:
+        if 'product_cache' in request.POST:
+            cache.delete('tags')
+            messages.success(request, _('Cache cleared successfully'))
+        elif 'categories_cache' in request.POST:
+            cache.delete('categories')
+            messages.success(request, _('Cache cleared successfully'))
+        elif 'all_cache' in request.POST:
+            cache.clear()
+            messages.success(request, _('Cache cleared successfully'))
+        else:
+            messages.warning(request, _('Error. Cache not cleared'))
+
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 @admin.register(Shop)
