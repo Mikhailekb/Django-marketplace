@@ -5735,6 +5735,10 @@ input[type="radio"] {
     margin-bottom: 25px;
 }
 
+.slider-row {
+    align-items: center;
+}
+
 @media screen and (max-width: 990px) {
     .Slider-title {
         font-size: 50px;
