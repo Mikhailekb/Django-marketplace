@@ -179,24 +179,37 @@
           </header>
           <div class="Slider-box Cards">
 
-            {% for product in slider_items %}
+            {% for item in slider_items %}
               <div class="Slider-item">
                 <div class="Slider-content">
                   <div class="Card">
-                    <a class="Card-picture" href="#">
-                      <img src="{% static product.img %}" alt="card.jpg"/>
+                    <a class="Card-picture slider-card-picture" href="{{ item.product.get_absolute_url }}">
+                      <img src="{{ item.product.main_image.middle.url }}" alt="{{ item.product.slug }}"/>
                     </a>
                     <div class="Card-content">
-                      <strong class="Card-title"><a href="#">{{ product.name }}</a></strong>
+                      <strong class="Card-title slider-card-title">
+                        <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+                      </strong>
                       <div class="Card-description">
                         <div class="Card-cost">
-                          <span class="Card-price">{{ product.price }}</span>
+                          <span class="Card-price">{{ item.avg_price|localize:request.LANGUAGE_CODE }}</span>
                         </div>
-                        <div class="Card-category">{{ product.category }}</div>
+                        <div class="Card-category">{{ item.product.category }}</div>
                         <div class="Card-hover">
-                          <a class="Card-btn" href="#">
-                            <img src="{% static 'img/icons/card/cart.svg' %}" alt="{{ product.name }}"/>
-                          </a>
+                          <form class="Card-btn comparison" action="{% url 'comparison' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn-reset btn-comparison" type="submit" name="add_product"
+                                    value="{{ item.id }}">
+                              <img src="{% static 'img/icons/exchange.svg' %}" alt="exchange.svg"/>
+                            </button>
+                          </form>
+                          <form class="Card-btn comparison" action="{% url 'cart_add' item|random_related_id %}"
+                                method="post">
+                            {% csrf_token %}
+                            <button class="btn-reset btn-comparison" type="submit">
+                              <img src="{% static 'img/icons/card/cart.svg' %}" alt="cart.svg"/>
+                            </button>
+                          </form>
                         </div>
                       </div>
                     </div>

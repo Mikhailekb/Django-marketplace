@@ -2,7 +2,6 @@ from collections import defaultdict
 from decimal import Decimal
 from typing import Any, Sequence
 
-from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
@@ -12,6 +11,7 @@ from django.db.models import QuerySet, Avg, Min, Max, Sum, Prefetch, Count
 from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, ListView, DetailView
 from django_filters.views import FilterView
@@ -23,7 +23,7 @@ from django_marketplace.constants import TAGS_CACHE_LIFETIME, SALES_CACHE_LIFETI
     PRODUCTS_TOP_CACHE_LIFETIME
 from .filters import ProductFilter
 from .forms import ReviewForm
-from .models.banner import Banner, SpecialOffer, SmallBanner
+from .models.banner import Banner, SpecialOffer, SmallBanner, SliderBanner
 from .models.discount import Discount
 from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review, ViewHistory
 from .models.shop import ProductShop, Shop
@@ -60,9 +60,14 @@ class HomeView(TemplateView):
                 .get(id=product_with_timer.product_shop_id)
             context['date_end'] = product_with_timer.date_end.strftime('%d.%m.%Y %H:%M')
 
+        slider_items = SliderBanner.objects.select_related('product', 'product__category', 'product__main_image') \
+            .annotate(avg_price=Avg(price_exp_banners),
+                      in_shops_id=ArrayAgg('product__in_shops'))
+
         context['top_goods'] = goods
         context['banners'] = banners
         context['small_banners'] = small_banners
+        context['slider_items'] = slider_items
 
         return context
 

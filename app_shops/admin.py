@@ -12,7 +12,7 @@ from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 from django.core.cache import cache
 from django.contrib import messages
 
-from .models.banner import Banner, SpecialOffer, SmallBanner
+from .models.banner import Banner, SpecialOffer, SmallBanner, SliderBanner
 from .models.category import Category
 from .models.discount import Discount, DiscountImage
 from .models.product import ProductImage, FeatureValue, Product, TagProduct, FeatureName, FeatureToProduct, Review
@@ -238,5 +238,10 @@ class SpecialOfferAdmin(admin.ModelAdmin):
 
 
 @admin.register(SmallBanner)
+class SmallBannerAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(SliderBanner)
 class SmallBannerAdmin(admin.ModelAdmin):
     pass

@@ -885,6 +885,12 @@
     justify-content: center;
 }
 
+.slider-card-picture {
+    object-fit: cover;
+    height: 300px;
+
+}
+
 @media screen and (min-width: 990px) {
     .Card-picture:hover {
         border-bottom-color: transparent;
@@ -1031,6 +1037,10 @@
     width: 100%;
     padding-bottom: 8px;
     margin-bottom: 3px;
+}
+
+.slider-card-title {
+    min-height: 62px;
 }
 
 .Card-title a {
