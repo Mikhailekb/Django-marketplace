@@ -35,34 +35,32 @@ class TestOrderForm(CustomTestCase):
             order_data_copy.pop(field)
 
             response = self.client.post(reverse('order'), data=order_data_copy)
-            response_text = response.context['form'].errors[field]
             with self.subTest("Запрос был успешен без указания обязательного поля", field=field):
-                self.assertIn('This field is required.', response_text)
+                self.assertFormError(response=response, form='form', field=field, errors='This field is required.')
 
     def test_email_validator(self):
-        """Проверка работы валидатора электронной почты"""
+        """Проверка работы валидации электронной почты"""
         self.order_data['email'] = 'testmail.org'
         response = self.client.post(reverse('order'), data=self.order_data)
-        response_text = response.context['form'].errors['email']
-        self.assertIn('Enter a valid email address.', response_text)
+        self.assertFormError(response=response, form='form', field='email', errors='Enter a valid email address.')
 
     def test_phone_validator(self):
-        """Проверка работы валидатора номера телефона"""
+        """Проверка работы валидации номера телефона"""
         self.order_data['phone'] = '123456789'
         response = self.client.post(reverse('order'), data=self.order_data)
-        response_text = response.context['form'].errors['phone']
-        self.assertIn('Введите корректный номер телефона (например, +12125552368).', response_text)
+        self.assertFormError(response=response, form='form', field='phone',
+                             errors='Введите корректный номер телефона (например, +12125552368).')
 
     def test_delivery_category_validator(self):
-        """Проверка работы валидатора выбора способа доставки"""
+        """Проверка работы валидации выбора способа доставки"""
         self.order_data['delivery_category'] = -1
         response = self.client.post(reverse('order'), data=self.order_data)
-        response_text = response.context['form'].errors['delivery_category']
-        self.assertIn('Select a valid choice. That choice is not one of the available choices.', response_text)
+        self.assertFormError(response=response, form='form', field='delivery_category',
+                             errors='Select a valid choice. That choice is not one of the available choices.')
 
     def test_payment_category_validator(self):
-        """Проверка работы валидатора выбора способа оплаты"""
+        """Проверка работы валидации выбора способа оплаты"""
         self.order_data['payment_category'] = 'qwerty'
         response = self.client.post(reverse('order'), data=self.order_data)
-        response_text = response.context['form'].errors['payment_category']
-        self.assertIn('Select a valid choice. qwerty is not one of the available choices.', response_text)
+        self.assertFormError(response=response, form='form', field='payment_category',
+                             errors='Select a valid choice. qwerty is not one of the available choices.')
