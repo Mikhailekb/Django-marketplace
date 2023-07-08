@@ -10,6 +10,7 @@ address = 'qwerty'
 
 class TestOrderForm(CustomTestCase):
     def setUp(self):
+        self.client.defaults['HTTP_ACCEPT_LANGUAGE'] = 'ru'
         self.client.login(username=name, password=password)
         self.client.post(reverse('cart_add', args=[self.product_shop.pk]), data={'quantity': 10})
 
@@ -36,13 +37,14 @@ class TestOrderForm(CustomTestCase):
 
             response = self.client.post(reverse('order'), data=order_data_copy)
             with self.subTest("Запрос был успешен без указания обязательного поля", field=field):
-                self.assertFormError(response=response, form='form', field=field, errors='This field is required.')
+                self.assertFormError(response=response, form='form', field=field, errors='Обязательное поле.')
 
     def test_email_validator(self):
         """Проверка работы валидации электронной почты"""
         self.order_data['email'] = 'testmail.org'
         response = self.client.post(reverse('order'), data=self.order_data)
-        self.assertFormError(response=response, form='form', field='email', errors='Enter a valid email address.')
+        self.assertFormError(response=response, form='form', field='email',
+                             errors='Введите правильный адрес электронной почты.')
 
     def test_phone_validator(self):
         """Проверка работы валидации номера телефона"""
@@ -56,11 +58,11 @@ class TestOrderForm(CustomTestCase):
         self.order_data['delivery_category'] = -1
         response = self.client.post(reverse('order'), data=self.order_data)
         self.assertFormError(response=response, form='form', field='delivery_category',
-                             errors='Select a valid choice. That choice is not one of the available choices.')
+                             errors='Выберите корректный вариант. Вашего варианта нет среди допустимых значений.')
 
     def test_payment_category_validator(self):
         """Проверка работы валидации выбора способа оплаты"""
         self.order_data['payment_category'] = 'qwerty'
         response = self.client.post(reverse('order'), data=self.order_data)
         self.assertFormError(response=response, form='form', field='payment_category',
-                             errors='Select a valid choice. qwerty is not one of the available choices.')
+                             errors='Выберите корректный вариант. qwerty нет среди допустимых значений.')
