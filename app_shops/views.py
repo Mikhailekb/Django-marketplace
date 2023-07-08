@@ -25,7 +25,7 @@ from .filters import ProductFilter
 from .forms import ReviewForm
 from .models.banner import Banner, SpecialOffer, SmallBanner, SliderBanner
 from .models.discount import Discount
-from .models.product import SortProduct, Product, TagProduct, FeatureToProduct, Review, ViewHistory
+from .models.product import Product, TagProduct, FeatureToProduct, Review, ViewHistory
 from .models.shop import ProductShop, Shop
 from .services.functions import get_prices, price_exp, price_exp_banners
 from .templatetags.custom_filters import random_related_id
@@ -80,6 +80,9 @@ class CatalogView(FilterView):
     context_object_name = 'goods'
     filterset_class = ProductFilter
 
+    PRODUCT_SORTED = (('count_sold', _('Popularity')), ('avg_price', _('Cost')),
+                      ('created', _('Novelty')), ('feedback', _('Feedback')))
+
     def get_paginate_by(self, queryset):
         self.paginate_by = 8
         if self.request.user_agent.is_mobile:
@@ -113,7 +116,7 @@ class CatalogView(FilterView):
 
         min_price, max_price, price_from, price_to = self._get_price_range()
 
-        context['sort'] = SortProduct
+        context['sort'] = self.PRODUCT_SORTED
         context['tags'] = tags
         context['order_by'] = self.ordering
         context['category'] = category

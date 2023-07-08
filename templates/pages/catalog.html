@@ -77,10 +77,10 @@
             <div class="Sort-variants">
               {% for option in sort %}
                 <a class="Sort-sortBy"
-                        {% if order_by == option.name %} id="-{{ option.name }}" href="?order_by=-{{ option.name }}"
-                        {% else %} id="{{ option.name }}" href="?order_by={{ option.name }}" {% endif %}
+                        {% if order_by == option.0 %} id="-{{ option.0 }}" href="?order_by=-{{ option.0 }}"
+                        {% else %} id="{{ option.0 }}" href="?order_by={{ option.0 }}" {% endif %}
                 >
-                  {{ option.value }}
+                  {{ option.1 }}
                 </a>
               {% endfor %}
             </div>
