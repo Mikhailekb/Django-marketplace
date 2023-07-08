@@ -56,22 +56,16 @@ class OrderView(UserPassesTestMixin, FormView):
         return ProductShop.objects.filter(id__in=goods_id)
 
     def form_valid(self, form: OrderForm):
-        comment = form.cleaned_data.get('comment')
         is_free_delivery = form.cleaned_data.get('is_free_delivery', False)
-        delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
-        name = form.cleaned_data.get('name')
-        phone = form.cleaned_data.get('phone')
-        email = form.cleaned_data.get('email')
-        city = form.cleaned_data.get('city')
-        address = form.cleaned_data.get('address')
-        order = Order(buyer=self.request.user, delivery_category=delivery_category, name=name,
-                      phone=phone, email=email, city=city, address=address, comment=comment)
-
         cart = Cart(self.request)
         total_price = cart.get_total_price_rub()
+        delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
+
         if not is_free_delivery or delivery_category.codename != 'regular-delivery':
             total_price += delivery_category.price
             is_free_delivery = False
+
+        order = self._make_order(form)
 
         goods, error_messages = self._check_count_left_goods(cart, order)
         if error_messages:
@@ -86,13 +80,28 @@ class OrderView(UserPassesTestMixin, FormView):
 
         self.request.session['order'] = order.id
 
+        self._set_success_url(payment_category)
+        return super().form_valid(form)
+
+    def _make_order(self, form):
+        comment = form.cleaned_data.get('comment')
+        delivery_category: DeliveryCategory = form.cleaned_data.get('delivery_category')
+        name = form.cleaned_data.get('name')
+        phone = form.cleaned_data.get('phone')
+        email = form.cleaned_data.get('email')
+        city = form.cleaned_data.get('city')
+        address = form.cleaned_data.get('address')
+        order = Order(buyer=self.request.user, delivery_category=delivery_category, name=name,
+                      phone=phone, email=email, city=city, address=address, comment=comment)
+        return order
+
+    def _set_success_url(self, payment_category):
         if payment_category == 'bank-card':
             self.success_url = reverse_lazy('payment-bank-card')
         elif payment_category == 'some-one':
             self.success_url = reverse_lazy('payment-some-one')
         else:
             self.success_url = reverse_lazy('home')
-        return super().form_valid(form)
 
     @staticmethod
     def _check_count_left_goods(cart: Cart, order: Order) -> tuple[list[OrderItem], list]:
