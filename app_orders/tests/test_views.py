@@ -56,11 +56,13 @@ class TestOrderView(CustomTestCase):
         self.client.post(reverse('cart_add', args=[self.product_shop.pk]), data={'quantity': 10})
 
     def test_order_no_auth(self):
+        """Проверка, что неавторизованного пользователя перенаправляет на страницу авторизации"""
         self.client.logout()
         response = self.client.get(reverse('order'))
         self.assertRedirects(response, reverse('account_login') + '?next=/order/checkout/')
 
     def test_order_without_cart_in_session(self):
+        """Проверка, что нельзя зайти на страницу без товаров в корзине"""
         session = self.client.session
         session.pop('cart')
         session.save()
@@ -69,6 +71,7 @@ class TestOrderView(CustomTestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_with_not_active_product(self):
+        """Проверка, что нельзя оформить заказ с неактивным товаром"""
         shop = Shop.objects.create(name=name2, description=text, mail=email2,
                                    address=address, slug=name2, is_active=True, phone=phone2)
         product_shop = ProductShop.objects.create(product=self.product, shop=shop, count_left=100, count_sold=100,
@@ -93,11 +96,13 @@ class TestPaymentView(CustomTestCase):
         self.client.post(reverse('order'), data=self.order_data)
 
     def test_payment_no_auth(self):
+        """Проверка, что неавторизованного пользователя перенаправляет на страницу авторизации"""
         self.client.logout()
         response = self.client.get(reverse('payment-bank-card'))
         self.assertRedirects(response, reverse('account_login') + '?next=/order/payment/bank-card/')
 
     def test_payment_without_order_in_session(self):
+        """Проверка, что нельзя зайти на страницу оплаты не оформив заказ"""
         session = self.client.session
         session.pop('order')
         session.save()
@@ -106,14 +111,14 @@ class TestPaymentView(CustomTestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_post_request_with_correct_data(self):
+        """Проверка работы метода с обработкой post запроса. Post запрос с корректными данными """
         response = self.client.post(reverse('payment-bank-card'), data={'account_number': '1234 3456'})
-        self.assertEqual(response.status_code, 302)
-        self.assertURLEqual(response.url, '/order/payment/progress/')
+        self.assertRedirects(response, reverse('payment_progress'))
 
     def test_post_request_with_incorrect_data(self):
+        """Проверка работы метода с обработкой post запроса. Post запрос с некорректными данными """
         response = self.client.post(reverse('payment-bank-card'), data={'account_number': 'qwerty'})
-        self.assertEqual(response.status_code, 302)
-        self.assertURLEqual(response.url, reverse('home'))
+        self.assertRedirects(response, reverse('home'))
 
 
 class TestProgressPaymentView(CustomTestCase):
@@ -125,11 +130,13 @@ class TestProgressPaymentView(CustomTestCase):
         self.client.post(reverse('payment-bank-card'), data={'account_number': '1234 3456'})
 
     def test_progress_payment_no_auth(self):
+        """Проверка, что неавторизованного пользователя перенаправляет на страницу авторизации"""
         self.client.logout()
         response = self.client.get(reverse('payment_progress'))
         self.assertRedirects(response, reverse('account_login') + '?next=/order/payment/progress/')
 
     def test_payment_without_order_in_session(self):
+        """Проверка, что нельзя зайти на страницу оплаты не оформив заказ"""
         session = self.client.session
         session.pop('order')
         session.save()
@@ -147,11 +154,18 @@ class TestOrderDetailView(CustomTestCase):
         self.order = Order.objects.get(buyer_id=self.user.pk)
 
     def test_order_detail_no_auth(self):
+        """Проверка, что неавторизованного пользователя перенаправляет на страницу авторизации"""
         self.client.logout()
         response = self.client.get(reverse('order_detail', args=[self.order.id]))
         self.assertRedirects(response, reverse('account_login') + f'?next=/order/{self.order.id}/')
 
+    def test_order_detail_access_to_page_user_who_made_order(self):
+        """Проверка, что пользователь оформивший заказ получает доступ к странице"""
+        response = self.client.get(reverse('order_detail', args=[self.order.id]))
+        self.assertEqual(response.status_code, 200)
+
     def test_order_detail_other_user_access(self):
+        """Проверка, что другие пользователи не могут получить доступ к странице заказа другого пользователя"""
         self.client.logout()
         get_user_model().objects.create_user(username=name2, password=password)
         self.client.login(username=name2, password=password)

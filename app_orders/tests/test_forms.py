@@ -23,11 +23,13 @@ class TestOrderForm(CustomTestCase):
                            }
 
     def test_with_correct_data(self):
+        """Проверка работы, если данные в форме корректные"""
         response = self.client.post(reverse('order'), data=self.order_data)
         self.assertEqual(response.status_code, 302)
         self.assertURLEqual(response.url, '/order/payment/bank-card/')
 
     def test_without_one_required_field(self):
+        """Проверка работы, если в форме не указано одно обязательное поле"""
         required_fields = ('name', 'phone', 'email', 'city', 'address', 'delivery_category', 'payment_category')
         for field in required_fields:
             order_data_copy = self.order_data.copy()
@@ -39,24 +41,28 @@ class TestOrderForm(CustomTestCase):
                 self.assertIn('This field is required.', response_text)
 
     def test_email_validator(self):
+        """Проверка работы валидатора электронной почты"""
         self.order_data['email'] = 'testmail.org'
         response = self.client.post(reverse('order'), data=self.order_data)
         response_text = response.context['form'].errors['email']
         self.assertIn('Enter a valid email address.', response_text)
 
     def test_phone_validator(self):
+        """Проверка работы валидатора номера телефона"""
         self.order_data['phone'] = '123456789'
         response = self.client.post(reverse('order'), data=self.order_data)
         response_text = response.context['form'].errors['phone']
         self.assertIn('Введите корректный номер телефона (например, +12125552368).', response_text)
 
     def test_delivery_category_validator(self):
+        """Проверка работы валидатора выбора способа доставки"""
         self.order_data['delivery_category'] = -1
         response = self.client.post(reverse('order'), data=self.order_data)
         response_text = response.context['form'].errors['delivery_category']
         self.assertIn('Select a valid choice. That choice is not one of the available choices.', response_text)
 
     def test_payment_category_validator(self):
+        """Проверка работы валидатора выбора способа оплаты"""
         self.order_data['payment_category'] = 'qwerty'
         response = self.client.post(reverse('order'), data=self.order_data)
         response_text = response.context['form'].errors['payment_category']

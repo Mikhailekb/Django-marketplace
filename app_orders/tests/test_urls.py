@@ -14,6 +14,7 @@ class TestOrdersUrls(CustomTestCase):
         self.client.post(reverse('order'), data=self.order_data)
 
     def test_order_and_payment_page(self):
+        """Проверка, что страницы находятся по нужному адресу"""
         base_orders_urls = (
             '/order/checkout/',
             '/order/payment/bank-card/',
@@ -44,6 +45,7 @@ class TestOrdersTemplates(CustomTestCase):
         self.order = Order.objects.get(buyer_id=self.user.pk)
 
     def test_correspondence_reverse_and_url(self):
+        """Проверка соответствия имени адреса и самого адреса"""
         reverse_and_url: dict[str, str] = {
             reverse('order'): '/order/checkout/',
             reverse('payment-bank-card'): '/order/payment/bank-card/',
@@ -55,7 +57,8 @@ class TestOrdersTemplates(CustomTestCase):
             with self.subTest(reverse_name=reverse_name):
                 self.assertEqual(reverse_name, url)
 
-    def test_order_and_payment_page(self):
+    def test_order_pages_uses_correct_templates(self):
+        """Проверка, что страницы используют корректный шаблон"""
         base_reverse_and_template = {
             reverse('order'): 'pages/order.html',
             reverse('payment-bank-card'): 'pages/payment.html',
