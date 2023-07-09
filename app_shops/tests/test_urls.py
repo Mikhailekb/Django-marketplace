@@ -1,5 +1,7 @@
-from app_shops.tests.test_models import CustomTestCase
 from django.urls import reverse
+
+from app_shops.tests.test_models import CustomTestCase
+
 
 class AppShopURLTests(CustomTestCase):
     def test_app_shop_page_url_exists_at_desired_location(self):
@@ -10,20 +12,24 @@ class AppShopURLTests(CustomTestCase):
         product_slug = self.product.slug
         shop_slug = self.shop.slug
 
-        pages: tuple = ('/', '/catalog/', '/promo/', f'/promo/{discount_slug}/',
-                        f'/product/{product_slug}/', '/catalog/compare/', '/about/',
-                        f'/store/{shop_slug}/')
+        pages = ('/',
+                 '/catalog/',
+                 '/promo/',
+                 f'/promo/{discount_slug}/',
+                 f'/product/{product_slug}/',
+                 '/catalog/compare/',
+                 '/about/',
+                 f'/store/{shop_slug}/')
         for page in pages:
             response = self.client.get(page)
             error_name = f'Ошибка: нет доступа до страницы {page}'
             self.assertEqual(response.status_code, 200, error_name)
 
-
     def test_app_shops_uses_correct_template(self):
         """
         Тест на проверку использования URL-адресом соответствующего шаблона.
         """
-        templates_url_names: dict =  {
+        templates_url_names: dict = {
             reverse('home'): 'pages/main.html',
             reverse('catalog'): 'pages/catalog.html',
             reverse('sales'): 'pages/sale.html',

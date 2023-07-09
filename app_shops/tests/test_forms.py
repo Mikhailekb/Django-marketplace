@@ -1,16 +1,17 @@
-from app_shops.models.product import Review
+from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+
 from app_shops.models.category import Category
 from app_shops.models.product import Product
-
+from app_shops.models.product import Review
 
 User = get_user_model()
 name = 'test'
 password = 'password'
 text = 'The best product'
 form_data = {'text': text}
+
 
 class ReviewFormTests(TestCase):
 
@@ -21,7 +22,7 @@ class ReviewFormTests(TestCase):
         self.authorized_client.force_login(self.user)
         self.category = Category.objects.create(name=name, slug=name, is_active=True)
         self.product = Product.objects.create(name=name, description_short=text, description_long=text,
-                                             category=self.category, slug=name, is_active=True)
+                                              category=self.category, slug=name, is_active=True)
 
     def test_create_review_redirect(self):
         """
