@@ -1,8 +1,8 @@
+from allauth.account.views import RedirectAuthenticatedUserMixin
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-
-from app_shops.models.product import ViewHistory, Product
+from app_shops.models.product import Product
 from .forms import ResetPassStage1Form, ResetPassStage2Form, UserEditForm
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DetailView, UpdateView, ListView
@@ -11,11 +11,12 @@ from .models import Profile
 from app_orders.models import Order
 
 
-class ResetPassStage1(FormView):
+class ResetPassStage1(RedirectAuthenticatedUserMixin, FormView):
     """Представление для восстановления пароля. Ввод Email"""
+    redirect_field_name = 'next'
     template_name = 'pages/e-mail.html'
     form_class = ResetPassStage1Form
-    success_url = reverse_lazy('reset_1')
+    success_url = '/'
 
     def form_valid(self, form):
         response = super().form_valid(form)

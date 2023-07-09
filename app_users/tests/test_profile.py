@@ -56,6 +56,8 @@ class AccountViewTest(BaseTestCase):
         self.client.login(username=name, password=password)
 
     def test_exists_page(self):
+
+        """Проверка наличия страницы аккаунта"""
         response = self.client.get(reverse('account'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/account.html')
@@ -67,11 +69,15 @@ class ProfileViewTest(BaseTestCase):
         self.client.login(username=name, password=password)
 
     def test_exists_page(self):
+
+        """Проверка наличия страницы профиля"""
         response = self.client.get(reverse('edit'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/profile.html')
 
     def test_edit_user(self):
+
+        """Проверка изменения данных пользователя в профиле"""
 
         img = tempfile.NamedTemporaryFile(suffix=".jpg").name
 
@@ -88,11 +94,17 @@ class OrderListViewTest(BaseTestCase):
         self.client.login(username=name, password=password)
 
     def test_exists_page(self):
+
+        """Проверка наличия страницы истории заказов"""
+
         response = self.client.get(reverse('orders'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/historyorder.html')
 
     def test_orders_list(self):
+
+        """Проверка вывода списка заказов на странице"""
+
         for order in range(10):
             Order.objects.create(**self.order_data)
         response = self.client.get(reverse('orders'))
