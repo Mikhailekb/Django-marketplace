@@ -1,9 +1,10 @@
-from app_shops.tests.test_models import CustomTestCase
 from django.urls import reverse
+
+from app_shops.tests.test_models import CustomTestCase
 
 
 class AppShopsViewsTest(CustomTestCase):
-    def test_homeview_page_show_correct_context(self):
+    def test_home_view_page_show_correct_context(self):
         """
         Шаблон в main.html сформирован с правильным контекстом.
         """
@@ -14,7 +15,7 @@ class AppShopsViewsTest(CustomTestCase):
         for key, value in home_view_text.items():
             self.assertEqual(home_view_text[key], value)
 
-    def test_catalogview_page_show_correct_content(self):
+    def test_catalog_view_page_show_correct_content(self):
         """
         Шаблон в catalog.html сформирован с правильным контекстом.
         """
@@ -23,7 +24,7 @@ class AppShopsViewsTest(CustomTestCase):
         for key, value in catalog_view_text.items():
             self.assertEqual(catalog_view_text[key], value)
 
-    def test_salesview_page_show_correct_context(self):
+    def test_sales_view_page_show_correct_context(self):
         """
         Шаблон в sale.html сформирован с правильным контекстом.
         """
