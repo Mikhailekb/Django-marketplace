@@ -4790,6 +4790,10 @@ input[type="radio"] {
     cursor: pointer;
 }
 
+.Order_anons:not(:last-child) {
+    margin-bottom: 40px;
+}
+
 .registr {
     font-size: 0.8em;
     margin-top: 10px;

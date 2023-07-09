@@ -185,7 +185,7 @@ ACCOUNT_FORMS = {
     "signup": "app_users.forms.RegisterForm"
 }
 
-LOGIN_URL = '/profile/accounts/login'
+LOGIN_URL = '/profile/accounts/login/'
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -226,7 +226,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
