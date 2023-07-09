@@ -29,6 +29,7 @@ from .models.product import Product, TagProduct, FeatureToProduct, Review, ViewH
 from .models.shop import ProductShop, Shop
 from .services.functions import get_prices, price_exp, price_exp_banners
 from .templatetags.custom_filters import random_related_id
+from django.urls import reverse
 
 
 class HomeView(TemplateView):
@@ -356,7 +357,7 @@ class ComparisonView(TemplateView):
         return allowable_feature_names
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        current_page = request.META.get('HTTP_REFERER')
+        current_page = request.META.get('HTTP_REFERER', reverse('catalog'))
         comparison_products = request.session.get('comparison_products', default=[])
         if product_id := request.POST.get('add_product'):
             if len(comparison_products) <= self.MAX_VALUE and product_id in comparison_products:
