@@ -1,0 +1,72 @@
+[
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 2,
+    "fields": {
+      "product": 3
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 3,
+    "fields": {
+      "product": 4
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 4,
+    "fields": {
+      "product": 5
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 5,
+    "fields": {
+      "product": 6
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 6,
+    "fields": {
+      "product": 7
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 7,
+    "fields": {
+      "product": 8
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 8,
+    "fields": {
+      "product": 9
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 9,
+    "fields": {
+      "product": 10
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 10,
+    "fields": {
+      "product": 11
+    }
+  },
+  {
+    "model": "app_shops.sliderbanner",
+    "pk": 11,
+    "fields": {
+      "product": 12
+    }
+  }
+]
