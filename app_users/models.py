@@ -1,10 +1,33 @@
-from django.contrib.auth.models import User
+from django.apps import apps
+from django.contrib.auth.models import User, Permission, Group
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 from imagekit.models import ProcessedImageField
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 from django_cleanup import cleanup
+
+
+@receiver(post_migrate, sender=apps.get_app_config('app_users'))
+def add_admin_group(sender, **kwargs):
+    admin_group, created = Group.objects.get_or_create(name=_('admins'))
+    seller_group, created = Group.objects.get_or_create(name=_('sellers'))
+
+    admin_group.permissions.set(Permission.objects.all())
+
+    seller_group.permissions.set(Permission.objects.filter(
+        Q(name__endswith='discount') | Q(name__endswith='image') |
+        Q(name__endswith='product') | Q(name__endswith='value') | Q(name__endswith='category') |
+        Q(name__endswith='payment_item') | Q(name__endswith='image') | Q(name__endswith='shop') |
+        Q(name__endswith='offer')
+    ))
+
+    admin_group.save()
+
+    seller_group.save()
 
 
 def validate_name(value):

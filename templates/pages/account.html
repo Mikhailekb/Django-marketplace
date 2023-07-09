@@ -47,38 +47,42 @@
                 <a class="Account-editLink" href="{% url 'edit' %}">{% trans 'Edit profile' %}</a>
               </div>
             </div>
-            {% if order %}
+              {% if order %}
               <div class="Account-group">
                 <div class="Account-column Account-column_full">
                   <div class="Order Order_anons">
                     <div class="Order-personal">
                       <div class="row">
-                        <div class="row-block">
-                          <a class="Order-title" href="oneorder.html">{% trans 'Order' %}&#32;
-                            <span class="Order-numberOrder">№{{ order.id }}</span>
-                            <span>&#32;от&#32;</span>
-                            <span class="Order-dateOrder">{{ order.created }}</span>
-                          </a>
-                          <div class="Account-editLink">
-                            <a href="{% url 'orders' %}">{% trans 'Orders history' %}</a>
+                        <div class="row-block"><a class="Order-title" href="{{ order.get_absolute_url }}">{% trans 'Order' %}&#32;<span
+                          class="Order-numberOrder">№{{ order.id }}</span>&#32;от&#32;<span
+                          class="Order-dateOrder">{{ order.created }}</span></a>
+                          <div class="Account-editLink"><a href="{% url 'orders' %}">{% trans 'Orders history' %}</a>
                           </div>
                         </div>
                         <div class="row-block">
                           <div class="Order-info Order-info_delivery">
-                            <div class="Order-infoType">{% trans 'Delivery type:' %}</div>
-                            <div class="Order-infoContent">{{ order.delivery_category.name }}</div>
+                            <div class="Order-infoType">{% trans 'Delivery type:' %}:
+                            </div>
+                            <div class="Order-infoContent">{{ order.delivery_category.name }}
+                            </div>
                           </div>
                           <div class="Order-info Order-info_pay">
-                            <div class="Order-infoType">{% trans 'Payment:' %}</div>
-                            <div class="Order-infoContent">{{ order.payment_item.payment_category.name }}</div>
+                            <div class="Order-infoType">{% trans 'Payment:' %}:
+                            </div>
+                            <div class="Order-infoContent">{{ order.payment_item.get_payment_category_display }}
+                            </div>
                           </div>
                           <div class="Order-info">
-                            <div class="Order-infoType">{% trans 'Total price' %}:</div>
-                            <div class="Order-infoContent">{{ order.payment_item.total_price }}</div>
+                            <div class="Order-infoType">{% trans 'Total price' %}:
+                            </div>
+                            <div class="Order-infoContent">{{ order.payment_item.total_price }}
+                            </div>
                           </div>
                           <div class="Order-info Order-info_status">
-                            <div class="Order-infoType">{% trans 'Status:' %}</div>
-                            <div class="Order-infoContent">{{ order.payment_item.get_is_passed_display }}</div>
+                            <div class="Order-infoType">{% trans 'Status:' %}:
+                            </div>
+                            <div class="Order-infoContent">{{ order.payment_item.get_is_passed_display }}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -86,8 +90,27 @@
                   </div>
                 </div>
               </div>
-              </div>
             {% endif %}
+          {% if products %}
+            {% for product in products %}
+              <div class="Account-group">
+                  <div class="Account-column Account-column_full">
+                    <div class="Order Order_anons">
+                      <div class="Order-personal">
+                        <div class="row">
+                          <div class="row-block"><a class="Order-title" href="/product/{{ product.slug }}">{{ product.name }}</a></div>
+                          <div class="row-block">
+                            <img src="{{ product.main_image.small.url }}" alt="image">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+          {% endif %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
