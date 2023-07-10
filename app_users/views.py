@@ -1,6 +1,6 @@
 from allauth.account.views import RedirectAuthenticatedUserMixin
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from app_shops.models.product import Product
 from .forms import ResetPassStage1Form, ResetPassStage2Form, UserEditForm
@@ -30,15 +30,19 @@ class ResetPassStage1(RedirectAuthenticatedUserMixin, FormView):
                 recipient_list=[email],
                 fail_silently=False,
             )
+            self.request.session['first_stage_successful'] = True
             return response
         return super().form_invalid(form)
 
 
-class ResetPassStage2(FormView):
+class ResetPassStage2(RedirectAuthenticatedUserMixin, UserPassesTestMixin, FormView):
     """Представление для восстановления пароля. Ввод нового пароля"""
     form_class = ResetPassStage2Form
     template_name = 'pages/password.html'
     success_url = reverse_lazy('home')
+
+    def test_func(self) -> bool:
+        return self.request.session.get('first_stage_successful', False)
 
     def form_valid(self, form):
         password = form.cleaned_data['password']
@@ -47,6 +51,7 @@ class ResetPassStage2(FormView):
         user.save()
         user = authenticate(username=user.username, password=password)
         login(self.request, user, backend='allauth.account.auth_backends.AuthenticationBackend')
+        self.request.session.pop('first_stage_successful', None)
         return super().form_valid(form)
 
 
@@ -91,7 +96,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data(errors=user_form, **kwargs))
 
 
-class AccountView(DetailView):
+class AccountView(LoginRequiredMixin, DetailView):
     """Представление для отображения детальной информации о пользователе"""
     template_name = 'pages/account.html'
     model = Profile

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 19:41+0500\n"
+"POT-Creation-Date: 2023-07-10 12:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,11 +78,11 @@ msgstr "способ доставки"
 #: .\app_shops\models\category.py:12 .\app_shops\models\product.py:23
 #: .\app_shops\models\product.py:38 .\app_shops\models\product.py:53
 #: .\app_shops\models\product.py:86 .\app_shops\models\shop.py:23
-#: .\app_users\models.py:34
+#: .\app_users\models.py:57
 msgid "name"
 msgstr "имя"
 
-#: .\app_orders\models.py:29 .\app_users\models.py:32
+#: .\app_orders\models.py:29 .\app_users\models.py:55
 msgid "phone"
 msgstr "телефон"
 
@@ -424,7 +424,7 @@ msgstr "значения"
 msgid "products"
 msgstr "товары"
 
-#: .\app_shops\models\product.py:92
+#: .\app_shops\models\product.py:92 .\app_users\models.py:17
 msgid "sellers"
 msgstr "продавцы"
 
@@ -437,7 +437,7 @@ msgid "product image"
 msgstr "изображение продукта"
 
 #: .\app_shops\models\product.py:134 .\app_shops\models\product.py:153
-#: .\app_users\models.py:31
+#: .\app_users\models.py:54
 msgid "user"
 msgstr "пользователь"
 
@@ -495,31 +495,31 @@ msgstr "Ожидалось число, получено {value_type}"
 msgid "The received argument does not have the \"in_shops_id\" attribute"
 msgstr "Полученный аргумент не имеет атрибута \"in_shops_id\""
 
-#: .\app_shops\views.py:83
+#: .\app_shops\views.py:84
 msgid "Popularity"
 msgstr "Популярности"
 
-#: .\app_shops\views.py:83
+#: .\app_shops\views.py:84
 msgid "Cost"
 msgstr "Цене"
 
-#: .\app_shops\views.py:84
+#: .\app_shops\views.py:85
 msgid "Novelty"
 msgstr "Новизне"
 
-#: .\app_shops\views.py:84
+#: .\app_shops\views.py:85
 msgid "Feedback"
 msgstr "Отзывам"
 
-#: .\app_shops\views.py:317
+#: .\app_shops\views.py:318
 msgid "Show all characteristics"
 msgstr "Показать все характеристики"
 
-#: .\app_shops\views.py:345
+#: .\app_shops\views.py:346
 msgid "Only differing characteristics"
 msgstr "Только разные характеристики"
 
-#: .\app_shops\views.py:399
+#: .\app_shops\views.py:400
 msgid "No shop found matching the query"
 msgstr "Магазин, соответствующий запросу, не найден"
 
@@ -527,19 +527,40 @@ msgstr "Магазин, соответствующий запросу, не на
 msgid "users"
 msgstr "пользователи"
 
-#: .\app_users\models.py:33
+#: .\app_users\models.py:16
+msgid "admins"
+msgstr "админы"
+
+#: .\app_users\models.py:56
 msgid "photo"
 msgstr "фото"
 
-#: .\app_users\models.py:37 .\templates\components\footer.html:28
+#: .\app_users\models.py:60 .\templates\components\footer.html:28
 #: .\templates\pages\account.html:21 .\templates\pages\historyorder.html:21
 #: .\templates\pages\profile.html:21
 msgid "Profile"
 msgstr "Профиль"
 
-#: .\app_users\models.py:38
+#: .\app_users\models.py:61
 msgid "Profiles"
 msgstr "Профили"
+
+#: .\templates\account\login.html:21
+msgid "Incorrect login or password"
+msgstr "Неправильный логин или пароль"
+
+#: .\templates\account\login.html:30
+msgid "Forgot password?"
+msgstr "Забыли пароль?"
+
+#: .\templates\account\login.html:31 .\templates\account\signup.html:12
+#: .\templates\components\header.html:82
+msgid "Registration"
+msgstr "Регистрация"
+
+#: .\templates\account\signup.html:25 .\templates\components\header.html:81
+msgid "Login"
+msgstr "Вход"
 
 #: .\templates\admin\categories_list.html:8
 msgid "Clear categories cache"
@@ -583,14 +604,6 @@ msgstr "О нас"
 #: .\templates\components\footer.html:36
 msgid "Contacts"
 msgstr "Контакты"
-
-#: .\templates\components\header.html:81
-msgid "Login"
-msgstr "Вход"
-
-#: .\templates\components\header.html:82
-msgid "Registration"
-msgstr "Регистрация"
 
 #: .\templates\components\header.html:126 .\templates\pages\account.html:18
 #: .\templates\pages\historyorder.html:18 .\templates\pages\profile.html:18
@@ -665,7 +678,7 @@ msgstr "перейти"
 msgid "Megano Store Hystory"
 msgstr "История магазина Megano"
 
-#: .\templates\pages\account.html:24 .\templates\pages\account.html:63
+#: .\templates\pages\account.html:24 .\templates\pages\account.html:59
 #: .\templates\pages\historyorder.html:24 .\templates\pages\profile.html:24
 msgid "Orders history"
 msgstr "История заказов"
@@ -674,15 +687,15 @@ msgstr "История заказов"
 msgid "Edit profile"
 msgstr "Редактировать профиль"
 
-#: .\templates\pages\account.html:57 .\templates\pages\historyorder.html:38
+#: .\templates\pages\account.html:56 .\templates\pages\historyorder.html:38
 msgid "Order"
 msgstr "Заказ"
 
-#: .\templates\pages\account.html:68
+#: .\templates\pages\account.html:64
 msgid "Delivery type:"
 msgstr "Тип доставки"
 
-#: .\templates\pages\account.html:72
+#: .\templates\pages\account.html:70
 msgid "Payment:"
 msgstr "Оплата"
 
@@ -690,7 +703,7 @@ msgstr "Оплата"
 msgid "Total price"
 msgstr "Общая цена"
 
-#: .\templates\pages\account.html:80
+#: .\templates\pages\account.html:82
 msgid "Status:"
 msgstr "Статус"
 

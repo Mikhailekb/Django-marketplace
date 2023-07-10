@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load static i18n %}
 
 
 {% block header %}
@@ -9,7 +9,7 @@
   <div class="wrap">
     <div class="wrapper">
       <div class="header">
-        <h3 class="sign-in">Регистрация</h3>
+        <h3 class="sign-in">{% trans 'Registration' %}</h3>
       </div>
       <div class="clear"></div>
       <form method="post">
@@ -22,7 +22,7 @@
         {{ form.password1.errors }}
         <input type="submit" value="Зарегистрироваться"/>
         <a class="registr" href="{% url 'account_login'%}">
-          Вход
+          {% trans 'Login' %}
         </a>
         <div class="clear"></div>
       </form>

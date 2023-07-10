@@ -127,7 +127,7 @@
                       {% if request.user.is_staff %}
                         <a class="dropdown-content-a" href="{% url 'admin:index' %}">{% trans 'Administrative section' %}</a>
                       {% endif %}
-                      <a class="dropdown-content-a" href="#">{% trans 'Logout' %}</a>
+                      <a class="dropdown-content-a" href="{% url 'account_logout' %}">{% trans 'Logout' %}</a>
                     </div>
                   </div>
                 {% endif %}
