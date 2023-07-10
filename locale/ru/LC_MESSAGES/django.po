@@ -528,8 +528,6 @@ msgid "users"
 msgstr "пользователи"
 
 #: .\app_users\models.py:16
-#, fuzzy
-#| msgid "mins"
 msgid "admins"
 msgstr "админы"
 
