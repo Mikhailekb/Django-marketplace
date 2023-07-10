@@ -39,6 +39,9 @@ class TestResetPass1(TestCase):
 
 class TestResetPass2(BaseTestCase):
 
+    def setUp(self):
+        self.client.post(reverse('reset_1'), {'email': email})
+
     def test_exists_page(self):
 
         """Проверка наличия 2-ой страницы восстановления пароля"""
