@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load static i18n %}
 
 
 {% block header %}
@@ -17,20 +17,18 @@
         {% csrf_token %}
         <div>
         </div>
+        {% if form.errors %}
+          <p>{% trans 'Incorrect login or password' %}</p>
+        {% endif %}
         {{ form.login }}
-        {{ form.login.errors }}
         {{ form.password }}
-        {{ form.password.errors }}
-        {% for elem in form.errors %}
-          {{ elem }}
-        {% endfor %}
         <div>
         </div>
         <div>
           <input type="submit" value="Войти"/>
         </div>
-        <a class="forgot-label" href="{% url 'reset_1' %}">Забыли пароль?</a>
-        <a class="registr" href="{% url 'account_signup' %}">Регистрация</a>
+        <a class="forgot-label" href="{% url 'reset_1' %}">{% trans 'Forgot password?' %}</a>
+        <a class="registr" href="{% url 'account_signup' %}">{% trans 'Registration' %}</a>
       </form>
     </div>
   </div>
