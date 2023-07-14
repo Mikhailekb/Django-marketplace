@@ -276,14 +276,13 @@ class ProductDetailView(DetailView):
 
 
 class ComparisonView(TemplateView):
-    MAX_VALUE = 3
     template_name = 'pages/comparison.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         comparison_products = self.request.session.get(
             'comparison_products', default=[])[:3]
-        if comparison_products and isinstance(comparison_products, list) and len(comparison_products) <= self.MAX_VALUE:
+        if comparison_products and isinstance(comparison_products, list):
             goods: QuerySet[Product] = Product.objects.filter(id__in=comparison_products) \
                 .annotate(avg_price=Avg(price_exp),
                           in_shops_id=ArrayAgg('in_shops')) \
@@ -321,6 +320,7 @@ class ComparisonView(TemplateView):
                 .values('product_id', 'feature_name') \
                 .annotate(values=ArrayAgg('values')) \
                 .order_by('product_id', 'feature_name')
+
             result = {}
             for item in values:
                 product_id = item['product_id']
@@ -330,18 +330,15 @@ class ComparisonView(TemplateView):
                     result[product_id][feature_name] = value
                 else:
                     result[product_id] = {feature_name: value}
+            result_list = list(result.values())
+            difference_features = {}
 
-            common_keys = set.intersection(*[set(d.keys()) for d in result.values()])
-            intersection_feature = {k: {key: value for key, value in v.items() if key in common_keys}
-                                    for k, v in result.items()}
+            for a in range(len(result_list)):
+                for key, value in result_list[0].items():
+                    if key in result_list[a] and value != result_list[a][key]:
+                        difference_features[key] = value
 
-            value_dict = defaultdict(set)
-            for v in intersection_feature.values():
-                for feature_name_id, value in v.items():
-                    value_dict[feature_name_id].add(value[0])
-
-            value_dict = {k: v for k, v in value_dict.items() if len(v) > 1}
-            allowable_feature_names = value_dict.keys()
+            allowable_feature_names = difference_features.keys()
         else:
             name_btn = _('Only differing characteristics')
             is_difference_value = 'True'
@@ -360,7 +357,7 @@ class ComparisonView(TemplateView):
         current_page = request.META.get('HTTP_REFERER', reverse('catalog'))
         comparison_products = request.session.get('comparison_products', default=[])
         if product_id := request.POST.get('add_product'):
-            if len(comparison_products) <= self.MAX_VALUE and product_id in comparison_products:
+            if product_id in comparison_products:
                 return redirect(current_page)
             comparison_products.append(product_id)
         elif product_id := request.POST.get('delete_product'):
@@ -390,16 +387,14 @@ class ShopDetailView(DetailView):
 
     def get_object(self, queryset=None):
         slug = self.kwargs.get(self.slug_url_kwarg)
-
         try:
-            shop = cache.get(f'shop_{slug}')
-            if not shop:
-                shop = Shop.objects.select_related('main_image').get(slug=slug)
-                cache.set(f'shop_{slug}', shop, timeout=SHOPS_CACHE_LIFETIME)
+            shop = cache.set(f'shop_{slug}',
+                             Shop.objects.select_related('main_image')
+                             .get(slug=slug),
+                             timeout=SHOPS_CACHE_LIFETIME)
+            return shop
         except ObjectDoesNotExist as e:
             raise Http404(_('No shop found matching the query')) from e
-
-        return shop
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
