@@ -299,10 +299,10 @@ class ComparisonView(TemplateView):
                              .filter(feature_name_id__in=allowable_feature_names)))
 
                 context['comparison_list'] = comparison_list
-                context['count_item'] = comparison_list.count()
                 context['one_category'] = True
             else:
                 context['comparison_list'] = goods
+            context['count_item'] = goods.count()
         return context
 
     def _get_allowable_feature_names(self, context: dict[str, Any], goods: Sequence) -> Sequence:
